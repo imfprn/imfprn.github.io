@@ -67,3 +67,15 @@ th {
     width: auto;
     height: auto;
 }
+
+/* CSS for the password field container */
+.input-container {
+    margin: 10px 0; /* Adjust margin as needed */
+}
+
+/* CSS for the password input field */
+#passwordInput {
+    width: 100%; /* Ensure the input field takes up the full width */
+    padding: 8px; /* Add padding for better appearance */
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+}
