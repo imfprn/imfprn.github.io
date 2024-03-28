@@ -53,11 +53,10 @@ th {
 
 /* Smaller size */
 .report-card-image {
-    width: 640px; /* Adjust the size as needed */
-    margin-left: auto;
-    margin-right: auto;
-    height: auto;
-    cursor: pointer; /* Add cursor pointer for indicating clickability */
+    max-width: 100%; /* Ensure images don't exceed their container width */
+    height: auto; /* Maintain aspect ratio */
+    display: block; /* Ensure proper rendering as block elements */
+    margin: 0 auto; /* Center the images horizontally */
 }
 
 /* Normal size when enlarged */
@@ -77,5 +76,12 @@ th {
 #passwordInput {
     width: 100%; /* Ensure the input field takes up the full width */
     padding: 8px; /* Add padding for better appearance */
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+}
+
+.container {
+    max-width: 600px; /* Adjust as needed */
+    margin: 0 auto; /* Center the container horizontally */
+    padding: 0 20px; /* Add padding for better appearance */
     box-sizing: border-box; /* Include padding and border in element's total width and height */
 }
