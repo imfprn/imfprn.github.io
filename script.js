@@ -72,5 +72,10 @@ function checkPassword() {
         alert('Incorrect password. Please try again.');
     }
 }
-
+function closePasswordPrompt() {
+    // Clear the password input field
+    document.getElementById('passwordInput').value = '';
+    // Hide the password prompt
+    document.getElementById('passwordModal').style.display = 'none';
+}
 
