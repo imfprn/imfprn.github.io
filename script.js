@@ -43,12 +43,18 @@ function showPasswordPrompt(name) {
     
     var last3Digits = child.id.slice(-3);
     
+    // Hide the images initially
+    document.getElementById('reportCardImage1').style.display = 'none';
+    document.getElementById('reportCardImage2').style.display = 'none';
+    
+    // Assign image paths to the image elements
+    document.getElementById('reportCardImage1').src = child.image1;
+    document.getElementById('reportCardImage2').src = child.image2;
+    
     document.getElementById('passwordModal').style.display = 'block';
     document.getElementById('passwordInput').focus();
     document.getElementById('passwordInput').setAttribute('data-name', name);
     document.getElementById('passwordInput').setAttribute('data-password', last3Digits);
-    document.getElementById('reportCardImage1').src = child.image1; // Set the source of the first image
-    document.getElementById('reportCardImage2').src = child.image2; // Set the source of the second image
 }
 
 function checkPassword() {
