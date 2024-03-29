@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Card Download</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Report Card P.2/2 Download</h1>
+    <table id="childTable">
+        <tr>
+            <th>Student's Number</th>
+            <th>Student's Name</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td><a href="#" onclick="showPasswordPrompt('Porsche')">Porsche</a></td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td><a href="#" onclick="showPasswordPrompt('Andaman')">Andaman</a></td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td><a href="#" onclick="showPasswordPrompt('Marwin')">Marwin</a></td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td><a href="#" onclick="showPasswordPrompt('Mai-eak')">Mai-eak</a></td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td><a href="#" onclick="showPasswordPrompt('Bpandin')">Bpandin</a></td>
+        </tr>
+        <tr>
+            <td>6</td>
+            <td><a href="#" onclick="showPasswordPrompt('Anna')">Anna</a></td>
+        </tr>
+        <tr>
+            <td>7</td>
+            <td><a href="#" onclick="showPasswordPrompt('Bella')">Bella</a></td>
+        </tr>
+        <tr>
+            <td>8</td>
+            <td><a href="#" onclick="showPasswordPrompt('Bonas')">Bonas</a></td>
+        </tr>
+        <tr>
+            <td>9</td>
+            <td><a href="#" onclick="showPasswordPrompt('Nam')">Nam</a></td>
+        </tr>
+        <tr>
+            <td>10</td>
+            <td><a href="#" onclick="showPasswordPrompt('Aya')">Aya</a></td>
+        </tr>
+        <tr>
+            <td>11</td>
+            <td><a href="#" onclick="showPasswordPrompt('Sangkhaya')">Sangkhaya</a></td>
+        </tr>
+        <tr>
+            <td>12</td>
+            <td><a href="#" onclick="showPasswordPrompt('Moto')">Moto</a></td>
+        </tr>
+        <tr>
+            <td>13</td>
+            <td><a href="#" onclick="showPasswordPrompt('Newton')">Newton</a></td>
+        </tr>
+        <tr>
+            <td>14</td>
+            <td><a href="#" onclick="showPasswordPrompt('Nakun')">Nakun</a></td>
+        </tr>
+        <tr>
+            <td>15</td>
+            <td><a href="#" onclick="showPasswordPrompt('Maikhao')">Maikhao</a></td>
+        </tr>
+        <tr>
+            <td>16</td>
+            <td><a href="#" onclick="showPasswordPrompt('Cena')">Cena</a></td>
+        </tr>
+        <tr>
+            <td>17</td>
+            <td><a href="#" onclick="showPasswordPrompt('Anda')">Anda</a></td>
+        </tr>
+        <tr>
+            <td>18</td>
+            <td><a href="#" onclick="showPasswordPrompt('Yaya')">Yaya</a></td>
+        </tr>
+        <tr>
+            <td>19</td>
+            <td><a href="#" onclick="showPasswordPrompt('Kwunkao')">Kwunkao</a></td>
+        </tr>
+        <tr>
+            <td>20</td>
+            <td><a href="#" onclick="showPasswordPrompt('Nene')">Nene</a></td>
+        </tr>
+        <tr>
+            <td>21</td>
+            <td><a href="#" onclick="showPasswordPrompt('Bright')">Bright</a></td>
+        </tr>
+        <tr>
+            <td>22</td>
+            <td><a href="#" onclick="showPasswordPrompt('Ice')">Ice</a></td>
+        </tr>
+        <tr>
+            <td>23</td>
+            <td><a href="#" onclick="showPasswordPrompt('Shertam')">Shertam</a></td>
+        </tr>
+        <tr>
+            <td>24</td>
+            <td><a href="#" onclick="showPasswordPrompt('Aileen')">Aileen</a></td>
+        </tr>
+        <tr>
+            <td>25</td>
+            <td><a href="#" onclick="showPasswordPrompt('Tonkhaow')">Tonkhaow</a></td>
+        </tr>
+        <tr>
+            <td>26</td>
+            <td><a href="#" onclick="showPasswordPrompt('Numop')">Numop</a></td>
+        </tr>
+        <tr>
+            <td>27</td>
+            <td><a href="#" onclick="showPasswordPrompt('Wawa')">Wawa</a></td>
+        </tr>
+        <tr>
+            <td>28</td>
+            <td><a href="#" onclick="showPasswordPrompt('Jayda')">Jayda</a></td>
+        </tr>
+        <tr>
+            <td>29</td>
+            <td><a href="#" onclick="showPasswordPrompt('NamPunch')">NamPunch</a></td>
+        </tr>
+
+        <!-- Add more rows for other children -->
+    </table>
+
+   <!-- Password prompt modal -->
+   <div id="passwordModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closePasswordPrompt()">&times;</span>
+        <h2>Enter Password</h2>
+        <div class="input-container">
+        <input type="password" id="passwordInput" placeholder="Password">
+        </div>
+        <button onclick="checkPassword()">Submit</button>
+    </div>
+</div>
+
+   <!-- Container for the report card images -->
+   <div id="reportCardContainer" class="container">
+    <img id="reportCardImage1" class="report-card-image" >
+    <img id="reportCardImage2" class="report-card-image" >
+</div>
+
+    <script src="script.js"></script>
+</body>
+</html>
