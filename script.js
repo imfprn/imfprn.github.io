@@ -17,7 +17,7 @@ var childData = [
     { name: 'Cena', id: '1102900265131', image1: 'assets/img/16.jpg', image2: 'assets/img/16_th.jpg' },
     { name: 'Anda', id: '1104100114521', image1: 'assets/img/17.jpg', image2: 'assets/img/17_th.jpg' },
     { name: 'Yaya', id: '1539901265740', image1: 'assets/img/18.jpg', image2: 'assets/img/18_th.jpg' },
-    { name: 'Khunkao', id: '1129902491305', image1: 'assets/img/19.jpg', image2: 'assets/img/19_th.jpg' },
+    { name: 'Kwunkao', id: '1129902491305', image1: 'assets/img/19.jpg', image2: 'assets/img/19_th.jpg' },
     { name: 'Nene', id: '1100704595793', image1: 'assets/img/20.jpg', image2: 'assets/img/20_th.jpg' },
     { name: 'Bright', id: '1129902507384', image1: 'assets/img/21.jpg', image2: 'assets/img/21_th.jpg' },
     { name: 'Ice', id: '1120300263969', image1: 'assets/img/22.jpg', image2: 'assets/img/22_th.jpg' },
