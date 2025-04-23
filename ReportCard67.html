@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report Card2024</title>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="card" id="login-section">
+        <a href="https://imfprn.github.io/#home">
+            <img src="assets/img/logo4.png" width="147" height="60" style="max-height:60px;height:auto; margin-left:15px">
+        </a>
+      <h1>Report Card 2024 | P.2/2 </h1>
+      <input id="code-input" type="text" placeholder="กรอกเลข 3 หลักท้ายของรหัสประจำตัวประชาชนของนักเรียน" maxlength="3" />
+      <button onclick="checkCode()">ดูผลการเรียน</button>
+      <p id="error-message" class="error"></p>
+    </div>
+
+    <div class="pdf-viewer" id="pdf-section" style="display: none;">
+      <iframe id="pdf-frame" src="" frameborder="0"></iframe>
+      <button class="back-btn" onclick="goBack()">ย้อนกลับ</button>
+    </div>
+  </div>
+
+  <script>
+   function checkCode() {
+  const code = document.getElementById("code-input").value;
+  const error = document.getElementById("error-message");
+
+  if (code.length === 3 && /^\d{3}$/.test(code)) {
+    const pdfPath = `reports/${code}.pdf`;
+    window.open(pdfPath, "_blank");
+    error.textContent = "";
+  } else {
+    error.textContent = "กรุณากรอกเลข 3 หลักให้ถูกต้อง (เฉพาะตัวเลข)";
+  }
+}
+
+    function goBack() {
+      document.getElementById("login-section").style.display = "block";
+      document.getElementById("pdf-section").style.display = "none";
+      document.getElementById("pdf-frame").src = "";
+    }
+  </script>
+</body>
+</html>
