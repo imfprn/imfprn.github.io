@@ -1,0 +1,598 @@
+<style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Sarabun', 'Kanit', sans-serif;
+      height: 100%;
+      overflow: hidden;
+      background: #f0f9ff;
+    }
+    
+    html {
+      height: 100%;
+    }
+    
+    .container {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    
+    .header {
+      padding: 20px;
+      text-align: center;
+      z-index: 10;
+      background: #ffffff;
+    }
+    
+    .title {
+      font-size: 32px;
+      font-weight: bold;
+      margin: 0;
+      color: #1e293b;
+    }
+    
+    .instruction {
+      font-size: 16px;
+      margin: 10px 0 0 0;
+      opacity: 0.9;
+      color: #1e293b;
+    }
+    
+    .scene-container {
+      flex: 1;
+      display: flex;
+      gap: 20px;
+      padding: 0 20px 20px 20px;
+      position: relative;
+    }
+    
+    .scene {
+      flex: 1;
+      border-radius: 16px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    
+    .scene:hover {
+      transform: translateY(-4px);
+    }
+    
+    .scene-label {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 24px;
+      border-radius: 24px;
+      font-size: 20px;
+      font-weight: bold;
+      z-index: 5;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      background: #3b82f6;
+      color: #ffffff;
+    }
+    
+    .sky {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 65%;
+      transition: background 0.5s ease;
+    }
+    
+    .day .sky {
+      background: linear-gradient(to bottom, #87CEEB 0%, #B0E0E6 100%);
+    }
+    
+    .night .sky {
+      background: linear-gradient(to bottom, #0a1929 0%, #1a3a52 100%);
+    }
+    
+    .sun, .moon {
+      position: absolute;
+      top: 15%;
+      right: 20%;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      box-shadow: 0 0 30px rgba(255,255,255,0.5);
+    }
+    
+    .sun {
+      background: radial-gradient(circle, #FFD700, #FFA500);
+    }
+    
+    .moon {
+      background: radial-gradient(circle, #F0F0F0, #D3D3D3);
+    }
+    
+    .stars {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 65%;
+    }
+    
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle 2s infinite alternate;
+    }
+    
+    @keyframes twinkle {
+      from { opacity: 0.3; }
+      to { opacity: 1; }
+    }
+    
+    .sea {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 35%;
+      transition: background 0.5s ease;
+    }
+    
+    .day .sea {
+      background: linear-gradient(to bottom, #4A90E2 0%, #2E5C8A 100%);
+    }
+    
+    .night .sea {
+      background: linear-gradient(to bottom, #1a3a52 0%, #0f2537 100%);
+    }
+    
+    .waves {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 100%;
+      overflow: hidden;
+    }
+    
+    .wave {
+      position: absolute;
+      bottom: 0;
+      left: -100%;
+      width: 200%;
+      height: 100%;
+      opacity: 0.3;
+      animation: wave-move 8s linear infinite;
+    }
+    
+    @keyframes wave-move {
+      from { left: -100%; }
+      to { left: 0%; }
+    }
+    
+    .land {
+      position: absolute;
+      bottom: 35%;
+      left: 0;
+      width: 40%;
+      height: 30%;
+      transition: background 0.5s ease;
+    }
+    
+    .day .land {
+      background: linear-gradient(to bottom, #90EE90 0%, #228B22 100%);
+    }
+    
+    .night .land {
+      background: linear-gradient(to bottom, #2d4a2d 0%, #1a2e1a 100%);
+    }
+    
+    .boat {
+      position: absolute;
+      bottom: 40%;
+      width: 50px;
+      height: 30px;
+      transition: left 4s ease-in-out;
+    }
+    
+    .boat-body {
+      position: absolute;
+      bottom: 0;
+      width: 50px;
+      height: 15px;
+      background: #8B4513;
+      border-radius: 0 0 25px 25px;
+    }
+    
+    .boat-sail {
+      position: absolute;
+      bottom: 15px;
+      left: 15px;
+      width: 0;
+      height: 0;
+      border-left: 20px solid transparent;
+      border-bottom: 25px solid #FFFFFF;
+    }
+    
+    .wind-arrow {
+      position: absolute;
+      width: 80px;
+      height: 3px;
+      transition: all 0.5s ease;
+    }
+    
+    .arrow-line {
+      width: 100%;
+      height: 100%;
+      border-radius: 2px;
+      background: #10b981;
+    }
+    
+    .arrow-head {
+      position: absolute;
+      right: -8px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-left: 12px solid #10b981;
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid transparent;
+    }
+    
+    .wind-label {
+      position: absolute;
+      font-size: 14px;
+      font-weight: bold;
+      white-space: nowrap;
+      padding: 4px 8px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.9);
+      color: #1e293b;
+    }
+    
+    .explanation {
+      position: absolute;
+      bottom: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-size: 14px;
+      text-align: center;
+      max-width: 80%;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      background: #ffffff;
+      color: #1e293b;
+    }
+    
+    .scene:hover .explanation {
+      opacity: 1;
+    }
+    
+    .emoji-particle {
+      position: absolute;
+      font-size: 24px;
+      pointer-events: none;
+      z-index: 10;
+    }
+    
+    @keyframes float-up {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 0;
+      }
+      20% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-200px) scale(0.8);
+        opacity: 0;
+      }
+    }
+    
+    @keyframes float-horizontal {
+      0% {
+        transform: translateX(0) scale(1);
+        opacity: 0;
+      }
+      20% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateX(-250px) scale(0.8);
+        opacity: 0;
+      }
+    }
+    
+    @keyframes float-horizontal-reverse {
+      0% {
+        transform: translateX(0) scale(1);
+        opacity: 0;
+      }
+      20% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateX(250px) scale(0.8);
+        opacity: 0;
+      }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .scene-container {
+        flex-direction: column;
+      }
+      
+      .title {
+        font-size: 24px;
+      }
+      
+      .instruction {
+        font-size: 14px;
+      }
+      
+      .scene-label {
+        font-size: 16px;
+        padding: 8px 16px;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+    <header class="topnav nav-down" id="navbar">
+          <div class="topnav" style="background-color: #ffffff" id="myTopnav">
+  
+              <div class="topnav-left ">
+                  <a href="https://imfprn.github.io/#home">
+                      <img src="assets/img/logo4.png" width="147" height="50" style="max-height:60px;height:auto; margin-left:15px">
+                  </a>
+  
+              </div>
+  
+          </div>
+      </header>
+  <div class="container">
+   <div class="header">
+    <h1 class="title">ลมบกลมทะเล: อากาศลอยตัว</h1>
+   </div>
+   <div class="scene-container"><!-- Day Scene -->
+    <div class="scene day" id="dayScene">
+     <div class="scene-label">
+      กลางวัน (ลมทะเล)
+     </div>
+     <div class="sky">
+      <div class="sun"></div>
+     </div>
+     <div class="land"></div>
+     <div class="sea">
+      <div class="waves">
+       <svg class="wave" viewbox="0 0 1200 100" preserveaspectratio="none"><path d="M0,50 Q150,20 300,50 T600,50 T900,50 T1200,50 L1200,100 L0,100 Z" fill="white" />
+       </svg>
+      </div>
+     </div>
+     <div class="boat" id="dayBoat" style="left: 70%;">
+      <div class="boat-body"></div>
+      <div class="boat-sail"></div>
+     </div>
+     <div class="wind-arrow" id="dayWind1" style="top: 50%; left: 45%; opacity: 0; transform: rotate(180deg);">
+      <div class="arrow-line"></div>
+      <div class="arrow-head"></div>
+     </div>
+     <div class="wind-arrow" id="dayWind2" style="top: 40%; left: 50%; opacity: 0; transform: rotate(180deg);">
+      <div class="arrow-line"></div>
+      <div class="arrow-head"></div>
+     </div>
+     <div class="wind-label" id="dayWindLabel" style="top: 35%; left: 48%; opacity: 0;">
+      ลมพัดเข้าฝั่ง
+     </div>
+     <div class="explanation">
+      บกร้อนกว่า อากาศร้อนลอยขึ้น<br>
+      ทะเลเย็นกว่า ลมพัดจากทะเลเข้าบก
+     </div>
+    </div><!-- Night Scene -->
+    <div class="scene night" id="nightScene">
+     <div class="scene-label">
+      กลางคืน (ลมบก)
+     </div>
+     <div class="sky">
+      <div class="moon"></div>
+      <div class="stars" id="stars"></div>
+     </div>
+     <div class="land"></div>
+     <div class="sea">
+      <div class="waves">
+       <svg class="wave" viewbox="0 0 1200 100" preserveaspectratio="none"><path d="M0,50 Q150,20 300,50 T600,50 T900,50 T1200,50 L1200,100 L0,100 Z" fill="rgba(255,255,255,0.1)" />
+       </svg>
+      </div>
+     </div>
+     <div class="boat" id="nightBoat" style="left: 20%;">
+      <div class="boat-body"></div>
+      <div class="boat-sail"></div>
+     </div>
+     <div class="wind-arrow" id="nightWind1" style="top: 50%; left: 25%; opacity: 0;">
+      <div class="arrow-line"></div>
+      <div class="arrow-head"></div>
+     </div>
+     <div class="wind-arrow" id="nightWind2" style="top: 40%; left: 20%; opacity: 0;">
+      <div class="arrow-line"></div>
+      <div class="arrow-head"></div>
+     </div>
+     <div class="wind-label" id="nightWindLabel" style="top: 35%; left: 18%; opacity: 0;">
+      ลมพัดออกทะเล
+     </div>
+     <div class="explanation">
+      บกเย็นกว่า อากาศเย็นลงต่ำ<br>
+      ทะเลอุ่นกว่า ลมพัดจากบกออกทะเล
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+    let dayAnimating = false;
+    let nightAnimating = false;
+
+    // Generate stars
+    function generateStars() {
+      const starsContainer = document.getElementById('stars');
+      for (let i = 0; i < 50; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.animationDelay = Math.random() * 2 + 's';
+        starsContainer.appendChild(star);
+      }
+    }
+
+    // Day scene animation
+    function animateDayScene() {
+      if (dayAnimating) return;
+      dayAnimating = true;
+
+      const boat = document.getElementById('dayBoat');
+      const wind1 = document.getElementById('dayWind1');
+      const wind2 = document.getElementById('dayWind2');
+      const label = document.getElementById('dayWindLabel');
+
+      // Reset
+      boat.style.left = '70%';
+      boat.style.transition = 'none';
+
+      setTimeout(() => {
+        // Show wind arrows
+        wind1.style.opacity = '1';
+        wind2.style.opacity = '1';
+        label.style.opacity = '1';
+
+        // Move boat to shore
+        boat.style.transition = 'left 4s ease-in-out';
+        boat.style.left = '20%';
+
+        // Add fire emoji floating up from land (hot air rises)
+        for (let i = 0; i < 6; i++) {
+          setTimeout(() => {
+            const fireEmoji = document.createElement('div');
+            fireEmoji.className = 'emoji-particle';
+            fireEmoji.textContent = '🔥';
+            fireEmoji.style.left = (15 + Math.random() * 20) + '%';
+            fireEmoji.style.bottom = '55%';
+            fireEmoji.style.animation = 'float-up 3s ease-out forwards';
+            fireEmoji.style.animationDelay = (Math.random() * 0.3) + 's';
+            document.getElementById('dayScene').appendChild(fireEmoji);
+
+            setTimeout(() => fireEmoji.remove(), 3500);
+          }, i * 400);
+        }
+
+        // Add snowflake emoji moving from sea to land (cool air moves in)
+        for (let i = 0; i < 6; i++) {
+          setTimeout(() => {
+            const snowEmoji = document.createElement('div');
+            snowEmoji.className = 'emoji-particle';
+            snowEmoji.textContent = '❄️';
+            snowEmoji.style.left = (65 + Math.random() * 20) + '%';
+            snowEmoji.style.bottom = '40%';
+            snowEmoji.style.animation = 'float-horizontal 3s ease-out forwards';
+            snowEmoji.style.animationDelay = (Math.random() * 0.3) + 's';
+            document.getElementById('dayScene').appendChild(snowEmoji);
+
+            setTimeout(() => snowEmoji.remove(), 3500);
+          }, i * 400);
+        }
+
+        setTimeout(() => {
+          wind1.style.opacity = '0';
+          wind2.style.opacity = '0';
+          label.style.opacity = '0';
+          dayAnimating = false;
+        }, 4000);
+      }, 100);
+    }
+
+    // Night scene animation
+    function animateNightScene() {
+      if (nightAnimating) return;
+      nightAnimating = true;
+
+      const boat = document.getElementById('nightBoat');
+      const wind1 = document.getElementById('nightWind1');
+      const wind2 = document.getElementById('nightWind2');
+      const label = document.getElementById('nightWindLabel');
+
+      // Reset
+      boat.style.left = '20%';
+      boat.style.transition = 'none';
+
+      setTimeout(() => {
+        // Show wind arrows
+        wind1.style.opacity = '1';
+        wind2.style.opacity = '1';
+        label.style.opacity = '1';
+
+        // Move boat to sea
+        boat.style.transition = 'left 4s ease-in-out';
+        boat.style.left = '70%';
+
+        // Add snowflake emoji moving from land to sea (cool air moves out)
+        for (let i = 0; i < 6; i++) {
+          setTimeout(() => {
+            const snowEmoji = document.createElement('div');
+            snowEmoji.className = 'emoji-particle';
+            snowEmoji.textContent = '❄️';
+            snowEmoji.style.left = (15 + Math.random() * 20) + '%';
+            snowEmoji.style.bottom = '40%';
+            snowEmoji.style.animation = 'float-horizontal-reverse 3s ease-out forwards';
+            snowEmoji.style.animationDelay = (Math.random() * 0.3) + 's';
+            document.getElementById('nightScene').appendChild(snowEmoji);
+
+            setTimeout(() => snowEmoji.remove(), 3500);
+          }, i * 400);
+        }
+
+        // Add fire emoji floating up from sea (warm air rises)
+        for (let i = 0; i < 6; i++) {
+          setTimeout(() => {
+            const fireEmoji = document.createElement('div');
+            fireEmoji.className = 'emoji-particle';
+            fireEmoji.textContent = '🔥';
+            fireEmoji.style.left = (65 + Math.random() * 20) + '%';
+            fireEmoji.style.bottom = '35%';
+            fireEmoji.style.animation = 'float-up 3s ease-out forwards';
+            fireEmoji.style.animationDelay = (Math.random() * 0.3) + 's';
+            document.getElementById('nightScene').appendChild(fireEmoji);
+
+            setTimeout(() => fireEmoji.remove(), 3500);
+          }, i * 400);
+        }
+
+        setTimeout(() => {
+          wind1.style.opacity = '0';
+          wind2.style.opacity = '0';
+          label.style.opacity = '0';
+          nightAnimating = false;
+        }, 4000);
+      }, 100);
+    }
+
+    // Event listeners
+    document.getElementById('dayScene').addEventListener('click', animateDayScene);
+    document.getElementById('nightScene').addEventListener('click', animateNightScene);
+
+    // Initialize
+    generateStars();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a099431429da18c',t:'MTc2MzQ5MTA0NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
