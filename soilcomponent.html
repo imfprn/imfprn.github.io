@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="th" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>การทดลองเรื่ององค์ประกอบของดิน</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *{font-family:'Kanit',sans-serif;}
+    .back-nav{position:fixed;top:0;left:0;right:0;z-index:9999;background:rgba(255,253,247,0.96);backdrop-filter:blur(10px);padding:8px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:3px dashed #B5EAD7;}
+    .back-nav a{background:#B5EAD7;border:2.5px solid rgba(0,0,0,0.08);border-radius:14px;padding:6px 14px;font-weight:800;font-size:0.88rem;color:#3a3a5c;text-decoration:none;}
+    @keyframes dropletAppear{0%{opacity:0;transform:scale(0)}100%{opacity:1;transform:scale(1)}}
+    @keyframes bubbleRise{0%{transform:translateY(0) scale(1);opacity:1}100%{transform:translateY(-120px) scale(0.5);opacity:0}}
+    @keyframes stir{0%,100%{transform:rotate(-15deg)}50%{transform:rotate(15deg)}}
+    @keyframes soilFloat{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-5px) rotate(10deg)}}
+    @keyframes pulseGlow{0%,100%{filter:drop-shadow(0 0 5px rgba(255,200,0,0.5))}50%{filter:drop-shadow(0 0 15px rgba(255,200,0,0.8))}}
+    .droplet{animation:dropletAppear 0.5s ease-out forwards}
+    .bubble{animation:bubbleRise 2s ease-out forwards}
+    .stir-rod{animation:stir 0.5s ease-in-out infinite}
+    .soil-particle{animation:soilFloat 2s ease-in-out infinite}
+    .sun-glow{animation:pulseGlow 2s ease-in-out infinite}
+    .tab-btn{transition:all 0.3s ease}
+    .tab-btn.active{background:linear-gradient(135deg,#22c55e 0%,#16a34a 100%);color:white;transform:translateY(-2px);box-shadow:0 4px 15px rgba(34,197,94,0.4)}
+    .start-btn{background:linear-gradient(135deg,#f59e0b 0%,#d97706 100%);transition:all 0.3s ease}
+    .start-btn:hover{transform:scale(1.05);box-shadow:0 5px 20px rgba(245,158,11,0.4)}
+    .start-btn:disabled{background:#9ca3af;transform:none;box-shadow:none;cursor:not-allowed}
+    .reset-btn{background:linear-gradient(135deg,#6366f1 0%,#4f46e5 100%);transition:all 0.3s ease}
+    .reset-btn:hover{transform:scale(1.05)}
+  </style>
+</head>
+<body class="h-full bg-gradient-to-br from-amber-50 via-green-50 to-cyan-50 overflow-auto" style="padding-top:58px;">
+  <div class="back-nav">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <a href="index.html">← กลับหน้าหลัก</a>
+      <span style="font-family:'Fredoka One',cursive;font-size:1.05rem;color:#285eb4;">ส่วนประกอบของดิน</span>
+    </div>
+    <span style="font-size:1.3rem;">🌱</span>
+  </div>
+  <div class="w-full h-full p-4 md:p-8">
+    <header class="text-center mb-8">
+      <h1 class="text-3xl md:text-4xl font-bold text-green-800 mb-2">🌱 การทดลองเรื่ององค์ประกอบของดิน 🔬</h1>
+      <p class="text-green-600 text-lg">เรียนรู้ว่าดินประกอบด้วยอะไรบ้าง</p>
+    </header>
+    <div class="flex justify-center gap-4 mb-8">
+      <button id="tab1" class="tab-btn active px-6 py-3 rounded-full font-semibold text-green-700 bg-white shadow-md" onclick="switchTab(1)">💧 การทดลองที่ 1: หาน้ำในดิน</button>
+      <button id="tab2" class="tab-btn px-6 py-3 rounded-full font-semibold text-green-700 bg-white shadow-md" onclick="switchTab(2)">💨 การทดลองที่ 2: หาอากาศในดิน</button>
+    </div>
+    <!-- Experiment 1 -->
+    <div id="experiment1" class="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl p-6 md:p-8">
+      <h2 class="text-2xl font-bold text-amber-600 mb-4 text-center">🌞 การทดลองที่ 1: ทดลองหาน้ำในดิน</h2>
+      <div class="relative bg-gradient-to-b from-sky-200 via-sky-100 to-amber-100 rounded-2xl h-80 md:h-96 overflow-hidden mb-6">
+        <div id="sun1" class="absolute top-4 right-8 opacity-0 transition-opacity duration-1000">
+          <div class="sun-glow w-16 h-16 bg-gradient-to-br from-yellow-300 to-orange-400 rounded-full flex items-center justify-center shadow-lg" style="margin:8px"><span class="text-2xl">☀️</span></div>
+        </div>
+        <div id="zipbag" class="absolute left-1/2 top-1/2 transition-all duration-1000" style="transform:translate(-50%,-50%) scale(0.8);opacity:0">
+          <div class="relative">
+            <svg width="200" height="220" viewBox="0 0 200 220"><rect x="20" y="30" width="160" height="180" rx="10" fill="rgba(255,255,255,0.7)" stroke="#94a3b8" stroke-width="2"/><rect x="20" y="30" width="160" height="20" rx="5" fill="#60a5fa"/><line x1="20" y1="50" x2="180" y2="50" stroke="#3b82f6" stroke-width="3"/><ellipse cx="100" cy="160" rx="65" ry="40" fill="#8B4513"/><ellipse cx="100" cy="150" rx="60" ry="35" fill="#A0522D"/><ellipse cx="100" cy="145" rx="55" ry="30" fill="#CD853F"/><circle cx="70" cy="155" r="5" fill="#654321"/><circle cx="130" cy="160" r="4" fill="#5D3A1A"/></svg>
+            <div id="droplets1" class="absolute inset-0 pointer-events-none"></div>
+          </div>
+        </div>
+        <div id="instructions1" class="absolute bottom-4 left-4 right-4 bg-white/90 rounded-xl p-4 text-center">
+          <p id="step-text1" class="text-green-700 font-medium">กดปุ่ม "เริ่มการทดลอง" เพื่อดูผลลัพธ์</p>
+        </div>
+      </div>
+      <div class="flex justify-center gap-4 mb-6">
+        <button id="start-btn1" class="start-btn text-white font-bold py-3 px-8 rounded-full text-lg" onclick="startExperiment1()">▶️ เริ่มการทดลอง</button>
+        <button class="reset-btn text-white font-bold py-3 px-8 rounded-full text-lg" onclick="resetExperiment1()">🔄 เริ่มใหม่</button>
+      </div>
+      <div id="explanation1" class="bg-green-50 rounded-xl p-4 border-2 border-green-200 opacity-0 transition-opacity duration-500">
+        <h3 class="font-bold text-green-700 mb-2">💡 สรุปผลการทดลอง</h3>
+        <p class="text-green-600">เมื่อนำดินใส่ถุงซิปแล้วปิดสนิท แล้ววางกลางแดด ความร้อนจากแสงอาทิตย์จะทำให้น้ำในดินระเหยกลายเป็นไอน้ำ และควบแน่นเป็นหยดน้ำเกาะที่ผนังถุง แสดงว่า <strong>ในดินมีน้ำเป็นส่วนประกอบ</strong></p>
+      </div>
+    </div>
+    <!-- Experiment 2 -->
+    <div id="experiment2" class="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl p-6 md:p-8 hidden">
+      <h2 class="text-2xl font-bold text-cyan-600 mb-4 text-center">🫧 การทดลองที่ 2: ทดลองหาอากาศในดิน</h2>
+      <div class="relative bg-gradient-to-b from-slate-100 to-slate-200 rounded-2xl h-80 md:h-96 overflow-hidden mb-6">
+        <div id="beaker" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+          <div class="relative">
+            <svg width="180" height="240" viewBox="0 0 180 240"><path d="M30 60 L30 200 Q30 220 50 220 L130 220 Q150 220 150 200 L150 60" fill="rgba(200,230,255,0.5)" stroke="#64748b" stroke-width="3"/><path d="M20 60 L30 60 L30 50 Q30 40 40 40 L140 40 Q150 40 150 50 L150 60 L160 60" fill="none" stroke="#64748b" stroke-width="3"/><path id="water-level" d="M32 80 L32 198 Q32 218 50 218 L130 218 Q148 218 148 198 L148 80 Z" fill="rgba(59,130,246,0.4)"/></svg>
+            <div id="soil-in-water" class="absolute bottom-6 left-1/2 -translate-x-1/2 opacity-0 transition-opacity duration-500"><svg width="100" height="60" viewBox="0 0 100 60"><ellipse cx="50" cy="40" rx="40" ry="20" fill="#8B4513" opacity="0.8"/><ellipse cx="50" cy="35" rx="35" ry="15" fill="#A0522D" opacity="0.9"/></svg></div>
+            <div id="stir-rod" class="absolute top-0 left-1/2 -translate-x-1/2 opacity-0"><svg width="20" height="200" viewBox="0 0 20 200"><rect x="8" y="0" width="4" height="180" rx="2" fill="#78716c"/><ellipse cx="10" cy="185" rx="8" ry="4" fill="#a8a29e"/></svg></div>
+            <div id="bubbles" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
+          </div>
+        </div>
+        <div id="soil-scoop" class="absolute left-8 top-1/3 transition-all duration-1000" style="opacity:0">
+          <svg width="100" height="80" viewBox="0 0 100 80"><rect x="60" y="30" width="40" height="8" rx="2" fill="#d4a574"/><path d="M10 25 Q10 55 30 60 L50 60 Q60 55 60 35 L60 25 Q60 20 55 20 L15 20 Q10 20 10 25 Z" fill="#c4a484" stroke="#a08060" stroke-width="2"/><ellipse cx="35" cy="35" rx="20" ry="12" fill="#8B4513"/></svg>
+        </div>
+        <div id="instructions2" class="absolute bottom-4 left-4 right-4 bg-white/90 rounded-xl p-4 text-center">
+          <p id="step-text2" class="text-cyan-700 font-medium">กดปุ่ม "เริ่มการทดลอง" เพื่อดูผลลัพธ์</p>
+        </div>
+      </div>
+      <div class="flex justify-center gap-4 mb-6">
+        <button id="start-btn2" class="start-btn text-white font-bold py-3 px-8 rounded-full text-lg" onclick="startExperiment2()">▶️ เริ่มการทดลอง</button>
+        <button class="reset-btn text-white font-bold py-3 px-8 rounded-full text-lg" onclick="resetExperiment2()">🔄 เริ่มใหม่</button>
+      </div>
+      <div id="explanation2" class="bg-cyan-50 rounded-xl p-4 border-2 border-cyan-200 opacity-0 transition-opacity duration-500">
+        <h3 class="font-bold text-cyan-700 mb-2">💡 สรุปผลการทดลอง</h3>
+        <p class="text-cyan-600">เมื่อนำดินใส่ลงในน้ำแล้วคนเล็กน้อย จะเห็นฟองอากาศลอยขึ้นมาจากดิน แสดงว่า <strong>ในดินมีอากาศเป็นส่วนประกอบ</strong></p>
+      </div>
+    </div>
+    <footer class="text-center mt-8 text-green-600 text-sm"><p>🌍 การทดลองวิทยาศาสตร์สำหรับเด็ก | เรียนรู้เรื่องดินอย่างสนุกสนาน</p></footer>
+  </div>
+  <script>
+    let exp1Running=false,exp2Running=false,bubbleInterval=null;
+    function switchTab(n){document.getElementById('tab1').classList.toggle('active',n===1);document.getElementById('tab2').classList.toggle('active',n===2);document.getElementById('experiment1').classList.toggle('hidden',n!==1);document.getElementById('experiment2').classList.toggle('hidden',n!==2);}
+    function startExperiment1(){if(exp1Running)return;exp1Running=true;document.getElementById('start-btn1').disabled=true;const zb=document.getElementById('zipbag'),sun=document.getElementById('sun1'),dr=document.getElementById('droplets1'),st=document.getElementById('step-text1'),ex=document.getElementById('explanation1');st.textContent='📦 ขั้นตอนที่ 1: นำดินใส่ถุงซิปแล้วปิดสนิท';zb.style.opacity='1';zb.style.transform='translate(-50%,-50%) scale(1)';setTimeout(()=>{st.textContent='☀️ ขั้นตอนที่ 2: นำไปวางกลางแดด';sun.style.opacity='1';},2000);setTimeout(()=>{st.textContent='💧 ขั้นตอนที่ 3: สังเกตละอองน้ำที่เกาะผนังถุง';[{x:40,y:50},{x:150,y:60},{x:60,y:80},{x:130,y:90},{x:50,y:110},{x:140,y:120},{x:45,y:140},{x:155,y:130}].forEach((pos,i)=>{setTimeout(()=>{const d=document.createElement('div');d.className='droplet absolute rounded-full bg-gradient-to-br from-cyan-200 to-blue-400';d.style.left=pos.x+'px';d.style.top=pos.y+'px';d.style.width=(6+Math.random()*6)+'px';d.style.height=(8+Math.random()*8)+'px';dr.appendChild(d);},i*200);});},4000);setTimeout(()=>{st.textContent='✅ การทดลองเสร็จสิ้น!';ex.style.opacity='1';document.getElementById('start-btn1').disabled=false;},7000);}
+    function resetExperiment1(){exp1Running=false;const zb=document.getElementById('zipbag'),sun=document.getElementById('sun1'),dr=document.getElementById('droplets1'),st=document.getElementById('step-text1'),ex=document.getElementById('explanation1');zb.style.opacity='0';zb.style.transform='translate(-50%,-50%) scale(0.8)';sun.style.opacity='0';dr.innerHTML='';st.textContent='กดปุ่ม "เริ่มการทดลอง" เพื่อดูผลลัพธ์';ex.style.opacity='0';document.getElementById('start-btn1').disabled=false;}
+    function startExperiment2(){if(exp2Running)return;exp2Running=true;document.getElementById('start-btn2').disabled=true;const sc=document.getElementById('soil-scoop'),si=document.getElementById('soil-in-water'),sr=document.getElementById('stir-rod'),bu=document.getElementById('bubbles'),st=document.getElementById('step-text2'),ex=document.getElementById('explanation2');st.textContent='🥄 ขั้นตอนที่ 1: ตักดินเตรียมใส่น้ำ';sc.style.opacity='1';setTimeout(()=>{st.textContent='💧 ขั้นตอนที่ 2: ใส่ดินลงในน้ำ';sc.style.transform='translateX(200px) translateY(-50px)';},1500);setTimeout(()=>{sc.style.opacity='0';si.style.opacity='1';},2500);setTimeout(()=>{st.textContent='🔄 ขั้นตอนที่ 3: คนเล็กน้อย';sr.style.opacity='1';sr.classList.add('stir-rod');},3500);setTimeout(()=>{st.textContent='🫧 ขั้นตอนที่ 4: สังเกตฟองอากาศที่ลอยขึ้นมา';sr.classList.remove('stir-rod');sr.style.opacity='0';bubbleInterval=setInterval(()=>{const b=document.createElement('div');b.className='bubble absolute rounded-full';const sz=8+Math.random()*12;b.style.cssText=`width:${sz}px;height:${sz}px;background:radial-gradient(circle at 30% 30%,rgba(255,255,255,0.8),rgba(59,130,246,0.3));border:1px solid rgba(59,130,246,0.4);left:${50+Math.random()*80}px;bottom:60px;`;bu.appendChild(b);setTimeout(()=>b.remove(),2000);},300);},5500);setTimeout(()=>{clearInterval(bubbleInterval);st.textContent='✅ การทดลองเสร็จสิ้น!';ex.style.opacity='1';document.getElementById('start-btn2').disabled=false;},10000);}
+    function resetExperiment2(){exp2Running=false;if(bubbleInterval){clearInterval(bubbleInterval);bubbleInterval=null;}const sc=document.getElementById('soil-scoop'),si=document.getElementById('soil-in-water'),sr=document.getElementById('stir-rod'),bu=document.getElementById('bubbles'),st=document.getElementById('step-text2'),ex=document.getElementById('explanation2');sc.style.opacity='0';sc.style.transform='translateX(0)';si.style.opacity='0';sr.style.opacity='0';bu.innerHTML='';st.textContent='กดปุ่ม "เริ่มการทดลอง" เพื่อดูผลลัพธ์';ex.style.opacity='0';document.getElementById('start-btn2').disabled=false;}
+  </script>
+</body>
+</html>

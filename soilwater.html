@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="th" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>การอุ้มน้ำของดิน</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    *{font-family:'Sarabun',sans-serif;}
+    .back-nav{position:fixed;top:0;left:0;right:0;z-index:9999;background:rgba(255,253,247,0.96);backdrop-filter:blur(10px);padding:8px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:3px dashed #FFCBA4;}
+    .back-nav a{background:#FFCBA4;border:2.5px solid rgba(0,0,0,0.08);border-radius:14px;padding:6px 14px;font-weight:800;font-size:0.88rem;color:#3a3a5c;text-decoration:none;}
+    @keyframes waterDrop{0%{transform:translateY(-20px);opacity:0}20%{opacity:1}80%{transform:translateY(120px);opacity:0.7}100%{transform:translateY(120px);opacity:0}}
+    @keyframes waterFlow{0%{height:0}100%{height:var(--flow-height)}}
+    @keyframes soakIn{0%{opacity:0.8;transform:translateY(0)}100%{opacity:0;transform:translateY(20px)}}
+    .water-drop{animation:waterDrop 1.5s ease-in infinite}
+    .water-flow{animation:waterFlow 2s ease-out forwards}
+    .zoom-view{background:radial-gradient(circle,#f0f9ff 0%,#e0f2fe 100%)}
+    .info-card{backdrop-filter:blur(10px)}
+  </style>
+</head>
+<body class="h-full bg-gradient-to-br from-sky-100 via-emerald-50 to-amber-50 overflow-auto" style="padding-top:58px;">
+  <div class="back-nav">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <a href="index.html">← กลับหน้าหลัก</a>
+      <span style="font-family:'Fredoka One',cursive;font-size:1.05rem;color:#285eb4;">การอุ้มน้ำของดิน</span>
+    </div>
+    <span style="font-size:1.3rem;">🪴</span>
+  </div>
+  <div class="w-full min-h-full p-4 md:p-6">
+    <header class="text-center mb-6">
+      <h1 class="text-2xl md:text-3xl font-bold text-emerald-800 mb-2">🌱 การอุ้มน้ำของดิน 3 ชนิด</h1>
+      <p class="text-emerald-600 text-sm md:text-base">เรียนรู้ว่าทำไมดินแต่ละชนิดอุ้มน้ำได้ต่างกัน</p>
+    </header>
+    <div class="max-w-6xl mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+        <!-- Sand -->
+        <div class="bg-white/80 rounded-2xl p-4 shadow-lg info-card">
+          <h3 class="text-lg font-bold text-amber-700 text-center mb-3">🏜️ ดินทราย</h3>
+          <div class="relative h-48 bg-gradient-to-b from-sky-100 to-sky-50 rounded-xl overflow-hidden border-2 border-amber-200">
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-8"><svg viewBox="0 0 64 32" class="w-full h-full"><path d="M8 0 L56 0 L40 32 L24 32 Z" fill="#78716c" stroke="#57534e" stroke-width="2"/></svg></div>
+            <div id="sandWater" class="absolute top-8 left-1/2 -translate-x-1/2 flex flex-col items-center opacity-0">
+              <div class="water-drop w-3 h-4 bg-blue-400 rounded-full mb-1"></div>
+              <div class="water-drop w-3 h-4 bg-blue-400 rounded-full mb-1" style="animation-delay:0.5s"></div>
+              <div class="water-drop w-3 h-4 bg-blue-400 rounded-full" style="animation-delay:1s"></div>
+            </div>
+            <div class="absolute bottom-8 left-1/2 -translate-x-1/2 w-20 h-20 border-2 border-amber-400 rounded-b-lg overflow-hidden bg-amber-100">
+              <div class="w-full h-full bg-gradient-to-b from-amber-300 to-amber-400 flex flex-wrap justify-center items-end p-1 gap-0.5">
+                <div class="w-2 h-2 rounded-full bg-amber-500"></div><div class="w-2 h-2 rounded-full bg-amber-400"></div><div class="w-2 h-2 rounded-full bg-amber-500"></div><div class="w-2 h-2 rounded-full bg-amber-300"></div><div class="w-2 h-2 rounded-full bg-amber-500"></div><div class="w-2 h-2 rounded-full bg-amber-400"></div>
+              </div>
+            </div>
+            <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-8 border-2 border-gray-400 rounded-b bg-white/50"><div id="sandCollected" class="absolute bottom-0 w-full bg-blue-400/70 rounded-b transition-all duration-1000" style="height:0"></div></div>
+            <div id="sandFlow" class="absolute bottom-8 left-1/2 -translate-x-1/2 w-1 bg-blue-400/50 opacity-0" style="--flow-height:24px"></div>
+          </div>
+        </div>
+        <!-- Loam -->
+        <div class="bg-white/80 rounded-2xl p-4 shadow-lg info-card">
+          <h3 class="text-lg font-bold text-amber-800 text-center mb-3">🌿 ดินร่วน</h3>
+          <div class="relative h-48 bg-gradient-to-b from-sky-100 to-sky-50 rounded-xl overflow-hidden border-2 border-amber-300">
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-8"><svg viewBox="0 0 64 32" class="w-full h-full"><path d="M8 0 L56 0 L40 32 L24 32 Z" fill="#78716c" stroke="#57534e" stroke-width="2"/></svg></div>
+            <div id="loamWater" class="absolute top-8 left-1/2 -translate-x-1/2 flex flex-col items-center opacity-0">
+              <div class="water-drop w-3 h-4 bg-blue-400 rounded-full mb-1"></div>
+              <div class="water-drop w-3 h-4 bg-blue-400 rounded-full mb-1" style="animation-delay:0.5s"></div>
+              <div class="water-drop w-3 h-4 bg-blue-400 rounded-full" style="animation-delay:1s"></div>
+            </div>
+            <div class="absolute bottom-8 left-1/2 -translate-x-1/2 w-20 h-20 border-2 border-amber-500 rounded-b-lg overflow-hidden bg-amber-200">
+              <div class="w-full h-full bg-gradient-to-b from-amber-600 to-amber-700 flex flex-wrap justify-center items-end p-1 gap-0.5">
+                <div class="w-3 h-2 rounded bg-amber-800"></div><div class="w-2 h-3 rounded bg-amber-700"></div><div class="w-2 h-2 rounded-full bg-amber-500"></div><div class="w-3 h-3 rounded bg-amber-800"></div>
+              </div>
+            </div>
+            <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-8 border-2 border-gray-400 rounded-b bg-white/50"><div id="loamCollected" class="absolute bottom-0 w-full bg-blue-400/70 rounded-b transition-all duration-1000" style="height:0"></div></div>
+            <div id="loamFlow" class="absolute bottom-8 left-1/2 -translate-x-1/2 w-1 bg-blue-400/50 opacity-0" style="--flow-height:24px"></div>
+          </div>
+        </div>
+        <!-- Clay -->
+        <div class="bg-white/80 rounded-2xl p-4 shadow-lg info-card">
+          <h3 class="text-lg font-bold text-orange-800 text-center mb-3">🏺 ดินเหนียว</h3>
+          <div class="relative h-48 bg-gradient-to-b from-sky-100 to-sky-50 rounded-xl overflow-hidden border-2 border-orange-300">
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-8"><svg viewBox="0 0 64 32" class="w-full h-full"><path d="M8 0 L56 0 L40 32 L24 32 Z" fill="#78716c" stroke="#57534e" stroke-width="2"/></svg></div>
+            <div id="clayWater" class="absolute top-8 left-1/2 -translate-x-1/2 flex flex-col items-center opacity-0">
+              <div class="water-drop w-3 h-4 bg-blue-400 rounded-full mb-1"></div>
+              <div class="water-drop w-3 h-4 bg-blue-400 rounded-full mb-1" style="animation-delay:0.5s"></div>
+              <div class="water-drop w-3 h-4 bg-blue-400 rounded-full" style="animation-delay:1s"></div>
+            </div>
+            <div class="absolute bottom-8 left-1/2 -translate-x-1/2 w-20 h-20 border-2 border-orange-500 rounded-b-lg overflow-hidden bg-orange-200">
+              <div class="w-full h-full bg-gradient-to-b from-orange-700 to-orange-800">
+                <div id="clayWaterTop" class="w-full bg-blue-400/60 transition-all duration-1000" style="height:0"></div>
+              </div>
+            </div>
+            <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-8 border-2 border-gray-400 rounded-b bg-white/50"><div id="clayCollected" class="absolute bottom-0 w-full bg-blue-400/70 rounded-b transition-all duration-1000" style="height:0"></div></div>
+          </div>
+        </div>
+      </div>
+      <!-- Controls -->
+      <div class="text-center mb-6">
+        <button id="startBtn" class="px-8 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold rounded-full shadow-lg text-lg">💧 เริ่มเทน้ำ</button>
+        <button id="resetBtn" class="ml-4 px-6 py-3 bg-gray-200 text-gray-700 font-semibold rounded-full shadow hidden">🔄 ทำใหม่</button>
+      </div>
+      <!-- Zoom Views -->
+      <div class="bg-white/90 rounded-2xl p-4 md:p-6 shadow-xl">
+        <h2 class="text-xl font-bold text-emerald-800 text-center mb-4">🔬 ซูมดูโครงสร้างภายในดิน</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="zoom-view rounded-xl p-4 border-2 border-amber-200">
+            <h4 class="font-bold text-amber-700 text-center mb-3">ดินทราย (Sand)</h4>
+            <div class="relative h-40 bg-amber-50 rounded-lg overflow-hidden">
+              <svg viewBox="0 0 200 160" class="w-full h-full">
+                <circle cx="30" cy="30" r="20" fill="#f59e0b" stroke="#d97706" stroke-width="2"/>
+                <circle cx="80" cy="25" r="22" fill="#fbbf24" stroke="#f59e0b" stroke-width="2"/>
+                <circle cx="130" cy="35" r="18" fill="#f59e0b" stroke="#d97706" stroke-width="2"/>
+                <circle cx="170" cy="28" r="20" fill="#fbbf24" stroke="#f59e0b" stroke-width="2"/>
+                <circle cx="25" cy="80" r="21" fill="#fbbf24" stroke="#f59e0b" stroke-width="2"/>
+                <circle cx="75" cy="75" r="19" fill="#f59e0b" stroke="#d97706" stroke-width="2"/>
+                <circle cx="125" cy="85" r="23" fill="#fbbf24" stroke="#f59e0b" stroke-width="2"/>
+                <circle cx="175" cy="78" r="17" fill="#f59e0b" stroke="#d97706" stroke-width="2"/>
+                <circle cx="35" cy="130" r="20" fill="#f59e0b" stroke="#d97706" stroke-width="2"/>
+                <circle cx="90" cy="135" r="22" fill="#fbbf24" stroke="#f59e0b" stroke-width="2"/>
+                <circle cx="145" cy="128" r="19" fill="#f59e0b" stroke="#d97706" stroke-width="2"/>
+                <g id="sandZoomWater" class="opacity-0 transition-opacity duration-500">
+                  <ellipse cx="55" cy="50" rx="8" ry="12" fill="#60a5fa" opacity="0.7"/>
+                  <ellipse cx="105" cy="55" rx="10" ry="15" fill="#3b82f6" opacity="0.6"/>
+                  <ellipse cx="50" cy="105" rx="9" ry="14" fill="#3b82f6" opacity="0.6"/>
+                  <ellipse cx="100" cy="108" rx="11" ry="16" fill="#60a5fa" opacity="0.7"/>
+                </g>
+              </svg>
+            </div>
+            <div class="mt-3 p-2 bg-amber-100 rounded-lg"><p class="text-xs text-amber-800 text-center"><strong>🔴 อนุภาคใหญ่</strong> → ช่องว่างใหญ่<br>น้ำไหลผ่านได้ง่ายและเร็ว</p></div>
+          </div>
+          <div class="zoom-view rounded-xl p-4 border-2 border-amber-300">
+            <h4 class="font-bold text-amber-800 text-center mb-3">ดินร่วน (Loam)</h4>
+            <div class="relative h-40 bg-amber-100 rounded-lg overflow-hidden">
+              <svg viewBox="0 0 200 160" class="w-full h-full">
+                <circle cx="25" cy="25" r="12" fill="#b45309" stroke="#92400e" stroke-width="1"/>
+                <circle cx="55" cy="20" r="8" fill="#d97706" stroke="#b45309" stroke-width="1"/>
+                <circle cx="80" cy="30" r="15" fill="#b45309" stroke="#92400e" stroke-width="1"/>
+                <circle cx="115" cy="22" r="10" fill="#d97706" stroke="#b45309" stroke-width="1"/>
+                <circle cx="145" cy="28" r="13" fill="#b45309" stroke="#92400e" stroke-width="1"/>
+                <circle cx="20" cy="65" r="14" fill="#d97706" stroke="#b45309" stroke-width="1"/>
+                <circle cx="50" cy="70" r="9" fill="#b45309" stroke="#92400e" stroke-width="1"/>
+                <circle cx="80" cy="68" r="11" fill="#d97706" stroke="#b45309" stroke-width="1"/>
+                <circle cx="110" cy="72" r="16" fill="#b45309" stroke="#92400e" stroke-width="1"/>
+                <circle cx="145" cy="65" r="8" fill="#d97706" stroke="#b45309" stroke-width="1"/>
+                <circle cx="30" cy="110" r="10" fill="#b45309" stroke="#92400e" stroke-width="1"/>
+                <circle cx="60" cy="115" r="14" fill="#d97706" stroke="#b45309" stroke-width="1"/>
+                <circle cx="95" cy="108" r="9" fill="#b45309" stroke="#92400e" stroke-width="1"/>
+                <g id="loamZoomWater" class="opacity-0 transition-opacity duration-500">
+                  <ellipse cx="40" cy="45" rx="6" ry="8" fill="#60a5fa" opacity="0.8"/>
+                  <ellipse cx="95" cy="48" rx="5" ry="7" fill="#3b82f6" opacity="0.7"/>
+                  <ellipse cx="35" cy="88" rx="5" ry="6" fill="#3b82f6" opacity="0.7"/>
+                  <ellipse cx="65" cy="92" rx="4" ry="5" fill="#60a5fa" opacity="0.8"/>
+                </g>
+              </svg>
+            </div>
+            <div class="mt-3 p-2 bg-green-100 rounded-lg"><p class="text-xs text-green-800 text-center"><strong>🟠 อนุภาคผสม</strong> → ช่องว่างพอดี<br>น้ำซึมได้ + กักเก็บได้ดี</p></div>
+          </div>
+          <div class="zoom-view rounded-xl p-4 border-2 border-orange-300">
+            <h4 class="font-bold text-orange-800 text-center mb-3">ดินเหนียว (Clay)</h4>
+            <div class="relative h-40 bg-orange-100 rounded-lg overflow-hidden">
+              <svg viewBox="0 0 200 160" class="w-full h-full">
+                <g fill="#c2410c" stroke="#9a3412" stroke-width="0.5">
+                  <circle cx="10" cy="15" r="4"/><circle cx="20" cy="12" r="3"/><circle cx="28" cy="16" r="4"/><circle cx="38" cy="13" r="3"/><circle cx="46" cy="15" r="4"/><circle cx="55" cy="12" r="3"/><circle cx="64" cy="16" r="4"/><circle cx="73" cy="13" r="3"/><circle cx="82" cy="15" r="4"/><circle cx="91" cy="12" r="3"/><circle cx="100" cy="16" r="4"/><circle cx="109" cy="13" r="3"/><circle cx="118" cy="15" r="4"/><circle cx="127" cy="12" r="3"/><circle cx="136" cy="16" r="4"/><circle cx="145" cy="13" r="3"/><circle cx="154" cy="15" r="4"/><circle cx="163" cy="12" r="3"/><circle cx="172" cy="16" r="4"/>
+                  <circle cx="14" cy="28" r="3"/><circle cx="23" cy="25" r="4"/><circle cx="32" cy="29" r="3"/><circle cx="41" cy="26" r="4"/><circle cx="50" cy="28" r="3"/><circle cx="59" cy="25" r="4"/><circle cx="68" cy="29" r="3"/><circle cx="77" cy="26" r="4"/><circle cx="86" cy="28" r="3"/><circle cx="95" cy="25" r="4"/><circle cx="104" cy="29" r="3"/><circle cx="113" cy="26" r="4"/><circle cx="122" cy="28" r="3"/><circle cx="131" cy="25" r="4"/><circle cx="140" cy="29" r="3"/><circle cx="149" cy="26" r="4"/><circle cx="158" cy="28" r="3"/><circle cx="167" cy="25" r="4"/>
+                  <circle cx="10" cy="42" r="4"/><circle cx="19" cy="39" r="3"/><circle cx="28" cy="43" r="4"/><circle cx="37" cy="40" r="3"/><circle cx="46" cy="42" r="4"/><circle cx="55" cy="39" r="3"/><circle cx="64" cy="43" r="4"/><circle cx="73" cy="40" r="3"/><circle cx="82" cy="42" r="4"/><circle cx="91" cy="39" r="3"/><circle cx="100" cy="43" r="4"/><circle cx="109" cy="40" r="3"/><circle cx="118" cy="42" r="4"/><circle cx="127" cy="39" r="3"/><circle cx="136" cy="43" r="4"/><circle cx="145" cy="40" r="3"/>
+                  <circle cx="14" cy="55" r="3"/><circle cx="23" cy="52" r="4"/><circle cx="32" cy="56" r="3"/><circle cx="41" cy="53" r="4"/><circle cx="50" cy="55" r="3"/><circle cx="59" cy="52" r="4"/><circle cx="68" cy="56" r="3"/><circle cx="77" cy="53" r="4"/><circle cx="86" cy="55" r="3"/><circle cx="95" cy="52" r="4"/><circle cx="104" cy="56" r="3"/><circle cx="113" cy="53" r="4"/>
+                  <circle cx="10" cy="68" r="4"/><circle cx="19" cy="65" r="3"/><circle cx="28" cy="69" r="4"/><circle cx="37" cy="66" r="3"/><circle cx="46" cy="68" r="4"/><circle cx="55" cy="65" r="3"/><circle cx="64" cy="69" r="4"/><circle cx="73" cy="66" r="3"/><circle cx="82" cy="68" r="4"/><circle cx="91" cy="65" r="3"/><circle cx="100" cy="69" r="4"/><circle cx="109" cy="66" r="3"/>
+                  <circle cx="14" cy="82" r="3"/><circle cx="23" cy="79" r="4"/><circle cx="32" cy="83" r="3"/><circle cx="41" cy="80" r="4"/><circle cx="50" cy="82" r="3"/><circle cx="59" cy="79" r="4"/><circle cx="68" cy="83" r="3"/><circle cx="77" cy="80" r="4"/><circle cx="86" cy="82" r="3"/><circle cx="95" cy="79" r="4"/>
+                  <circle cx="10" cy="95" r="4"/><circle cx="19" cy="92" r="3"/><circle cx="28" cy="96" r="4"/><circle cx="37" cy="93" r="3"/><circle cx="46" cy="95" r="4"/><circle cx="55" cy="92" r="3"/><circle cx="64" cy="96" r="4"/><circle cx="73" cy="93" r="3"/>
+                  <circle cx="14" cy="108" r="3"/><circle cx="23" cy="105" r="4"/><circle cx="32" cy="109" r="3"/><circle cx="41" cy="106" r="4"/><circle cx="50" cy="108" r="3"/><circle cx="59" cy="105" r="4"/>
+                  <circle cx="10" cy="122" r="4"/><circle cx="19" cy="119" r="3"/><circle cx="28" cy="123" r="4"/><circle cx="37" cy="120" r="3"/><circle cx="46" cy="122" r="4"/>
+                  <circle cx="14" cy="135" r="3"/><circle cx="23" cy="138" r="4"/><circle cx="32" cy="134" r="3"/><circle cx="41" cy="137" r="4"/>
+                  <circle cx="10" cy="150" r="4"/><circle cx="19" cy="147" r="3"/><circle cx="28" cy="151" r="4"/>
+                </g>
+                <g id="clayZoomWater" class="opacity-0 transition-opacity duration-500">
+                  <rect x="0" y="0" width="200" height="35" fill="#60a5fa" opacity="0.6"/>
+                  <text x="100" y="22" text-anchor="middle" fill="#1e40af" font-size="10" font-weight="bold">น้ำขัง</text>
+                  <g stroke="#dc2626" stroke-width="2"><line x1="45" y1="40" x2="55" y2="50"/><line x1="55" y1="40" x2="45" y2="50"/><line x1="95" y1="40" x2="105" y2="50"/><line x1="105" y1="40" x2="95" y2="50"/></g>
+                </g>
+              </svg>
+            </div>
+            <div class="mt-3 p-2 bg-red-100 rounded-lg"><p class="text-xs text-red-800 text-center"><strong>🟤 อนุภาคเล็กมาก</strong> → ช่องว่างแคบ<br>น้ำซึมผ่านไม่ได้ → ขังบนผิว</p></div>
+          </div>
+        </div>
+      </div>
+      <!-- Summary -->
+      <div class="mt-6 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-2xl p-4 md:p-6 text-white shadow-xl">
+        <h3 class="text-lg font-bold text-center mb-4">📚 สรุปการเรียนรู้</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+          <div class="bg-white/20 rounded-xl p-3"><h4 class="font-bold mb-2">🏜️ ดินทราย</h4><ul class="space-y-1 text-xs"><li>• อนุภาคใหญ่ (0.05-2 มม.)</li><li>• ช่องว่างใหญ่มาก</li><li>• น้ำไหลผ่านเร็ว</li><li>• ไม่เหมาะปลูกพืช</li></ul></div>
+          <div class="bg-white/20 rounded-xl p-3"><h4 class="font-bold mb-2">🌿 ดินร่วน</h4><ul class="space-y-1 text-xs"><li>• อนุภาคผสม</li><li>• ช่องว่างพอดี</li><li>• อุ้มน้ำได้ดีที่สุด</li><li>• เหมาะสำหรับเกษตร</li></ul></div>
+          <div class="bg-white/20 rounded-xl p-3"><h4 class="font-bold mb-2">🏺 ดินเหนียว</h4><ul class="space-y-1 text-xs"><li>• อนุภาคเล็กมาก</li><li>• ช่องว่างแคบมาก</li><li>• น้ำซึมผ่านยาก</li><li>• น้ำขังบนผิว</li></ul></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    let isRunning=false;
+    document.getElementById('startBtn').addEventListener('click',startExperiment);
+    document.getElementById('resetBtn').addEventListener('click',resetExperiment);
+    function startExperiment(){if(isRunning)return;isRunning=true;document.getElementById('startBtn').classList.add('hidden');document.getElementById('resetBtn').classList.remove('hidden');
+    document.getElementById('sandWater').style.opacity='1';document.getElementById('loamWater').style.opacity='1';document.getElementById('clayWater').style.opacity='1';
+    setTimeout(()=>{document.getElementById('sandZoomWater').style.opacity='1';document.getElementById('loamZoomWater').style.opacity='1';document.getElementById('clayZoomWater').style.opacity='1';},1000);
+    setTimeout(()=>{document.getElementById('sandFlow').style.opacity='1';document.getElementById('sandFlow').classList.add('water-flow');},500);
+    setTimeout(()=>{document.getElementById('sandCollected').style.height='85%';},1500);
+    setTimeout(()=>{document.getElementById('loamFlow').style.opacity='1';document.getElementById('loamFlow').classList.add('water-flow');},1500);
+    setTimeout(()=>{document.getElementById('loamCollected').style.height='35%';},3000);
+    setTimeout(()=>{document.getElementById('clayWaterTop').style.height='40%';},2000);
+    setTimeout(()=>{document.getElementById('clayCollected').style.height='10%';},4000);}
+    function resetExperiment(){isRunning=false;document.getElementById('startBtn').classList.remove('hidden');document.getElementById('resetBtn').classList.add('hidden');
+    ['sandWater','loamWater','clayWater'].forEach(id=>document.getElementById(id).style.opacity='0');
+    ['sandZoomWater','loamZoomWater','clayZoomWater'].forEach(id=>document.getElementById(id).style.opacity='0');
+    document.getElementById('sandFlow').style.opacity='0';document.getElementById('sandFlow').classList.remove('water-flow');
+    document.getElementById('loamFlow').style.opacity='0';document.getElementById('loamFlow').classList.remove('water-flow');
+    ['sandCollected','loamCollected','clayCollected'].forEach(id=>document.getElementById(id).style.height='0');
+    document.getElementById('clayWaterTop').style.height='0';}
+  </script>
+</body>
+</html>

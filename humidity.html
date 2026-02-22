@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>การทดลองความกดอากาศ</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *{font-family:'Kanit',sans-serif;}
+    .back-nav{position:fixed;top:0;left:0;right:0;z-index:9999;background:rgba(255,253,247,0.96);backdrop-filter:blur(10px);padding:8px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:3px dashed #C9B8FF;}
+    .back-nav a{background:#C9B8FF;border:2.5px solid rgba(0,0,0,0.08);border-radius:14px;padding:6px 14px;font-weight:800;font-size:0.88rem;color:#3a3a5c;text-decoration:none;}
+    @keyframes bubbleRise{0%{transform:translateY(0) scale(1);opacity:0.8}50%{transform:translateY(-30px) scale(1.1);opacity:0.6}100%{transform:translateY(-60px) scale(0.8);opacity:0}}
+    @keyframes hotAirRise{0%{transform:translateY(0) translateX(0);opacity:0.9}100%{transform:translateY(-160px) translateX(0);opacity:0}}
+    @keyframes coldAirSink{0%{transform:translateY(0);opacity:0.8}100%{transform:translateY(60px);opacity:0}}
+    @keyframes steamRise{0%{transform:translateY(0) scale(1);opacity:0.6}100%{transform:translateY(-80px) scale(2);opacity:0}}
+    @keyframes rainDrop{0%{transform:translateY(-20px);opacity:0}20%{opacity:1}100%{transform:translateY(100px);opacity:0}}
+    @keyframes cloudForm{0%,100%{transform:scale(1);opacity:0.8}50%{transform:scale(1.1);opacity:1}}
+    @keyframes condensation{0%{opacity:0;transform:scale(0)}50%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.2) translateY(5px)}}
+    @keyframes iceGlow{0%,100%{filter:drop-shadow(0 0 5px rgba(173,216,230,0.5))}50%{filter:drop-shadow(0 0 15px rgba(173,216,230,0.9))}}
+    @keyframes warmGlow{0%,100%{filter:drop-shadow(0 0 8px rgba(255,100,50,0.4))}50%{filter:drop-shadow(0 0 20px rgba(255,100,50,0.8))}}
+    .bubble{animation:bubbleRise 2s ease-out infinite}
+    .hot-air{animation:hotAirRise 3s ease-out infinite}
+    .cold-air{animation:coldAirSink 2s ease-in infinite}
+    .steam{animation:steamRise 2.5s ease-out infinite}
+    .rain{animation:rainDrop 1.5s linear infinite}
+    .cloud{animation:cloudForm 3s ease-in-out infinite}
+    .condensation{animation:condensation 2s ease-out infinite}
+    .ice-glow{animation:iceGlow 2s ease-in-out infinite}
+    .warm-glow{animation:warmGlow 2s ease-in-out infinite}
+    .beaker{background:linear-gradient(135deg,rgba(255,255,255,0.1) 0%,rgba(255,255,255,0.05) 100%);border:3px solid rgba(200,220,255,0.6);border-radius:0 0 15px 15px;box-shadow:inset 0 0 30px rgba(255,255,255,0.1),0 10px 30px rgba(0,0,0,0.2);}
+    .water-cold{background:linear-gradient(180deg,#a8d8ff 0%,#6bb8ff 50%,#4aa3ff 100%)}
+    .water-normal{background:linear-gradient(180deg,#87ceeb 0%,#5bb5d8 50%,#4a9cc4 100%)}
+    .water-hot{background:linear-gradient(180deg,#ffb366 0%,#ff8533 50%,#ff6600 100%)}
+    .ice-cube{background:linear-gradient(135deg,#e6f7ff 0%,#b3e0ff 30%,#99d6ff 60%,#80ccff 100%);border:2px solid rgba(255,255,255,0.8);box-shadow:inset -3px -3px 10px rgba(0,0,0,0.1),inset 3px 3px 10px rgba(255,255,255,0.9);}
+  </style>
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 overflow-auto" style="padding-top:58px;">
+  <div class="back-nav">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <a href="index.html">← กลับหน้าหลัก</a>
+      <span style="font-family:'Fredoka One',cursive;font-size:1.05rem;color:#285eb4;">ความกดอากาศและการเกิดฝน</span>
+    </div>
+    <span style="font-size:1.3rem;">🌧️</span>
+  </div>
+  <div class="w-full min-h-full p-4 md:p-8">
+    <header class="text-center mb-6">
+      <h1 class="text-2xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-500 mb-2">🧪 การทดลองความกดอากาศและการเกิดฝน</h1>
+      <p class="text-slate-300 text-sm md:text-base">ศึกษาการเคลื่อนที่ของอากาศร้อน-เย็น และความชื้นในบรรยากาศ</p>
+    </header>
+    <div class="flex flex-wrap justify-center gap-3 mb-6">
+      <button onclick="startExperiment()" class="px-5 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-full font-medium shadow-lg transition-all hover:scale-105">▶️ เริ่มการทดลอง</button>
+      <button onclick="resetExperiment()" class="px-5 py-2.5 bg-gradient-to-r from-slate-600 to-slate-700 text-white rounded-full font-medium shadow-lg transition-all hover:scale-105">🔄 รีเซ็ต</button>
+      <button onclick="toggleSpeed()" id="speed-btn" class="px-5 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-full font-medium shadow-lg transition-all hover:scale-105">⚡ ความเร็ว: ปกติ</button>
+    </div>
+    <div class="flex flex-wrap justify-center gap-6 md:gap-10 mb-8">
+      <!-- Cold -->
+      <div class="text-center"><div class="relative">
+        <div class="absolute -top-8 left-1/2 transform -translate-x-1/2 z-20"><div class="ice-cube ice-glow w-16 h-10 rounded-lg flex items-center justify-center"><span class="text-2xl">🧊</span></div><div id="cold-condensation" class="absolute top-full left-0 w-full"></div></div>
+        <div class="beaker w-32 h-48 md:w-40 md:h-56 relative overflow-hidden"><div class="water-cold absolute bottom-0 left-0 right-0 h-3/4 rounded-b-xl"><div id="cold-bubbles" class="absolute inset-0"></div></div><div id="cold-air-zone" class="absolute -top-20 left-0 right-0 h-20 overflow-hidden"></div><div class="absolute bottom-2 right-2 bg-blue-900/80 text-blue-200 px-2 py-1 rounded text-xs font-bold">5°C</div></div>
+        <div class="mt-3 px-3 py-2 bg-blue-900/50 rounded-lg border border-blue-500/30"><p class="text-blue-300 font-semibold">💧 น้ำเย็น</p><p class="text-blue-200 text-xs">ความกดอากาศสูง</p></div>
+      </div><div id="cold-info" class="mt-3 p-3 bg-slate-800/60 rounded-lg border border-blue-500/20 max-w-[180px] text-left opacity-0 transition-opacity duration-500"><p class="text-cyan-300 text-xs leading-relaxed">🔵 อากาศเย็นมีความหนาแน่นสูง จึง<strong class="text-cyan-400">จมลง</strong></p></div></div>
+      <!-- Normal -->
+      <div class="text-center"><div class="relative">
+        <div class="absolute -top-8 left-1/2 transform -translate-x-1/2 z-20"><div class="ice-cube w-16 h-10 rounded-lg flex items-center justify-center"><span class="text-2xl">🧊</span></div><div id="normal-condensation" class="absolute top-full left-0 w-full"></div></div>
+        <div class="beaker w-32 h-48 md:w-40 md:h-56 relative overflow-hidden"><div class="water-normal absolute bottom-0 left-0 right-0 h-3/4 rounded-b-xl"><div id="normal-bubbles" class="absolute inset-0"></div></div><div class="absolute bottom-2 right-2 bg-slate-700/80 text-slate-200 px-2 py-1 rounded text-xs font-bold">25°C</div></div>
+        <div class="mt-3 px-3 py-2 bg-slate-700/50 rounded-lg border border-slate-500/30"><p class="text-slate-300 font-semibold">🌡️ น้ำอุณหภูมิปกติ</p><p class="text-slate-400 text-xs">ความกดอากาศปานกลาง</p></div>
+      </div><div id="normal-info" class="mt-3 p-3 bg-slate-800/60 rounded-lg border border-slate-500/20 max-w-[180px] text-left opacity-0 transition-opacity duration-500"><p class="text-slate-300 text-xs">⚪ อากาศเคลื่อนที่<strong>สมดุล</strong></p></div></div>
+      <!-- Hot -->
+      <div class="text-center"><div class="relative">
+        <div class="absolute -top-8 left-1/2 transform -translate-x-1/2 z-20"><div class="ice-cube warm-glow w-16 h-10 rounded-lg flex items-center justify-center"><span class="text-2xl">🧊</span></div><div id="hot-condensation" class="absolute top-full left-0 w-full"></div></div>
+        <div id="cloud-zone" class="absolute -top-24 left-1/2 transform -translate-x-1/2 z-10"></div>
+        <div id="rain-zone" class="absolute -top-16 left-0 right-0 h-16 overflow-hidden" style="z-index:5"></div>
+        <div class="beaker w-32 h-48 md:w-40 md:h-56 relative overflow-hidden"><div class="water-hot absolute bottom-0 left-0 right-0 h-3/4 rounded-b-xl"><div id="hot-bubbles" class="absolute inset-0"></div></div><div id="steam-zone" class="absolute top-0 left-0 right-0 h-1/2 overflow-visible"></div><div id="hot-air-zone" class="absolute -top-20 left-0 right-0 h-28 overflow-hidden"></div><div class="absolute bottom-2 right-2 bg-orange-900/80 text-orange-200 px-2 py-1 rounded text-xs font-bold">80°C</div></div>
+        <div class="mt-3 px-3 py-2 bg-orange-900/50 rounded-lg border border-orange-500/30"><p class="text-orange-300 font-semibold">🔥 น้ำร้อน</p><p class="text-orange-200 text-xs">ความกดอากาศต่ำ</p></div>
+      </div><div id="hot-info" class="mt-3 p-3 bg-slate-800/60 rounded-lg border border-orange-500/20 max-w-[180px] text-left opacity-0 transition-opacity duration-500"><p class="text-orange-300 text-xs">🔴 อากาศร้อน<strong class="text-orange-400">ลอยขึ้น</strong> → <strong class="text-cyan-400">เกิดฝน!</strong></p></div></div>
+    </div>
+    <div class="max-w-4xl mx-auto bg-slate-800/70 rounded-2xl p-5 border border-slate-600/30 mb-6">
+      <h2 class="text-xl font-bold text-white mb-4">📚 หลักการทางวิทยาศาสตร์</h2>
+      <div class="grid md:grid-cols-3 gap-4">
+        <div class="bg-blue-900/50 p-4 rounded-xl border border-blue-500/20"><div class="text-3xl mb-2">🌡️</div><h3 class="text-blue-300 font-semibold mb-2">ความกดอากาศ</h3><p class="text-blue-100/80 text-sm">อากาศร้อนมีความหนาแน่นต่ำจึงลอยตัวสูงขึ้น ส่วนอากาศเย็นมีความหนาแน่นสูงจึงจมลง</p></div>
+        <div class="bg-purple-900/50 p-4 rounded-xl border border-purple-500/20"><div class="text-3xl mb-2">💨</div><h3 class="text-purple-300 font-semibold mb-2">ความชื้นในอากาศ</h3><p class="text-purple-100/80 text-sm">น้ำระเหยเป็นไอน้ำ เมื่ออากาศร้อนพาไอน้ำขึ้น กระทบอากาศเย็น ไอน้ำจะควบแน่นเป็นหยดน้ำ</p></div>
+        <div class="bg-teal-900/50 p-4 rounded-xl border border-teal-500/20"><div class="text-3xl mb-2">🌧️</div><h3 class="text-teal-300 font-semibold mb-2">การเกิดฝน</h3><p class="text-teal-100/80 text-sm">ดวงอาทิตย์ทำให้น้ำระเหย อากาศร้อนพาไอน้ำขึ้น ควบแน่นเป็นเมฆ แล้วตกลงมาเป็นฝน</p></div>
+      </div>
+      <div class="mt-4 p-3 bg-slate-900/50 rounded-xl border border-slate-500/20">
+        <h3 class="text-white font-semibold mb-2 text-center">🔄 วัฏจักรของน้ำ</h3>
+        <div class="flex flex-wrap justify-center items-center gap-2 text-sm">
+          <span class="px-3 py-1 bg-orange-500/20 text-orange-300 rounded-full">☀️ ดวงอาทิตย์</span><span class="text-slate-500">→</span>
+          <span class="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full">💧 น้ำระเหย</span><span class="text-slate-500">→</span>
+          <span class="px-3 py-1 bg-red-500/20 text-red-300 rounded-full">🔺 อากาศร้อนลอย</span><span class="text-slate-500">→</span>
+          <span class="px-3 py-1 bg-purple-500/20 text-purple-300 rounded-full">☁️ เมฆ</span><span class="text-slate-500">→</span>
+          <span class="px-3 py-1 bg-cyan-500/20 text-cyan-300 rounded-full">🌧️ ฝนตก</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="status-bar" class="fixed bottom-4 left-1/2 transform -translate-x-1/2 px-5 py-2.5 bg-slate-800/90 backdrop-blur rounded-full text-white text-sm shadow-xl border border-slate-600/30 opacity-0 transition-all duration-300"><span id="status-text">พร้อมเริ่มการทดลอง</span></div>
+  <script>
+    let isRunning=false,animationSpeed=1,intervals=[];
+    function showStatus(t){const b=document.getElementById('status-bar');document.getElementById('status-text').textContent=t;b.style.opacity='1';setTimeout(()=>b.style.opacity='0',3000);}
+    function createBubble(c,color='rgba(255,255,255,0.6)'){const b=document.createElement('div');const sz=4+Math.random()*8;b.className='bubble absolute rounded-full';b.style.cssText=`width:${sz}px;height:${sz}px;background:${color};left:${10+Math.random()*80}%;bottom:${Math.random()*30}%;animation-delay:${Math.random()*2}s;animation-duration:${(1.5+Math.random())/animationSpeed}s;`;c.appendChild(b);setTimeout(()=>b.remove(),3000/animationSpeed);}
+    function createHotAir(c){const a=document.createElement('div');a.className='hot-air absolute';a.innerHTML='<svg width="20" height="30" viewBox="0 0 20 30"><path d="M10 30 L10 5 L5 12 M10 5 L15 12" stroke="#ff6b35" stroke-width="2" fill="none" opacity="0.7"/></svg>';a.style.cssText=`left:${20+Math.random()*60}%;bottom:0;animation-duration:${3/animationSpeed}s;`;c.appendChild(a);setTimeout(()=>a.remove(),4000/animationSpeed);}
+    function createColdAir(c){const a=document.createElement('div');a.className='cold-air absolute';a.innerHTML='<svg width="20" height="30" viewBox="0 0 20 30"><path d="M10 0 L10 25 L5 18 M10 25 L15 18" stroke="#60a5fa" stroke-width="2" fill="none" opacity="0.7"/></svg>';a.style.cssText=`left:${20+Math.random()*60}%;top:0;animation-duration:${2/animationSpeed}s;`;c.appendChild(a);setTimeout(()=>a.remove(),3000/animationSpeed);}
+    function createSteam(c){const s=document.createElement('div');s.className='steam absolute text-2xl';s.textContent='💨';s.style.cssText=`left:${20+Math.random()*60}%;bottom:60%;animation-duration:${2.5/animationSpeed}s;`;c.appendChild(s);setTimeout(()=>s.remove(),3000/animationSpeed);}
+    function createCondensation(c,intensity=1){const d=document.createElement('div');d.className='condensation absolute';const sz=3+Math.random()*5*intensity;d.style.cssText=`width:${sz}px;height:${sz}px;background:rgba(135,206,250,0.8);border-radius:50%;left:${Math.random()*100}%;top:${Math.random()*20}px;animation-duration:${2/animationSpeed}s;`;c.appendChild(d);setTimeout(()=>d.remove(),2500/animationSpeed);}
+    function createRain(c){const d=document.createElement('div');d.className='rain absolute';d.innerHTML='<span style="font-size:0.8rem;">💧</span>';d.style.cssText=`left:${20+Math.random()*60}%;animation-duration:${1.5/animationSpeed}s;animation-delay:${Math.random()*0.5}s;`;c.appendChild(d);setTimeout(()=>d.remove(),2000/animationSpeed);}
+    function startExperiment(){if(isRunning)return;isRunning=true;showStatus('🔬 เริ่มการทดลอง');setTimeout(()=>{document.getElementById('cold-info').style.opacity='1';document.getElementById('normal-info').style.opacity='1';document.getElementById('hot-info').style.opacity='1';},1000);
+    intervals.push(setInterval(()=>{createBubble(document.getElementById('cold-bubbles'),'rgba(173,216,230,0.7)');createColdAir(document.getElementById('cold-air-zone'));createCondensation(document.getElementById('cold-condensation'),0.5);},800/animationSpeed));
+    intervals.push(setInterval(()=>{createBubble(document.getElementById('normal-bubbles'),'rgba(200,200,200,0.5)');},1200/animationSpeed));
+    intervals.push(setInterval(()=>{createBubble(document.getElementById('hot-bubbles'),'rgba(255,150,100,0.7)');createHotAir(document.getElementById('hot-air-zone'));createSteam(document.getElementById('steam-zone'));createCondensation(document.getElementById('hot-condensation'),1.5);},500/animationSpeed));
+    setTimeout(()=>{const cz=document.getElementById('cloud-zone');cz.innerHTML='<div class="cloud" style="font-size:2.5rem">☁️</div>';intervals.push(setInterval(()=>createRain(document.getElementById('rain-zone')),300/animationSpeed));showStatus('🌧️ เกิดการควบแน่นและฝนตก!');},2000/animationSpeed);}
+    function resetExperiment(){isRunning=false;intervals.forEach(clearInterval);intervals=[];['cold-bubbles','normal-bubbles','hot-bubbles','cold-air-zone','normal-air-zone','hot-air-zone','steam-zone','cloud-zone','rain-zone','cold-condensation','normal-condensation','hot-condensation'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='';});['cold-info','normal-info','hot-info'].forEach(id=>document.getElementById(id).style.opacity='0');showStatus('🔄 รีเซ็ตการทดลอง');}
+    function toggleSpeed(){animationSpeed=animationSpeed===1?2:animationSpeed===2?0.5:1;const t=animationSpeed===1?'ปกติ':animationSpeed===2?'เร็ว':'ช้า';document.getElementById('speed-btn').textContent=`⚡ ความเร็ว: ${t}`;if(isRunning){resetExperiment();setTimeout(startExperiment,300);}showStatus(`⚡ ปรับความเร็วเป็น: ${t}`);}
+  </script>
+</body>
+</html>
