@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="th" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>แบบจำลองกลางวันกลางคืน</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Sarabun', sans-serif; }
+    .back-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+      background: rgba(255,253,247,0.96); backdrop-filter: blur(10px);
+      padding: 8px 20px; display: flex; align-items: center;
+      justify-content: space-between; border-bottom: 3px dashed #FFB3C6;
+    }
+    .back-nav a {
+      background: #FFB3C6; border: 2.5px solid rgba(0,0,0,0.08);
+      border-radius: 14px; padding: 6px 14px; font-weight: 800;
+      font-size: 0.88rem; color: #3a3a5c; text-decoration: none;
+    }
+    .back-nav .nav-title { font-family: 'Fredoka One', cursive; font-size: 1.05rem; color: #285eb4; }
+    .sun {
+      background: radial-gradient(circle, #FFE066 0%, #FFB800 50%, #FF8C00 100%);
+      box-shadow: 0 0 60px #FFB800, 0 0 100px #FF8C00;
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+    @keyframes pulse-glow {
+      0%,100% { box-shadow: 0 0 60px #FFB800, 0 0 100px #FF8C00; }
+      50% { box-shadow: 0 0 80px #FFB800, 0 0 120px #FF8C00; }
+    }
+    .earth {
+      background: linear-gradient(135deg, #1E5631 0%, #2E86AB 30%, #1E5631 50%, #2E86AB 70%, #1E5631 100%);
+      box-shadow: inset -30px 0 50px rgba(0,0,0,0.3);
+      position: relative; overflow: hidden;
+    }
+    .star { position: absolute; background: white; border-radius: 50%; animation: twinkle 2s ease-in-out infinite; }
+    @keyframes twinkle { 0%,100%{opacity:0.3} 50%{opacity:1} }
+    .compass-label { position:absolute; font-weight:600; color:#FFE066; text-shadow:0 0 10px rgba(255,224,102,0.5); pointer-events:none; z-index:5; }
+    @keyframes rotate-arrow { 0%{transform:rotate(360deg)} 100%{transform:rotate(0deg)} }
+  </style>
+</head>
+<body class="h-full m-0 overflow-auto" style="padding-top:58px;background:linear-gradient(180deg,#0a0a1a 0%,#1a1a3a 50%,#0a0a2a 100%);">
+  <div class="back-nav">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <a href="index.html">← กลับหน้าหลัก</a>
+      <span class="nav-title">กลางวัน-กลางคืน</span>
+    </div>
+    <span style="font-size:1.3rem;">🌍</span>
+  </div>
+  <div class="w-full min-h-full">
+    <div id="stars-container" class="fixed inset-0 overflow-hidden pointer-events-none"></div>
+    <div class="relative z-10 p-4 md:p-8 flex flex-col min-h-screen">
+      <header class="text-center mb-6">
+        <h1 class="text-2xl md:text-4xl font-bold text-yellow-300 mb-2">🌍 แบบจำลองการเกิดกลางวัน-กลางคืน</h1>
+        <p class="text-blue-200 text-sm md:text-base">การหมุนรอบตัวเองของโลกจากทิศตะวันตกไปทิศตะวันออก</p>
+      </header>
+      <div class="flex-1 flex flex-col lg:flex-row items-center justify-center gap-8">
+        <div class="hidden lg:flex flex-col gap-4 w-48">
+          <div class="bg-yellow-900/40 p-4 rounded-xl border border-yellow-600/30">
+            <div class="flex items-center gap-2 mb-2"><span class="text-2xl">☀️</span><span class="text-yellow-300 font-semibold">ดวงอาทิตย์</span></div>
+            <p class="text-yellow-100/80 text-xs">แหล่งกำเนิดแสงคงที่</p>
+          </div>
+          <div class="bg-blue-900/40 p-4 rounded-xl border border-blue-600/30">
+            <div class="flex items-center gap-2 mb-2"><span class="text-2xl">🌏</span><span class="text-blue-300 font-semibold">โลก</span></div>
+            <p class="text-blue-100/80 text-xs">หมุนรอบตัวเอง 24 ชม./รอบ</p>
+          </div>
+        </div>
+        <div id="animation-area" class="relative w-full max-w-2xl aspect-video rounded-3xl border border-indigo-500/20 overflow-hidden bg-transparent">
+          <div class="compass-label top-4 left-1/2 -translate-x-1/2 text-sm">เหนือ (N)</div>
+          <div class="compass-label bottom-4 left-1/2 -translate-x-1/2 text-sm">ใต้ (S)</div>
+          <div class="compass-label left-4 top-1/2 -translate-y-1/2 text-sm">ตะวันตก (W)</div>
+          <div class="compass-label right-4 top-1/2 -translate-y-1/2 text-sm">ตะวันออก (E)</div>
+          <div class="sun absolute w-20 h-20 md:w-28 md:h-28 rounded-full flex items-center justify-center z-10" style="left:8%;top:50%;transform:translateY(-50%)"><span class="text-3xl md:text-4xl">☀️</span></div>
+          <div class="absolute left-[18%] top-1/2 -translate-y-1/2 pointer-events-none" style="z-index:5">
+            <svg width="100" height="120" viewBox="0 0 100 120" class="opacity-40">
+              <defs><linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#FFB800;stop-opacity:0.8"/><stop offset="100%" style="stop-color:#FFB800;stop-opacity:0"/></linearGradient></defs>
+              <path d="M0,60 L100,20" stroke="url(#rg)" stroke-width="2"/><path d="M0,60 L100,40" stroke="url(#rg)" stroke-width="2"/><path d="M0,60 L100,60" stroke="url(#rg)" stroke-width="3"/><path d="M0,60 L100,80" stroke="url(#rg)" stroke-width="2"/><path d="M0,60 L100,100" stroke="url(#rg)" stroke-width="2"/>
+            </svg>
+          </div>
+          <div id="earth-container" class="absolute w-32 h-32 md:w-40 md:h-40 z-10" style="left:50%;top:50%;transform:translate(-50%,-50%)">
+            <div class="absolute -top-20 left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none z-10">
+              <svg class="w-10 h-10" viewBox="0 0 40 40" style="animation:rotate-arrow 3s linear infinite"><circle cx="20" cy="20" r="15" fill="none" stroke="#4ADE80" stroke-width="2" stroke-dasharray="70 30"/><polygon points="35,18 35,22 40,20" fill="#4ADE80"/></svg>
+              <span class="text-green-400 text-xs mt-1">ทิศหมุน</span>
+            </div>
+            <div class="earth absolute w-32 h-32 md:w-40 md:h-40 rounded-full" style="left:50%;top:50%;transform:translate(-50%,-50%);z-index:10">
+              <div class="absolute top-1/2 left-1/2 w-1 h-40 md:h-56 bg-cyan-400 -translate-x-1/2 -translate-y-1/2 rotate-[23.5deg] rounded-full opacity-60 pointer-events-none"></div>
+              <div class="absolute w-3 h-3 bg-red-500 rounded-full shadow-lg" style="top:25%;left:50%;transform:translate(-50%,-50%);z-index:11">
+                <div class="absolute text-red-300 text-xs font-bold whitespace-nowrap" style="top:50%;left:50%;transform:translate(-50%,-120%)">👁️ ผู้สังเกต</div>
+              </div>
+            </div>
+          </div>
+          <div class="absolute w-32 h-32 md:w-40 md:h-40 rounded-full pointer-events-none" style="background:radial-gradient(circle at 0% 50%,transparent 0%,transparent 20%,rgba(0,0,20,0.4) 50%,rgba(0,0,0,0.95) 100%);z-index:15;left:50%;top:50%;transform:translate(-50%,-50%)"></div>
+        </div>
+        <div class="hidden lg:flex flex-col gap-4 w-48">
+          <div class="bg-green-900/40 p-4 rounded-xl border border-green-600/30">
+            <div class="flex items-center gap-2 mb-2"><span class="text-2xl">🔄</span><span class="text-green-300 font-semibold">ทิศหมุน</span></div>
+            <p class="text-green-100/80 text-xs">ตะวันตก → ตะวันออก</p>
+          </div>
+          <div class="bg-red-900/40 p-4 rounded-xl border border-red-600/30">
+            <div class="flex items-center gap-2 mb-2"><span class="text-2xl">👁️</span><span class="text-red-300 font-semibold">ผู้สังเกต</span></div>
+            <p class="text-red-100/80 text-xs">จุดแดงบนโลก</p>
+          </div>
+        </div>
+      </div>
+      <div class="mt-6 bg-slate-800/50 rounded-2xl p-4 border border-slate-600/30">
+        <div class="flex flex-col md:flex-row items-center justify-center gap-4">
+          <div class="flex items-center gap-3">
+            <span class="text-slate-300 text-sm">ความเร็ว:</span>
+            <button id="speed-slow" class="px-3 py-1.5 rounded-lg bg-slate-700 text-slate-300 text-sm border border-slate-500/30">0.5x</button>
+            <button id="speed-normal" class="px-3 py-1.5 rounded-lg bg-blue-600 text-white text-sm border border-blue-400/30">1x</button>
+            <button id="speed-fast" class="px-3 py-1.5 rounded-lg bg-slate-700 text-slate-300 text-sm border border-slate-500/30">2x</button>
+          </div>
+          <button id="play-pause" class="px-6 py-2 rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold">⏸️ หยุดชั่วคราว</button>
+          <button id="reset" class="px-4 py-2 rounded-xl bg-gradient-to-r from-orange-600 to-red-600 text-white font-semibold">🔄 รีเซ็ต</button>
+        </div>
+      </div>
+      <div class="mt-4 text-center">
+        <p class="text-slate-400 text-xs md:text-sm max-w-2xl mx-auto">💡 <strong class="text-slate-300">หลักการ:</strong> โลกหมุนรอบตัวเองจากทิศตะวันตกไปทิศตะวันออก ด้านที่หันเข้าหาดวงอาทิตย์จะเป็นกลางวัน ส่วนด้านตรงข้ามจะเป็นกลางคืน</p>
+      </div>
+    </div>
+  </div>
+  <script>
+    let isPlaying=true,speed=1,angle=0;
+    const ec=document.getElementById('earth-container');
+    function createStars(){const c=document.getElementById('stars-container');for(let i=0;i<50;i++){const s=document.createElement('div');s.className='star';s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';s.style.width=(Math.random()*2+1)+'px';s.style.height=s.style.width;s.style.animationDelay=Math.random()*2+'s';c.appendChild(s);}}
+    function animate(){if(isPlaying)angle-=0.5*speed;ec.style.transform=`translate(-50%,-50%) rotateZ(${angle}deg)`;requestAnimationFrame(animate);}
+    function setSpeed(s){speed=s;['slow','normal','fast'].forEach(n=>{const b=document.getElementById('speed-'+n);const v=n==='slow'?0.5:n==='normal'?1:2;b.className='px-3 py-1.5 rounded-lg text-sm border '+(s===v?'bg-blue-600 text-white border-blue-400/30':'bg-slate-700 text-slate-300 border-slate-500/30');});}
+    document.getElementById('speed-slow').addEventListener('click',()=>setSpeed(0.5));
+    document.getElementById('speed-normal').addEventListener('click',()=>setSpeed(1));
+    document.getElementById('speed-fast').addEventListener('click',()=>setSpeed(2));
+    document.getElementById('play-pause').addEventListener('click',()=>{isPlaying=!isPlaying;const b=document.getElementById('play-pause');b.innerHTML=isPlaying?'⏸️ หยุดชั่วคราว':'▶️ เล่นต่อ';});
+    document.getElementById('reset').addEventListener('click',()=>{angle=0;isPlaying=true;speed=1;setSpeed(1);document.getElementById('play-pause').innerHTML='⏸️ หยุดชั่วคราว';});
+    createStars();animate();
+  </script>
+</body>
+</html>

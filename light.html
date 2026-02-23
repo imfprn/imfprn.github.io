@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>การทดลองแสงเคลื่อนที่เป็นเส้นตรง</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+  <style>
+    .back-nav { position:fixed;top:0;left:0;right:0;z-index:9999;background:rgba(255,253,247,0.96);backdrop-filter:blur(10px);padding:8px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:3px dashed #FFF0A0; }
+    .back-nav a { background:#FFF0A0;border:2.5px solid rgba(0,0,0,0.08);border-radius:14px;padding:6px 14px;font-weight:800;font-size:0.88rem;color:#3a3a5c;text-decoration:none; }
+    @keyframes lightBeam { 0%{width:0;opacity:0} 20%{width:200px;opacity:0.8} 100%{width:1000px;opacity:0.8} }
+    @keyframes lightBeamBlocked { 0%{width:0;opacity:0} 30%{width:200px;opacity:0.8} 100%{width:260px;opacity:0.8} }
+    @keyframes lightSpot { 0%{opacity:0;transform:scale(0)} 80%{opacity:0;transform:scale(0)} 100%{opacity:1;transform:scale(1)} }
+    @keyframes flashlightGlow { 0%,100%{box-shadow:0 0 20px rgba(255,255,0,0.5)} 50%{box-shadow:0 0 40px rgba(255,255,0,0.8)} }
+    @keyframes scatteredRays { 0%{width:0;opacity:0} 30%{width:144px;opacity:0.6} 100%{width:144px;opacity:0.6} }
+    .light-beam { background:linear-gradient(90deg,rgba(255,255,0,0.8) 0%,rgba(255,255,150,0.6) 50%,rgba(255,255,0,0.8) 100%);height:6px;position:absolute;top:calc(50% - 17px);left:120px;transform:translateY(-50%);border-radius:3px;animation:lightBeam 3s ease-in-out infinite; }
+    .light-spot { width:60px;height:60px;background:radial-gradient(circle,rgba(255,255,0,0.9) 0%,rgba(255,255,150,0.6) 50%,rgba(255,255,0,0.3) 100%);border-radius:50%;position:absolute;right:42px;top:calc(50% - 30px);transform:translateY(-50%);animation:lightSpot 3s ease-in-out infinite; }
+    .flashlight { animation:flashlightGlow 2s ease-in-out infinite; }
+    .paper { background:linear-gradient(135deg,#f8f9fa 0%,#e9ecef 100%);box-shadow:0 4px 8px rgba(0,0,0,0.1); }
+    .hole { background:radial-gradient(circle,#000 30%,#333 100%);box-shadow:inset 0 0 10px rgba(0,0,0,0.8); }
+    .screen { background:linear-gradient(135deg,#ffffff 0%,#f1f3f4 100%);box-shadow:0 6px 12px rgba(0,0,0,0.15); }
+    .scattered-ray { background:linear-gradient(90deg,rgba(255,255,0,0.6) 0%,rgba(255,255,150,0.4) 50%,rgba(255,255,0,0.6) 100%);height:3px;position:absolute;left:120px;border-radius:2px;animation:scatteredRays 3s ease-in-out infinite; }
+    .ray-1{top:calc(50% - 50px);transform:rotate(-15deg)} .ray-2{top:calc(50% - 40px);transform:rotate(-8deg)} .ray-3{top:calc(50% - 25px);transform:rotate(-3deg)} .ray-4{top:calc(50% - 10px);transform:rotate(3deg)} .ray-5{top:calc(50% + 0px);transform:rotate(8deg)} .ray-6{top:calc(50% + 10px);transform:rotate(15deg)}
+  </style>
+</head>
+<body class="bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 min-h-screen flex flex-col items-center justify-center p-8" style="padding-top:80px;">
+  <div class="back-nav">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <a href="index.html">← กลับหน้าหลัก</a>
+      <span style="font-family:'Fredoka One',cursive;font-size:1.05rem;color:#285eb4;">การทดลองแสงเส้นตรง</span>
+    </div>
+    <span style="font-size:1.3rem;">💡</span>
+  </div>
+  <div class="text-center mb-12">
+    <h1 class="text-4xl font-bold text-white mb-4">การทดลองแสงเคลื่อนที่เป็นเส้นตรง</h1>
+    <p class="text-xl text-blue-200 mb-6">แสดงให้เห็นว่าแสงเดินทางเป็นเส้นตรง</p>
+  </div>
+  <div class="mb-8 flex gap-4">
+    <button onclick="showNormalMode()" id="normalBtn" class="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-6 py-3 rounded-full font-semibold shadow-lg">✅ แสงผ่านได้</button>
+    <button onclick="showBlockedMode()" id="blockedBtn" class="bg-gradient-to-r from-gray-500 to-gray-600 text-white px-6 py-3 rounded-full font-semibold shadow-lg">🚫 แสงถูกบัง</button>
+  </div>
+  <div class="relative w-full max-w-6xl h-96 bg-gradient-to-r from-gray-800 to-gray-700 rounded-2xl shadow-2xl overflow-hidden">
+    <div class="absolute left-8 top-1/2 transform -translate-y-1/2">
+      <div class="flashlight bg-gradient-to-r from-yellow-400 to-orange-500 w-24 h-16 rounded-r-full rounded-l-lg flex items-center justify-center"><div class="w-4 h-4 bg-yellow-200 rounded-full"></div></div>
+      <div class="text-white text-sm mt-2 text-center font-medium">ไฟฉาย</div>
+    </div>
+    <div class="light-beam"></div>
+    <div class="scattered-ray ray-1"></div><div class="scattered-ray ray-2"></div><div class="scattered-ray ray-3"></div><div class="scattered-ray ray-4"></div><div class="scattered-ray ray-5"></div><div class="scattered-ray ray-6"></div>
+    <div class="absolute left-64 top-1/2 transform -translate-y-1/2">
+      <div class="paper w-20 h-48 rounded-lg flex items-center justify-center"><div class="hole w-6 h-6 rounded-full"></div></div>
+      <div class="text-white text-sm mt-2 text-center font-medium">กระดาษ 1</div>
+    </div>
+    <div class="absolute top-1/2 transform -translate-y-1/2" style="left:459px">
+      <div class="paper w-20 h-48 rounded-lg flex items-center justify-center" id="paper2"><div class="hole w-6 h-6 rounded-full" id="hole2"></div></div>
+      <div class="text-white text-sm mt-2 text-center font-medium">กระดาษ 2</div>
+    </div>
+    <div class="absolute top-1/2 transform -translate-y-1/2 opacity-0 transition-opacity duration-500" id="obstacle" style="left:459px">
+      <div class="bg-gradient-to-b from-red-600 to-red-800 w-16 h-40 rounded-lg shadow-lg flex items-center justify-center"><div class="text-white text-xs font-bold transform -rotate-90">สิ่งกีดขวาง</div></div>
+    </div>
+    <div class="absolute right-8 top-1/2 transform -translate-y-1/2">
+      <div class="screen w-16 h-56 rounded-lg relative"><div class="light-spot"></div></div>
+      <div class="text-white text-sm mt-2 text-center font-medium">ฉากกั้น</div>
+    </div>
+  </div>
+  <div class="mt-12 flex gap-4">
+    <button onclick="restartAnimation()" class="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-8 py-3 rounded-full font-semibold shadow-lg">🔄 เริ่มการทดลองใหม่</button>
+    <button onclick="toggleAnimation()" id="toggleBtn" class="bg-gradient-to-r from-blue-500 to-cyan-600 text-white px-8 py-3 rounded-full font-semibold shadow-lg">⏸️ หยุดชั่วคราว</button>
+  </div>
+  <div class="mt-12 max-w-5xl bg-white/10 backdrop-blur-sm rounded-2xl p-8 text-white">
+    <h2 class="text-2xl font-bold mb-6 text-center">🔬 หลักการทดลองแสงเคลื่อนที่เป็นเส้นตรง</h2>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div><h3 class="text-lg font-semibold mb-3 text-yellow-300">📋 วิธีการทดลอง:</h3><ul class="space-y-2 text-blue-100"><li>• จัดวางกระดาษ 3 แผ่นในแนวเดียวกัน</li><li>• เจาะรูให้ตรงกันทุกแผ่น</li><li>• ส่องไฟฉายผ่านรูแรก</li><li>• สังเกตแสงที่ปรากฏบนฉากกั้น</li></ul></div>
+      <div><h3 class="text-lg font-semibold mb-3 text-green-300">✅ เมื่อแสงผ่านได้:</h3><ul class="space-y-2 text-blue-100"><li>• แสงเดินทางเป็นเส้นตรง</li><li>• แสงผ่านรูที่ตรงกันได้</li><li>• ปรากฏจุดแสงบนฉากกั้น</li><li>• พิสูจน์ธรรมชาติของแสง</li></ul></div>
+      <div><h3 class="text-lg font-semibold mb-3 text-red-300">🚫 เมื่อมีสิ่งกีดขวาง:</h3><ul class="space-y-2 text-blue-100"><li>• แสงถูกบังโดยวัตถุ</li><li>• แสงไม่สามารถโค้งไปรอบวัตถุ</li><li>• ไม่มีแสงปรากฏบนฉากกั้น</li><li>• ยืนยันแสงเดินทางตรง</li></ul></div>
+    </div>
+  </div>
+  <script>
+    let animationPaused=false,currentMode='normal';
+    function showNormalMode(){currentMode='normal';document.getElementById('obstacle').style.opacity='0';document.getElementById('paper2').style.opacity='1';document.getElementById('normalBtn').className='bg-gradient-to-r from-green-500 to-emerald-600 text-white px-6 py-3 rounded-full font-semibold shadow-lg';document.getElementById('blockedBtn').className='bg-gradient-to-r from-gray-500 to-gray-600 text-white px-6 py-3 rounded-full font-semibold shadow-lg';restartAnimation();}
+    function showBlockedMode(){currentMode='blocked';document.getElementById('obstacle').style.opacity='1';document.getElementById('paper2').style.opacity='0.3';document.getElementById('normalBtn').className='bg-gradient-to-r from-gray-500 to-gray-600 text-white px-6 py-3 rounded-full font-semibold shadow-lg';document.getElementById('blockedBtn').className='bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-3 rounded-full font-semibold shadow-lg';restartAnimation();}
+    function restartAnimation(){const lb=document.querySelector('.light-beam'),ls=document.querySelector('.light-spot'),fl=document.querySelector('.flashlight'),sr=document.querySelectorAll('.scattered-ray');lb.style.animation='none';ls.style.animation='none';fl.style.animation='none';sr.forEach(r=>r.style.animation='none');setTimeout(()=>{if(currentMode==='normal'){lb.style.animation='lightBeam 3s ease-in-out infinite';ls.style.animation='lightSpot 3s ease-in-out infinite';}else{lb.style.animation='lightBeamBlocked 3s ease-in-out infinite';ls.style.animation='none';ls.style.opacity='0';}fl.style.animation='flashlightGlow 2s ease-in-out infinite';sr.forEach(r=>r.style.animation='scatteredRays 3s ease-in-out infinite');},10);animationPaused=false;document.getElementById('toggleBtn').innerHTML='⏸️ หยุดชั่วคราว';}
+    function toggleAnimation(){const lb=document.querySelector('.light-beam'),ls=document.querySelector('.light-spot'),fl=document.querySelector('.flashlight'),sr=document.querySelectorAll('.scattered-ray');if(animationPaused){lb.style.animationPlayState='running';if(currentMode==='normal')ls.style.animationPlayState='running';fl.style.animationPlayState='running';sr.forEach(r=>r.style.animationPlayState='running');document.getElementById('toggleBtn').innerHTML='⏸️ หยุดชั่วคราว';animationPaused=false;}else{lb.style.animationPlayState='paused';ls.style.animationPlayState='paused';fl.style.animationPlayState='paused';sr.forEach(r=>r.style.animationPlayState='paused');document.getElementById('toggleBtn').innerHTML='▶️ เล่นต่อ';animationPaused=true;}}
+    window.addEventListener('load',()=>setTimeout(restartAnimation,500));
+  </script>
+</body>
+</html>
