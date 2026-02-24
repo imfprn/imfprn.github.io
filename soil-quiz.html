@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soil-quiz</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&family=Kanit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --mint: #C7F2C7;
+      --pink: #FFB3C6;
+      --lavender: #D4BBFF;
+      --sky: #AEE6FF;
+      --yellow: #FFF0A0;
+      --peach: #FFCBA4;
+      --blue: #4A90D9;
+      --dark: #3a3a5c;
+      --correct: #22c55e;
+      --wrong: #ef4444;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Kanit', sans-serif;
+      background: #FFFDF7;
+      min-height: 100vh;
+      padding-top: 58px;
+    }
+
+    /* ===== BACK NAV ===== */
+    .back-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+      background: rgba(255,253,247,0.96); backdrop-filter: blur(10px);
+      padding: 8px 20px; display: flex; align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px dashed var(--mint);
+    }
+    .back-nav a {
+      background: var(--mint); border: 2.5px solid rgba(0,0,0,0.08);
+      border-radius: 14px; padding: 6px 14px; font-weight: 800;
+      font-size: 0.88rem; color: var(--dark); text-decoration: none;
+      font-family: 'Nunito', sans-serif;
+      box-shadow: 3px 3px 0 rgba(0,0,0,0.08);
+      transition: transform 0.15s;
+    }
+    .back-nav a:hover { transform: translate(-2px,-2px); }
+    .back-nav .nav-title { font-family: 'Fredoka One', cursive; font-size: 1.1rem; color: var(--blue); }
+
+    /* ===== HEADER ===== */
+    .page-header {
+      background: linear-gradient(135deg, #e0f7fa 0%, #f0fdf4 50%, #fef9c3 100%);
+      border-bottom: 3px dashed var(--sky);
+      padding: 28px 20px 20px;
+      text-align: center;
+    }
+    .page-header h1 {
+       font-family: "Prompt", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      color: var(--dark);
+      margin-bottom: 6px;
+    }
+    .page-header h1 span { color: var(--blue); }
+    .page-header p { color: #555; font-size: 1rem; }
+
+    /* ===== PROGRESS ===== */
+    .progress-bar-wrap {
+      max-width: 700px; margin: 16px auto 0;
+      background: rgba(0,0,0,0.06); border-radius: 20px; height: 14px; overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--blue), #7ec8e3);
+      border-radius: 20px;
+      transition: width 0.5s ease;
+    }
+    .progress-label { text-align: center; margin-top: 6px; font-size: 0.85rem; color: #888; font-weight: 700; }
+
+    /* ===== MAIN LAYOUT ===== */
+    .main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 28px 16px 60px;
+    }
+
+    /* ===== QUESTION CARD ===== */
+    .question-card {
+      background: #fff;
+      border-radius: 24px;
+      border: 2.5px solid rgba(0,0,0,0.07);
+      box-shadow: 6px 6px 0 rgba(0,0,0,0.06);
+      padding: 28px;
+      margin-bottom: 28px;
+      transition: box-shadow 0.2s;
+    }
+    .question-card.done-correct {
+      border-color: var(--correct);
+      box-shadow: 6px 6px 0 rgba(34,197,94,0.25);
+      background: #f0fff4;
+    }
+    .question-card.done-wrong {
+      border-color: var(--wrong);
+      box-shadow: 6px 6px 0 rgba(239,68,68,0.2);
+      background: #fff5f5;
+    }
+
+    .question-top {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    @media(min-width: 600px) {
+      .question-top { flex-direction: row; align-items: flex-start; }
+    }
+
+    /* ===== SOIL IMAGE ===== */
+    .soil-image-wrap {
+      position: relative;
+      flex-shrink: 0;
+    }
+    .soil-image-wrap img {
+      width: 220px;
+      height: 200px;
+      background: #e8f4f8;
+      object-fit: cover;
+      border-radius: 18px;
+      border: 3px solid rgba(0,0,0,0.08);
+      box-shadow: 4px 4px 12px rgba(0,0,0,0.1);
+      display: block;
+    }
+    @media(max-width: 599px) {
+      .soil-image-wrap img { width: 100%; height: 180px; }
+    }
+    .badge {
+      position: absolute;
+      top: 10px; left: 10px;
+      width: 38px; height: 38px;
+      background: var(--blue);
+      color: #fff;
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.2rem;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 2px 2px 8px rgba(0,0,0,0.25);
+    }
+
+    /* ===== DROPDOWNS ===== */
+    .questions-side {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      justify-content: center;
+    }
+
+    .q-item label {
+      display: block;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--dark);
+      margin-bottom: 6px;
+    }
+
+    .dropdown-wrap {
+      position: relative;
+    }
+
+    .q-select {
+      width: 100%;
+      padding: 10px 44px 10px 16px;
+      border: 2.5px solid var(--sky);
+      border-radius: 14px;
+      background: #f7fbff;
+      font-family: 'Kanit', sans-serif;
+      font-size: 1rem;
+      color: var(--dark);
+      appearance: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      outline: none;
+    }
+    .q-select:focus { border-color: var(--blue); background: #fff; }
+    .q-select.correct {
+      border-color: var(--correct);
+      background: #f0fff4;
+      color: #166534;
+    }
+    .q-select.wrong {
+      border-color: var(--wrong);
+      background: #fff5f5;
+      color: #991b1b;
+    }
+
+    .dropdown-arrow {
+      position: absolute;
+      right: 12px; top: 50%;
+      transform: translateY(-50%);
+      width: 28px; height: 28px;
+      background: var(--blue);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      pointer-events: none;
+    }
+    .dropdown-arrow svg { fill: white; }
+
+    .feedback-icon {
+      position: absolute;
+      right: 48px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.2rem;
+      pointer-events: none;
+      display: none;
+    }
+
+    /* ===== ANSWER FEEDBACK ===== */
+    .answer-reveal {
+      margin-top: 8px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: none;
+    }
+    .answer-reveal.show { display: block; }
+    .answer-reveal.correct-msg { background: #dcfce7; color: #166534; border: 1.5px solid #86efac; }
+    .answer-reveal.wrong-msg { background: #fee2e2; color: #991b1b; border: 1.5px solid #fca5a5; }
+
+    /* ===== SUBMIT BUTTON ===== */
+    .submit-wrap { text-align: center; margin-top: 8px; }
+    .check-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 32px;
+      background: linear-gradient(135deg, var(--blue) 0%, #5ba8e8 100%);
+      color: #fff;
+      border: none;
+      border-radius: 20px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 1rem; font-weight: 800;
+      cursor: pointer;
+      box-shadow: 4px 4px 0 rgba(74,144,217,0.35);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .check-btn:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 rgba(74,144,217,0.35); }
+    .check-btn:active { transform: translate(1px,1px); }
+    .check-btn:disabled { background: #d1d5db; box-shadow: none; cursor: not-allowed; }
+
+    /* ===== RESULT PANEL ===== */
+    #result-panel {
+      display: none;
+      background: linear-gradient(135deg, #f0fdf4, #fffbeb);
+      border: 3px solid var(--mint);
+      border-radius: 24px;
+      padding: 32px 24px;
+      text-align: center;
+      box-shadow: 6px 6px 0 rgba(0,0,0,0.07);
+      margin-top: 8px;
+    }
+    #result-panel .result-emoji { font-size: 3rem; margin-bottom: 10px; }
+    #result-panel h2 { font-family: 'Fredoka One', cursive; font-size: 1.8rem; color: var(--dark); }
+    #result-panel .score-display {
+      font-size: 3rem; font-family: 'Fredoka One', cursive;
+      color: var(--blue); margin: 10px 0;
+    }
+    #result-panel p { color: #555; font-size: 1rem; margin-bottom: 16px; }
+    .retry-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 28px;
+      background: var(--yellow);
+      color: var(--dark);
+      border: 2.5px solid rgba(0,0,0,0.1);
+      border-radius: 20px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 1rem; font-weight: 800;
+      cursor: pointer;
+      box-shadow: 4px 4px 0 rgba(0,0,0,0.1);
+      transition: transform 0.15s;
+    }
+    .retry-btn:hover { transform: translate(-2px,-2px); }
+
+    /* ===== FLOATING DECO ===== */
+    .floater {
+      position: fixed; font-size: 2rem;
+      pointer-events: none; z-index: 0;
+      opacity: 0.12; animation: floatUp linear infinite;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.12; }
+      90% { opacity: 0.12; }
+      100% { transform: translateY(-120px) rotate(360deg); opacity: 0; }
+    }
+
+    /* ===== HEADER INSTRUCTION ===== */
+    .instruction-bar {
+      max-width: 900px;
+      margin: 20px auto 0;
+      padding: 0 16px;
+    }
+    .instruction-box {
+      background: var(--lavender);
+      border: 2.5px solid rgba(100,80,200,0.2);
+      border-radius: 16px;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.95rem;
+      color: var(--dark);
+      font-weight: 600;
+    }
+    .instruction-box .inst-icon { font-size: 1.6rem; flex-shrink: 0; }
+  </style>
+  <!-- 
+    ==========================================
+    วิธีใช้งาน: เซฟรูปภาพ 3 ไฟล์ในโฟลเดอร์เดียวกับ HTML นี้:
+      soil_loam.png  = ภาพที่ 1 (มือกำดินสีน้ำตาล)
+      soil_sand.png  = ภาพที่ 2 (กองทรายสีทอง)
+      soil_clay.png  = ภาพที่ 3 (มือกำดินเหนียวเขียว)
+    ==========================================
+  -->
+</head>
+<body>
+
+  <!-- Floating decorations -->
+  <div class="floater" style="left:5%;animation-duration:18s;animation-delay:0s;">🌱</div>
+  <div class="floater" style="left:20%;animation-duration:22s;animation-delay:4s;">🪨</div>
+  <div class="floater" style="left:40%;animation-duration:16s;animation-delay:8s;">💧</div>
+  <div class="floater" style="left:65%;animation-duration:20s;animation-delay:2s;">🌿</div>
+  <div class="floater" style="left:85%;animation-duration:14s;animation-delay:6s;">🏺</div>
+
+  <!-- Back Nav -->
+  <div class="back-nav">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <a href="index.html">← กลับหน้าหลัก</a>
+      <span class="nav-title">แบบฝึกหัด: สังเกตลักษณะดิน</span>
+    </div>
+    <span style="font-size:1.3rem;">📝</span>
+  </div>
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <h1>📝 <span>แบบฝึกหัด</span> สังเกตลักษณะดิน</h1>
+    <p>สังเกตลักษณะทางกายภาพของดินในภาพ แล้วตอบคำถามให้ถูกต้อง</p>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+    </div>
+    <div class="progress-label" id="progressLabel">ตอบแล้ว 0 / 9 ข้อ</div>
+  </div>
+
+  <!-- Instruction -->
+  <div class="instruction-bar">
+    <div class="instruction-box">
+      <span class="inst-icon">👀</span>
+      <span><strong>วิธีทำ:</strong> สังเกตภาพดินด้านซ้ายแล้วเลือกคำตอบที่ถูกต้อง กดปุ่ม <strong>"ตรวจคำตอบ"</strong> เพื่อดูเฉลย</span>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  
+    
+  <div class="main">
+
+    <!-- Question 1: Clay Soil -->
+    <div class="question-card" id="card1">
+      <div class="question-top">
+        <div class="soil-image-wrap">
+          <img id="img-card1" src="assets/img/clay.png" alt="ดินเหนียว">
+          <div class="badge">1</div>
+        </div>
+        <div class="questions-side">
+
+          <div class="q-item">
+            <label>ลักษณะเนื้อดิน</label>
+            <div class="dropdown-wrap">
+              <select class="q-select" id="q1a" data-answer="เนียนละเอียด เหนียวติดมือ">
+                <option value="">-- เลือกคำตอบ --</option>
+                <option>หยาบ ร่วนซุย ไม่ติดมือ</option>
+                <option>เนียนละเอียด เหนียวติดมือ</option>
+                <option>ปานกลาง ร่วนนุ่ม</option>
+              </select>
+              <div class="dropdown-arrow"><svg width="12" height="8" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg></div>
+              <span class="feedback-icon" id="fi-q1a"></span>
+            </div>
+            <div class="answer-reveal" id="ar-q1a"></div>
+          </div>
+
+          <div class="q-item">
+            <label>การอุ้มน้ำของดิน</label>
+            <div class="dropdown-wrap">
+              <select class="q-select" id="q1b" data-answer="อุ้มน้ำได้มาก น้ำซึมผ่านยาก">
+                <option value="">-- เลือกคำตอบ --</option>
+                <option>อุ้มน้ำได้น้อย น้ำซึมผ่านเร็ว</option>
+                <option>อุ้มน้ำได้ปานกลาง</option>
+                <option>อุ้มน้ำได้มาก น้ำซึมผ่านยาก</option>
+              </select>
+              <div class="dropdown-arrow"><svg width="12" height="8" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg></div>
+              <span class="feedback-icon" id="fi-q1b"></span>
+            </div>
+            <div class="answer-reveal" id="ar-q1b"></div>
+          </div>
+
+          <div class="q-item">
+            <label>ชนิดของดิน</label>
+            <div class="dropdown-wrap">
+              <select class="q-select" id="q1c" data-answer="ดินเหนียว">
+                <option value="">-- เลือกคำตอบ --</option>
+                <option>ดินทราย</option>
+                <option>ดินร่วน</option>
+                <option>ดินเหนียว</option>
+              </select>
+              <div class="dropdown-arrow"><svg width="12" height="8" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg></div>
+              <span class="feedback-icon" id="fi-q1c"></span>
+            </div>
+            <div class="answer-reveal" id="ar-q1c"></div>
+          </div>
+
+        </div>
+      </div>
+      <div class="submit-wrap" style="margin-top:20px;">
+        <button class="check-btn" onclick="checkCard(1)">🔍 ตรวจคำตอบ</button>
+      </div>
+    </div>
+
+    <!-- Question 2: Sandy Soil -->
+    <div class="question-card" id="card2">
+      <div class="question-top">
+        <div class="soil-image-wrap">
+          <img id="img-card2" src="assets/img/sandy.png" alt="ดินทราย">
+          <div class="badge" style="background:#e67e22;">2</div>
+        </div>
+        <div class="questions-side">
+
+          <div class="q-item">
+            <label>สีของดิน</label>
+            <div class="dropdown-wrap">
+              <select class="q-select" id="q2a" data-answer="น้ำตาลอ่อน หรือเหลืองทอง">
+                <option value="">-- เลือกคำตอบ --</option>
+                <option>น้ำตาลเข้ม หรือดำ</option>
+                <option>น้ำตาลอ่อน หรือเหลืองทอง</option>
+                <option>เทาอมเขียว</option>
+              </select>
+              <div class="dropdown-arrow"><svg width="12" height="8" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg></div>
+              <span class="feedback-icon" id="fi-q2a"></span>
+            </div>
+            <div class="answer-reveal" id="ar-q2a"></div>
+          </div>
+
+          <div class="q-item">
+            <label>การจับตัวของดิน</label>
+            <div class="dropdown-wrap">
+              <select class="q-select" id="q2b" data-answer="ร่วนซุย ไม่จับตัว กระจายตัวง่าย">
+                <option value="">-- เลือกคำตอบ --</option>
+                <option>ร่วนซุย ไม่จับตัว กระจายตัวง่าย</option>
+                <option>เหนียวแน่น จับตัวดี</option>
+                <option>จับตัวปานกลาง</option>
+              </select>
+              <div class="dropdown-arrow"><svg width="12" height="8" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg></div>
+              <span class="feedback-icon" id="fi-q2b"></span>
+            </div>
+            <div class="answer-reveal" id="ar-q2b"></div>
+          </div>
+
+          <div class="q-item">
+            <label>ชนิดของดิน</label>
+            <div class="dropdown-wrap">
+              <select class="q-select" id="q2c" data-answer="ดินทราย">
+                <option value="">-- เลือกคำตอบ --</option>
+                <option>ดินทราย</option>
+                <option>ดินร่วน</option>
+                <option>ดินเหนียว</option>
+              </select>
+              <div class="dropdown-arrow"><svg width="12" height="8" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg></div>
+              <span class="feedback-icon" id="fi-q2c"></span>
+            </div>
+            <div class="answer-reveal" id="ar-q2c"></div>
+          </div>
+
+        </div>
+      </div>
+      <div class="submit-wrap" style="margin-top:20px;">
+        <button class="check-btn" onclick="checkCard(2)">🔍 ตรวจคำตอบ</button>
+      </div>
+    </div>
+
+    <!-- Question 3: Loam Soil -->
+    <div class="question-card" id="card3">
+      <div class="question-top">
+        <div class="soil-image-wrap">
+          <img id="img-card3" src="assets/img/loam.png" alt="ดินร่วน">
+          <div class="badge" style="background:#6d4c41;">3</div>
+        </div>
+        <div class="questions-side">
+
+          <div class="q-item">
+            <label>ลักษณะเนื้อดิน</label>
+            <div class="dropdown-wrap">
+              <select class="q-select" id="q3a" data-answer="ร่วนนุ่ม เนื้อละเอียดปานกลาง">
+                <option value="">-- เลือกคำตอบ --</option>
+                <option>หยาบมาก เม็ดใหญ่เห็นชัด</option>
+                <option>ร่วนนุ่ม เนื้อละเอียดปานกลาง</option>
+                <option>เหนียวมาก ปั้นได้ง่าย</option>
+              </select>
+              <div class="dropdown-arrow"><svg width="12" height="8" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg></div>
+              <span class="feedback-icon" id="fi-q3a"></span>
+            </div>
+            <div class="answer-reveal" id="ar-q3a"></div>
+          </div>
+
+          <div class="q-item">
+            <label>สีของดิน</label>
+            <div class="dropdown-wrap">
+              <select class="q-select" id="q3b" data-answer="น้ำตาลเข้ม ดำอมน้ำตาล">
+                <option value="">-- เลือกคำตอบ --</option>
+                <option>น้ำตาลอ่อน เหลืองทราย</option>
+                <option>น้ำตาลเข้ม ดำอมน้ำตาล</option>
+                <option>เทาอมเขียว</option>
+              </select>
+              <div class="dropdown-arrow"><svg width="12" height="8" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg></div>
+              <span class="feedback-icon" id="fi-q3b"></span>
+            </div>
+            <div class="answer-reveal" id="ar-q3b"></div>
+          </div>
+
+          <div class="q-item">
+            <label>ชนิดของดิน</label>
+            <div class="dropdown-wrap">
+              <select class="q-select" id="q3c" data-answer="ดินร่วน">
+                <option value="">-- เลือกคำตอบ --</option>
+                <option>ดินทราย</option>
+                <option>ดินร่วน</option>
+                <option>ดินเหนียว</option>
+              </select>
+              <div class="dropdown-arrow"><svg width="12" height="8" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg></div>
+              <span class="feedback-icon" id="fi-q3c"></span>
+            </div>
+            <div class="answer-reveal" id="ar-q3c"></div>
+          </div>
+
+        </div>
+      </div>
+      <div class="submit-wrap" style="margin-top:20px;">
+        <button class="check-btn" onclick="checkCard(3)">🔍 ตรวจคำตอบ</button>
+      </div>
+    </div>
+
+    <!-- Result Panel -->
+    <div id="result-panel">
+      <div class="result-emoji" id="resultEmoji">🌟</div>
+      <h2 id="resultTitle">ยอดเยี่ยม!</h2>
+      <div class="score-display" id="scoreDisplay">9/9</div>
+      <p id="resultMsg">คุณตอบถูกต้องทุกข้อ เก่งมากเลย!</p>
+      <button class="retry-btn" onclick="resetAll()">🔄 ทำแบบฝึกหัดใหม่</button>
+    </div>
+
+  </div><!-- end .main -->
+
+  <script>
+    // Track answers
+    const totalQ = 9;
+    let answeredCount = 0;
+    let correctCount = 0;
+    const cardDone = { 1: false, 2: false, 3: false };
+
+    function updateProgress() {
+      const pct = Math.round((answeredCount / totalQ) * 100);
+      document.getElementById('progressFill').style.width = pct + '%';
+      document.getElementById('progressLabel').textContent = `ตอบแล้ว ${answeredCount} / ${totalQ} ข้อ`;
+    }
+
+    function checkCard(cardNum) {
+      if (cardDone[cardNum]) return;
+
+      const ids = {
+        1: ['q1a','q1b','q1c'],
+        2: ['q2a','q2b','q2c'],
+        3: ['q3a','q3b','q3c']
+      };
+
+      const qIds = ids[cardNum];
+      let cardCorrect = 0;
+      let allAnswered = true;
+
+      qIds.forEach(id => {
+        const sel = document.getElementById(id);
+        if (!sel.value) { allAnswered = false; }
+      });
+
+      if (!allAnswered) {
+        alert('กรุณาเลือกคำตอบให้ครบทุกข้อก่อนนะคะ 😊');
+        return;
+      }
+
+      qIds.forEach(id => {
+        const sel = document.getElementById(id);
+        const correct = sel.dataset.answer;
+        const userAnswer = sel.value;
+        const isCorrect = userAnswer === correct;
+
+        const fi = document.getElementById('fi-' + id);
+        const ar = document.getElementById('ar-' + id);
+
+        sel.disabled = true;
+
+        if (isCorrect) {
+          sel.classList.add('correct');
+          fi.textContent = '✅';
+          fi.style.display = 'inline';
+          ar.textContent = '✅ ถูกต้อง! ' + correct;
+          ar.className = 'answer-reveal show correct-msg';
+          cardCorrect++;
+          correctCount++;
+        } else {
+          sel.classList.add('wrong');
+          fi.textContent = '❌';
+          fi.style.display = 'inline';
+          ar.textContent = '❌ คำตอบที่ถูกคือ: ' + correct;
+          ar.className = 'answer-reveal show wrong-msg';
+        }
+        answeredCount++;
+      });
+
+      // Update card style
+      const card = document.getElementById('card' + cardNum);
+      const btn = card.querySelector('.check-btn');
+      btn.disabled = true;
+      btn.textContent = cardCorrect === 3 ? '✅ ทำถูกทุกข้อ!' : '📖 ดูเฉลยแล้ว';
+      card.classList.add(cardCorrect === 3 ? 'done-correct' : 'done-wrong');
+      cardDone[cardNum] = true;
+
+      updateProgress();
+
+      // Check if all done
+      if (cardDone[1] && cardDone[2] && cardDone[3]) {
+        setTimeout(showResult, 600);
+      }
+    }
+
+    function showResult() {
+      const panel = document.getElementById('result-panel');
+      panel.style.display = 'block';
+      panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      const pct = correctCount / totalQ;
+      let emoji, title, msg;
+
+      if (pct === 1) {
+        emoji = '🏆'; title = 'เก่งมากเลย!'; msg = 'คุณตอบถูกทุกข้อ! ความเข้าใจเรื่องดินของคุณยอดเยี่ยมมาก 🌟';
+      } else if (pct >= 0.78) {
+        emoji = '🌟'; title = 'ดีมาก!'; msg = 'คุณทำได้ดีมาก! ลองทบทวนข้อที่ผิดเพิ่มเติมนะคะ 📚';
+      } else if (pct >= 0.56) {
+        emoji = '👍'; title = 'พยายามดี!'; msg = 'ผ่านครึ่งมาได้แล้ว! ลองทำซ้ำเพื่อฝึกความจำนะคะ 💪';
+      } else {
+        emoji = '📚'; title = 'ต้องฝึกเพิ่ม!'; msg = 'ไม่เป็นไร! กลับไปทบทวนบทเรียนเรื่องดินแล้วลองใหม่นะคะ 🌱';
+      }
+
+      document.getElementById('resultEmoji').textContent = emoji;
+      document.getElementById('resultTitle').textContent = title;
+      document.getElementById('scoreDisplay').textContent = correctCount + '/' + totalQ;
+      document.getElementById('resultMsg').textContent = msg;
+    }
+
+    function resetAll() {
+      // Reset counters
+      answeredCount = 0;
+      correctCount = 0;
+      cardDone[1] = false; cardDone[2] = false; cardDone[3] = false;
+
+      // Reset all selects
+      const ids = ['q1a','q1b','q1c','q2a','q2b','q2c','q3a','q3b','q3c'];
+      ids.forEach(id => {
+        const sel = document.getElementById(id);
+        sel.value = '';
+        sel.disabled = false;
+        sel.className = 'q-select';
+        document.getElementById('fi-' + id).style.display = 'none';
+        const ar = document.getElementById('ar-' + id);
+        ar.className = 'answer-reveal';
+        ar.textContent = '';
+      });
+
+      // Reset cards
+      [1,2,3].forEach(n => {
+        const card = document.getElementById('card' + n);
+        card.className = 'question-card';
+        const btn = card.querySelector('.check-btn');
+        btn.disabled = false;
+        btn.textContent = '🔍 ตรวจคำตอบ';
+      });
+
+      // Hide result
+      document.getElementById('result-panel').style.display = 'none';
+      updateProgress();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Init
+    updateProgress();
+  </script>
+
+</body>
+</html>
