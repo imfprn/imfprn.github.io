@@ -369,7 +369,7 @@
 
       <!-- Footer note -->
       <div class="card-footer">
-        หากมีปัญหาการเข้าถึง ติดต่อครูผู้สอน <br> <span>ครู: พีรณัฐ ณ นคร</span> &nbsp;·&nbsp; ชั้น <span>ป.2/2</span>
+        หากมีปัญหาการเข้าถึง ติดต่อ<br> <span>ครู: พีรณัฐ ณ นคร</span> &nbsp;·&nbsp; ชั้น <span>ป.2/2</span>
         
       </div>
 
@@ -377,63 +377,42 @@
   </div><!-- end .page-wrap -->
 
   <script>
-    async function checkCode() {
-  const codeInput = document.getElementById('code-input');
-  const code = codeInput.value.trim();
+  async function checkCode() {
+  const code = document.getElementById('code-input').value.trim();
   const errorBox = document.getElementById('error-box');
   const errorText = document.getElementById('error-text');
   const succBox = document.getElementById('success-box');
-  const submitBtn = document.querySelector('.submit-btn');
 
-  // 1. ล้างสถานะเดิม
-  errorBox.classList.remove('show');
-  succBox.classList.remove('show');
-
-  // 2. ตรวจสอบรูปแบบเบื้องต้น (ต้องเป็นตัวเลข 3 หลัก)
-  if (code.length !== 5 || !/^\d{5}$/.test(code)) {
-    errorText.textContent = code.length === 0 
-      ? 'กรุณากรอกรหัส 5 หลักก่อนกดดูผลการเรียน' 
-      : 'กรุณากรอกเลข 5 หลักให้ครบและถูกต้อง';
+  if (code.length !== 5 || !/^\d{5}$/.test(code)) { // ปรับเลขหลักตามที่ใช้งานจริง
+    errorText.textContent = 'กรุณากรอกเลขให้ถูกต้อง';
     errorBox.classList.add('show');
-    codeInput.focus();
     return;
   }
 
-  // 3. เริ่มขั้นตอนการตรวจสอบไฟล์
-  const pdfPath = `reports68/${code}.pdf`;
+  const newWindow = window.open('', '_blank');
   
-  // แสดงสถานะว่ากำลังตรวจสอบ (เพื่อความลื่นไหล)
-  submitBtn.disabled = true;
-  submitBtn.innerHTML = '<span>⏳</span> กำลังตรวจสอบข้อมูล...';
+  errorBox.classList.remove('show');
+  succBox.classList.add('show');
+
+  const pdfPath = `reports68/${code}.pdf`;
 
   try {
-    // ใช้ fetch แบบ HEAD เพื่อเช็คว่ามีไฟล์ไหม (ประหยัด Data เพราะไม่โหลดไฟล์จริงมา)
     const response = await fetch(pdfPath, { method: 'HEAD' });
 
     if (response.ok) {
-      // พบไฟล์จริง!
-      succBox.classList.add('show');
-      setTimeout(() => {
-        window.open(pdfPath, '_blank');
-        succBox.classList.remove('show');
-        resetBtn();
-      }, 800);
+      newWindow.location.href = pdfPath;
+      setTimeout(() => succBox.classList.remove('show'), 800);
     } else {
-      // ไม่พบไฟล์ (เช่น พิมพ์เลขผิด หรือยังไม่ได้อัปโหลดไฟล์ของคนนี้)
-      errorText.textContent = 'ไม่พบข้อมูลผลการเรียน โปรดตรวจสอบตัวเลขใหม่อีกครั้ง';
+      newWindow.close();
+      errorText.textContent = 'ไม่พบข้อมูลผลการเรียน โปรดตรวจสอบอีกครั้ง';
       errorBox.classList.add('show');
-      resetBtn();
+      succBox.classList.remove('show');
     }
   } catch (err) {
-    // กรณีเกิดข้อผิดพลาดในการเชื่อมต่อ
-    errorText.textContent = 'เกิดข้อผิดพลาดในการเชื่อมต่อ โปรดลองใหม่อีกครั้ง';
+    newWindow.close();
+    errorText.textContent = 'เกิดข้อผิดพลาดในการเชื่อมต่อ';
     errorBox.classList.add('show');
-    resetBtn();
-  }
-
-  function resetBtn() {
-    submitBtn.disabled = false;
-    submitBtn.innerHTML = '<span></span> ดูผลการเรียน';
+    succBox.classList.remove('show');
   }
 }
   </script>
