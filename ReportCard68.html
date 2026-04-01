@@ -383,42 +383,31 @@
   </div><!-- end .page-wrap -->
 
   <script>
-  async function checkCode() {
+  function checkCode() {
   const code = document.getElementById('code-input').value.trim();
   const errorBox = document.getElementById('error-box');
-  const errorText = document.getElementById('error-text');
   const succBox = document.getElementById('success-box');
 
-  if (code.length !== 5 || !/^\d{5}$/.test(code)) { // ปรับเลขหลักตามที่ใช้งานจริง
-    errorText.textContent = 'กรุณากรอกเลขให้ถูกต้อง';
-    errorBox.classList.add('show');
-    return;
-  }
-
-  const newWindow = window.open('', '_blank');
-  
   errorBox.classList.remove('show');
-  succBox.classList.add('show');
+  succBox.classList.remove('show');
 
-  const pdfPath = `reports68/${code}.pdf`;
-
-  try {
-    const response = await fetch(pdfPath, { method: 'HEAD' });
-
-    if (response.ok) {
-      newWindow.location.href = pdfPath;
-      setTimeout(() => succBox.classList.remove('show'), 800);
-    } else {
-      newWindow.close();
-      errorText.textContent = 'ไม่พบข้อมูลผลการเรียน โปรดตรวจสอบอีกครั้ง';
-      errorBox.classList.add('show');
+  // ตรวจสอบความถูกต้องของรหัสก่อน
+  if (code.length === 5 && /^\d{5}$/.test(code)) {
+    const pdfPath = `https://imfprn.github.io/reports68/${code}.pdf`; 
+    
+    succBox.classList.add('show');
+    
+    setTimeout(() => {
+      window.location.href = pdfPath; 
       succBox.classList.remove('show');
-    }
-  } catch (err) {
-    newWindow.close();
-    errorText.textContent = 'เกิดข้อผิดพลาดในการเชื่อมต่อ';
+    }, 800);
+  } else {
+    const msg = code.length === 0
+      ? 'กรุณากรอกรหัส 5 หลักก่อนกดดูผลการเรียน'
+      : 'กรุณากรอกเลข 5 หลักให้ครบและถูกต้อง (เฉพาะตัวเลข)';
+    document.getElementById('error-text').textContent = msg;
     errorBox.classList.add('show');
-    succBox.classList.remove('show');
+    document.getElementById('code-input').focus();
   }
 }
   </script>
