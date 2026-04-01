@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report Card 2025</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --pink:     #FFB3C6;
+      --yellow:   #FFF0A0;
+      --mint:     #B5EAD7;
+      --lavender: #C9B8FF;
+      --sky:      #AEE6FF;
+      --peach:    #FFCBA4;
+      --blue:     #285eb4;
+      --dark:     #3a3a5c;
+      --white:    #FFFDF7;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background-color: var(--white);
+      color: var(--dark);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      overflow-x: hidden;
+    }
+
+    /* Floating gradient bg — identical to index */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at 10% 20%, rgba(255,179,198,0.25) 0%, transparent 40%),
+        radial-gradient(circle at 90% 10%, rgba(174,230,255,0.25) 0%, transparent 40%),
+        radial-gradient(circle at 80% 80%, rgba(181,234,215,0.25) 0%, transparent 40%),
+        radial-gradient(circle at 20% 80%, rgba(201,184,255,0.25) 0%, transparent 40%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ===== FLOATING DECO EMOJIS ===== */
+    .floater {
+      position: fixed;
+      font-size: 2rem;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.13;
+      animation: floatAround linear infinite;
+    }
+    @keyframes floatAround {
+      0%   { transform: translateY(0)      rotate(0deg);   }
+      100% { transform: translateY(-100vh) rotate(360deg); }
+    }
+
+    /* ===== WRAPPER ===== */
+    .page-wrap {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 480px;
+    }
+
+    /* ===== BACK LINK ===== */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--blue);
+      text-decoration: none;
+      margin-bottom: 18px;
+      padding: 7px 14px;
+      background: white;
+      border-radius: 14px;
+      border: 2px solid var(--sky);
+      box-shadow: 3px 3px 0 rgba(0,0,0,0.06);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .back-link:hover {
+      transform: translate(-2px,-2px);
+      box-shadow: 5px 5px 0 rgba(0,0,0,0.09);
+    }
+
+    /* ===== MAIN CARD ===== */
+    .card {
+      background: white;
+      border-radius: 28px;
+      border: 2.5px solid rgba(0,0,0,0.06);
+      box-shadow: 8px 8px 0px var(--yellow), 0 4px 24px rgba(0,0,0,0.07);
+      padding: 36px 32px 32px;
+      position: relative;
+      overflow: hidden;
+      animation: cardIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(30px) scale(0.95); }
+      to   { opacity: 1; transform: translateY(0)    scale(1);    }
+    }
+
+    /* decorative corner ribbon — removed */
+
+    /* ===== LOGO + HEADER ===== */
+    .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .logo-badge {
+      width: 52px; height: 52px;
+      background: linear-gradient(135deg, var(--sky) 0%, var(--lavender) 100%);
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem;
+      border: 2.5px solid white;
+      box-shadow: 4px 4px 0 rgba(0,0,0,0.08);
+      flex-shrink: 0;
+    }
+    .logo-text-main {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.35rem;
+      color: var(--dark);
+      line-height: 1.1;
+      display: flex;
+      justify-content: center; 
+      align-items: center; 
+    }
+    .logo-text-sub {
+      font-size: 0.8rem;
+      color: #888;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    .divider {
+      height: 3px;
+      border-radius: 3px;
+      background: linear-gradient(90deg, var(--pink), var(--lavender), var(--sky), var(--mint));
+      margin-bottom: 24px;
+    }
+
+    /* ===== BADGE CHIP ===== */
+    .badge-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 22px;
+    }
+    .badge {
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      border: 2px solid rgba(0,0,0,0.05);
+    }
+
+    /* ===== INPUT ===== */
+    .field-label {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 7px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .input-wrap {
+      position: relative;
+      margin-bottom: 16px;
+    }
+    .input-icon {
+      position: absolute;
+      left: 14px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.1rem;
+      pointer-events: none;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 13px 16px 13px 42px;
+      border: 2.5px solid var(--sky);
+      border-radius: 16px;
+      background: #f7fbff;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--dark);
+      letter-spacing: 3px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+    input[type="text"]:focus {
+      border-color: var(--blue);
+      background: white;
+      box-shadow: 0 0 0 3px rgba(40,94,180,0.12);
+    }
+    input[type="text"]::placeholder {
+      letter-spacing: 0.5px;
+      color: #b0b8d0;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    /* ===== BUTTON ===== */
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--blue) 0%, #4a90e2 100%);
+      color: white;
+      border: none;
+      border-radius: 16px;
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.1rem;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      box-shadow: 0 4px 0 rgba(40,94,180,0.35), 0 8px 24px rgba(40,94,180,0.2);
+      transition: transform 0.15s, box-shadow 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 rgba(40,94,180,0.35), 0 12px 30px rgba(40,94,180,0.25);
+    }
+    .submit-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 rgba(40,94,180,0.35);
+    }
+
+    /* ===== ERROR ===== */
+    .error-box {
+      margin-top: 14px;
+      padding: 11px 16px;
+      background: #fff0f0;
+      border: 2px solid #ffc5c5;
+      border-radius: 14px;
+      color: #c0392b;
+      font-size: 0.88rem;
+      font-weight: 700;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      animation: shakeX 0.4s ease;
+    }
+    .error-box.show { display: flex; }
+    @keyframes shakeX {
+      0%,100%{ transform: translateX(0);    }
+      20%    { transform: translateX(-6px); }
+      40%    { transform: translateX( 6px); }
+      60%    { transform: translateX(-4px); }
+      80%    { transform: translateX( 4px); }
+    }
+
+    /* ===== SUCCESS BOX ===== */
+    .success-box {
+      margin-top: 14px;
+      padding: 11px 16px;
+      background: #f0fff8;
+      border: 2px solid #a8e6cf;
+      border-radius: 14px;
+      color: #1a7a4e;
+      font-size: 0.88rem;
+      font-weight: 700;
+      display: none;
+      align-items: center;
+      gap: 8px;
+    }
+    .success-box.show { display: flex; }
+
+    /* ===== FOOTER NOTE ===== */
+    .card-footer {
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 2px dashed rgba(0,0,0,0.07);
+      font-size: 0.78rem;
+      color: #aaa;
+      font-weight: 700;
+      text-align: center;
+      line-height: 1.6;
+    }
+    .card-footer span {
+      color: var(--blue);
+      font-weight: 800;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating deco -->
+  <div class="floater" style="left:5%;  animation-duration:18s; animation-delay:0s;">📋</div>
+  <div class="floater" style="left:22%; animation-duration:24s; animation-delay:5s;">⭐</div>
+  <div class="floater" style="left:55%; animation-duration:20s; animation-delay:2s;">🎓</div>
+  <div class="floater" style="left:75%; animation-duration:16s; animation-delay:8s;">📚</div>
+  <div class="floater" style="left:88%; animation-duration:22s; animation-delay:3s;">✏️</div>
+
+  <div class="page-wrap">
+
+    <!-- Back link -->
+    <a href="index.html" class="back-link">← กลับหน้าหลัก</a>
+
+    <!-- Main card -->
+    <div class="card">
+      <a href="https://imfprn.github.io/#home" style="display:block; text-align:center; margin-bottom:16px;">
+        <img src="assets/img/logo4.png" width="147" height="60" style="max-height:60px; height:auto;">
+        
+      </a>
+        <div class="logo-text-main">Report Card 2025 | P2/2</div>
+        <!-- <div class="logo-text-sub">ป.2/2 · ปีการศึกษา 2568</div> -->
+          
+      <!-- Logo row -->
+      <div class="logo-row">
+        <!-- <div class="logo-badge">📋</div> -->
+        
+          
+        
+      </div>
+
+      <div class="divider"></div>
+
+           <!-- Instruction -->
+      <!-- <div class="field-label"> กรอกรหัสเพื่อดูผลการเรียน</div> -->
+      <!-- <div style="font-size:0.8rem;color:#999;font-weight:700;margin-bottom:14px;line-height:1.5;">
+        ใช้ <strong style="color:var(--dark);">เลข 3 หลักท้ายของรหัสประจำตัวประชาชน</strong>ของนักเรียน
+      </div> -->
+
+      <!-- Input -->
+      <div class="input-wrap">
+        <span class="input-icon">🔢</span>
+        <input
+          id="code-input"
+          type="text"
+          placeholder="กรอกเลข 5 หลักท้ายของรหัสประจำตัวประชาชนของนักเรียน"
+          maxlength="5"
+          inputmode="numeric"
+          pattern="\d{3}"
+          onkeydown="if(event.key==='Enter') checkCode()"
+          oninput="this.value=this.value.replace(/\D/g,'')"
+        />
+      </div>
+
+      <!-- Button -->
+      <button class="submit-btn" onclick="checkCode()">
+        <span></span> ดูผลการเรียน
+      </button>
+
+      <!-- Error -->
+      <div class="error-box" id="error-box">
+        <span>⚠️</span>
+        <span id="error-text">กรุณากรอกเลข 5 หลักให้ถูกต้อง (เฉพาะตัวเลข)</span>
+      </div>
+
+      <!-- Success -->
+      <div class="success-box" id="success-box">
+        <span>✅</span>
+        <span>กำลังเปิดไฟล์ผลการเรียน...</span>
+      </div>
+
+      <!-- Footer note -->
+      <div class="card-footer">
+        หากมีปัญหาการเข้าถึง ติดต่อครูผู้สอน <br> <span>ครู: พีรณัฐ ณ นคร</span> &nbsp;·&nbsp; ชั้น <span>ป.2/2</span>
+        
+      </div>
+
+    </div><!-- end .card -->
+  </div><!-- end .page-wrap -->
+
+  <script>
+    async function checkCode() {
+  const codeInput = document.getElementById('code-input');
+  const code = codeInput.value.trim();
+  const errorBox = document.getElementById('error-box');
+  const errorText = document.getElementById('error-text');
+  const succBox = document.getElementById('success-box');
+  const submitBtn = document.querySelector('.submit-btn');
+
+  // 1. ล้างสถานะเดิม
+  errorBox.classList.remove('show');
+  succBox.classList.remove('show');
+
+  // 2. ตรวจสอบรูปแบบเบื้องต้น (ต้องเป็นตัวเลข 3 หลัก)
+  if (code.length !== 5 || !/^\d{5}$/.test(code)) {
+    errorText.textContent = code.length === 0 
+      ? 'กรุณากรอกรหัส 5 หลักก่อนกดดูผลการเรียน' 
+      : 'กรุณากรอกเลข 5 หลักให้ครบและถูกต้อง';
+    errorBox.classList.add('show');
+    codeInput.focus();
+    return;
+  }
+
+  // 3. เริ่มขั้นตอนการตรวจสอบไฟล์
+  const pdfPath = `reports68/${code}.pdf`;
+  
+  // แสดงสถานะว่ากำลังตรวจสอบ (เพื่อความลื่นไหล)
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<span>⏳</span> กำลังตรวจสอบข้อมูล...';
+
+  try {
+    // ใช้ fetch แบบ HEAD เพื่อเช็คว่ามีไฟล์ไหม (ประหยัด Data เพราะไม่โหลดไฟล์จริงมา)
+    const response = await fetch(pdfPath, { method: 'HEAD' });
+
+    if (response.ok) {
+      // พบไฟล์จริง!
+      succBox.classList.add('show');
+      setTimeout(() => {
+        window.open(pdfPath, '_blank');
+        succBox.classList.remove('show');
+        resetBtn();
+      }, 800);
+    } else {
+      // ไม่พบไฟล์ (เช่น พิมพ์เลขผิด หรือยังไม่ได้อัปโหลดไฟล์ของคนนี้)
+      errorText.textContent = 'ไม่พบข้อมูลผลการเรียน โปรดตรวจสอบตัวเลขใหม่อีกครั้ง';
+      errorBox.classList.add('show');
+      resetBtn();
+    }
+  } catch (err) {
+    // กรณีเกิดข้อผิดพลาดในการเชื่อมต่อ
+    errorText.textContent = 'เกิดข้อผิดพลาดในการเชื่อมต่อ โปรดลองใหม่อีกครั้ง';
+    errorBox.classList.add('show');
+    resetBtn();
+  }
+
+  function resetBtn() {
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = '<span></span> ดูผลการเรียน';
+  }
+}
+  </script>
+</body>
+</html>
