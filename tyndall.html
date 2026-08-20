@@ -161,6 +161,7 @@
     .beam-rail {
       position: absolute; top: 50%; left: 0; right: 0; height: 6px;
       transform: translateY(-50%); pointer-events: none;
+      z-index: 1;  /* below beakers */
     }
     .beam-seg {
       position: absolute; height: 3px; top: 1.5px;
@@ -170,15 +171,13 @@
     .laser-on .beam-seg { opacity: 1; }
 
     /* Segments relative to rail width */
-    .seg-before  { left: 7%;  width: 22%; }  /* laser tip → beaker 1 */
-    .seg-between { left: 38%; width: 12%; }  /* beaker 1 exit → beaker 2 entry */
-    .seg-after   { left: 67%; width: 33%; } /* beaker 2 exit → edge */
+    .seg-before  { left: 7%;  width: 43%; }  /* laser tip → beaker 2 entry (continuous) */
+    .seg-between { display: none; }           /* merged into seg-before */
+    .seg-after   { left: 67%; width: 33%; }  /* beaker 2 exit → edge */
 
-    /* Beaker 1 (water) – invisible: no scatter, laser not visible in solution */
+    /* Beaker 1 (water) – beam is continuous but hidden by beaker sitting on top */
     .seg-b1 {
-      left: 29%; width: 9%;
-      background: transparent;
-      opacity: 0 !important;
+      display: none; /* not needed — single continuous beam now */
     }
 
     /* Beaker 2 (colloid) – GLOW */
@@ -216,8 +215,8 @@
       display: flex; flex-direction: column; align-items: center;
       position: absolute; bottom: 0; transform: translateX(-50%);
     }
-    .bk-wrap.bk1 { left: 33%; }
-    .bk-wrap.bk2 { left: 58%; }
+    .bk-wrap.bk1 { left: 33%; z-index: 5; }  /* above beam-rail → blocks laser */
+    .bk-wrap.bk2 { left: 58%; z-index: 3; }  /* beam-b2 glow renders inside svg */
 
     .bk-label {
       font-size: .72rem; font-weight: 800; color: #94a3b8;
@@ -408,7 +407,7 @@
 
   <div class="page">
 
-   
+    
 
     <!-- EXPERIMENT SECTION -->
     <div class="sec-head">
@@ -450,15 +449,17 @@
         <!-- Beakers -->
         <div class="bk-wrap bk1">
           <svg class="beaker" viewBox="0 0 100 140">
+            <!-- opaque backing to block laser beam behind beaker -->
+            <rect x="20" y="35" width="60" height="93" rx="2" fill="#0f172a"/>
             <!-- beaker outline -->
             <path d="M20,15 L20,112 Q20,128 35,128 L65,128 Q80,128 80,112 L80,15"
                   fill="none" stroke="rgba(148,163,184,0.7)" stroke-width="2.5"/>
             <!-- rim -->
             <line x1="14" y1="15" x2="24" y2="15" stroke="rgba(148,163,184,0.7)" stroke-width="2"/>
             <line x1="76" y1="15" x2="86" y2="15" stroke="rgba(148,163,184,0.7)" stroke-width="2"/>
-            <!-- water fill – transparent/clear -->
+            <!-- water fill – clear/transparent look -->
             <path d="M22,35 L22,111 Q22,126 35,126 L65,126 Q78,126 78,111 L78,35 Z"
-                  fill="rgba(147,210,240,0.18)"/>
+                  fill="rgba(147,210,240,0.12)"/>
             <!-- subtle waves -->
             <path d="M22,36 Q40,32 60,36 Q70,38 78,36" fill="none" stroke="rgba(147,210,240,0.4)" stroke-width="1"/>
           </svg>
@@ -502,18 +503,18 @@
       </div><!-- end stage -->
 
       <!-- Info panels -->
-      <div class="info-grid">
-        <!-- <div class="info-panel" style="background:rgba(59,130,246,.08);border-color:rgba(59,130,246,.2);">
+      <!-- <div class="info-grid">
+        <div class="info-panel" style="background:rgba(59,130,246,.08);border-color:rgba(59,130,246,.2);">
           <h4 style="color:#60a5fa;">🥛 แก้วซ้าย – น้ำใส (สารละลาย)</h4>
           <p style="color:#94a3b8;">อนุภาคละลายเล็กมาก (&lt;1 nm) แสงไม่กระเจิง — มองไม่เห็นลำแสง</p>
-        </div> -->
-        <!-- <div class="info-panel" style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.2);">
+        </div>
+        <div class="info-panel" style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.2);">
           <h4 style="color:#f87171;">🌫️ แก้วขวา – นมเจือจาง (คอลลอยด์)</h4>
           <p style="color:#94a3b8;">อนุภาคคอลลอยด์ขนาด 1–1000 nm กระเจิงแสง — เห็นลำแสงชัดเจน</p>
-        </div> -->
-      </div>
+        </div>
+      </div> -->
     </div><!-- end exp-card -->
- <!-- HERO -->
+<!-- HERO -->
     <div class="hero">
       <span class="hero-icon">🔦</span>
       <h1>ปรากฏการณ์ <span>ทินดอลล์</span></h1>
