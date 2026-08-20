@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>สรุปวัสดุรอบตัวเรา | Peeranat Na Nakorn</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --pink: #FFB3C6;
+      --yellow: #FFF0A0;
+      --mint: #B5EAD7;
+      --lavender: #C9B8FF;
+      --sky: #AEE6FF;
+      --peach: #FFCBA4;
+      --blue: #285eb4;
+      --dark: #3a3a5c;
+      --white: #FFFDF7;
+      --green: #4CAF50;
+      --red: #FF6B6B;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background-color: var(--white);
+      color: var(--dark);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        radial-gradient(circle at 10% 20%, rgba(255,179,198,0.25) 0%, transparent 40%),
+        radial-gradient(circle at 90% 10%, rgba(174,230,255,0.25) 0%, transparent 40%),
+        radial-gradient(circle at 80% 80%, rgba(181,234,215,0.25) 0%, transparent 40%),
+        radial-gradient(circle at 20% 80%, rgba(201,184,255,0.25) 0%, transparent 40%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ===== NAVBAR ===== */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,253,247,0.9);
+      backdrop-filter: blur(10px);
+      padding: 12px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px dashed var(--pink);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    }
+
+    .nav-logo {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.3rem;
+      color: var(--blue);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--sky);
+      border: 2.5px solid rgba(0,0,0,0.08);
+      border-radius: 16px;
+      padding: 8px 16px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 0.85rem;
+      color: var(--dark);
+      text-decoration: none;
+      box-shadow: 3px 3px 0px rgba(0,0,0,0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .back-btn:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 5px 5px 0px rgba(0,0,0,0.12);
+    }
+
+    /* ===== PAGE WRAP ===== */
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 24px 20px;
+    }
+
+    .page-title {
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .page-title h1 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 2.4rem;
+      color: var(--blue);
+      line-height: 1.2;
+    }
+
+    .page-title p {
+      font-weight: 700;
+      color: #888;
+      margin-top: 6px;
+      font-size: 1rem;
+    }
+
+    .emoji-row {
+      text-align: center;
+      font-size: 2rem;
+      margin: 14px 0 30px;
+      letter-spacing: 10px;
+    }
+
+    /* ===== CARD ===== */
+    .card {
+      background: white;
+      border-radius: 28px;
+      padding: 26px 28px;
+      box-shadow: 6px 6px 0px var(--mint), 0 10px 30px rgba(0,0,0,0.06);
+      border: 2.5px solid var(--mint);
+      margin-bottom: 26px;
+      position: relative;
+    }
+
+    .card.pink-shadow { box-shadow: 6px 6px 0px var(--pink); border-color: var(--pink); }
+    .card.yellow-shadow { box-shadow: 6px 6px 0px var(--yellow); border-color: rgba(255,220,50,0.6); }
+    .card.sky-shadow { box-shadow: 6px 6px 0px var(--sky); border-color: var(--sky); }
+    .card.lavender-shadow { box-shadow: 6px 6px 0px var(--lavender); border-color: var(--lavender); }
+    .card.peach-shadow { box-shadow: 6px 6px 0px var(--peach); border-color: var(--peach); }
+
+    .card-title {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.35rem;
+      color: var(--blue);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card p, .card li {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: #555;
+    }
+
+    .card ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .card ul li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .card ul li .bullet {
+      flex-shrink: 0;
+      font-size: 1.1rem;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .tag {
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      border: 2px solid rgba(0,0,0,0.07);
+      transition: transform 0.2s;
+      cursor: default;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tag:hover { transform: scale(1.06) rotate(-1deg); }
+
+    /* mini table */
+    .mini-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 14px;
+      font-size: 0.85rem;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .mini-table th {
+      background: var(--blue);
+      color: white;
+      padding: 10px 8px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+    }
+
+    .mini-table td {
+      padding: 9px 8px;
+      text-align: center;
+      border-bottom: 1px solid #eee;
+      font-weight: 700;
+      color: #555;
+    }
+
+    .mini-table tr:nth-child(even) td { background: #FAFAFF; }
+
+    /* ===== SECTION DIVIDER ===== */
+    .divider {
+      text-align: center;
+      margin: 38px 0 24px;
+    }
+
+    .divider h2 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.7rem;
+      color: var(--blue);
+      display: inline-block;
+      position: relative;
+      padding: 0 18px;
+    }
+
+    .divider::before, .divider::after {
+      content: '';
+    }
+
+    .divider-line {
+      border: none;
+      border-top: 3px dashed var(--lavender);
+      margin: 10px auto 0;
+      max-width: 500px;
+    }
+
+    /* ===== QUIZ ===== */
+    .quiz-card {
+      background: white;
+      border-radius: 28px;
+      padding: 24px 26px;
+      box-shadow: 6px 6px 0px var(--lavender), 0 10px 30px rgba(0,0,0,0.06);
+      border: 2.5px solid var(--lavender);
+      margin-bottom: 22px;
+    }
+
+    .quiz-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--lavender);
+      color: white;
+      font-family: 'Fredoka One', cursive;
+      font-size: 0.95rem;
+      flex-shrink: 0;
+    }
+
+    .quiz-q {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 1rem;
+      color: var(--dark);
+      margin-bottom: 14px;
+      line-height: 1.5;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .quiz-opt {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #F7F7FC;
+      border: 2.5px solid transparent;
+      border-radius: 16px;
+      padding: 11px 16px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--dark);
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: left;
+    }
+
+    .quiz-opt:hover { background: #EFEFFB; transform: translateX(3px); }
+
+    .quiz-opt.selected { border-color: var(--sky); background: #E4F6FF; }
+
+    .quiz-opt.correct {
+      border-color: var(--green);
+      background: #E8F8EC;
+    }
+
+    .quiz-opt.wrong {
+      border-color: var(--red);
+      background: #FFEDED;
+    }
+
+    .quiz-opt .opt-icon {
+      width: 22px;
+      text-align: center;
+    }
+
+    .quiz-feedback {
+      margin-top: 12px;
+      font-weight: 800;
+      font-size: 0.9rem;
+      min-height: 20px;
+    }
+
+    .quiz-feedback.correct-text { color: var(--green); }
+    .quiz-feedback.wrong-text { color: var(--red); }
+
+    .quiz-summary {
+      text-align: center;
+      background: white;
+      border-radius: 28px;
+      padding: 30px;
+      box-shadow: 6px 6px 0px var(--yellow), 0 10px 30px rgba(0,0,0,0.06);
+      border: 2.5px solid rgba(255,220,50,0.6);
+      margin-top: 10px;
+    }
+
+    .quiz-summary .score-emoji {
+      font-size: 3rem;
+      margin-bottom: 8px;
+    }
+
+    .quiz-summary h3 {
+      font-family: 'Fredoka One', cursive;
+      color: var(--blue);
+      font-size: 1.4rem;
+      margin-bottom: 6px;
+    }
+
+    .quiz-summary p {
+      color: #777;
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+    }
+
+    .retry-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 18px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 800;
+      cursor: pointer;
+      border: 2.5px solid rgba(0,0,0,0.08);
+      background: var(--pink);
+      color: var(--dark);
+      box-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .retry-btn:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px rgba(0,0,0,0.12);
+    }
+
+    .check-btn {
+      margin-top: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 18px;
+      border-radius: 14px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 800;
+      cursor: pointer;
+      border: 2.5px solid rgba(0,0,0,0.08);
+      background: var(--mint);
+      color: var(--dark);
+      box-shadow: 3px 3px 0px rgba(0,0,0,0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .check-btn:hover { transform: translate(-2px,-2px); box-shadow: 5px 5px 0px rgba(0,0,0,0.12); }
+    .check-btn:disabled { opacity: 0.4; cursor: not-allowed; transform:none; box-shadow:3px 3px 0px rgba(0,0,0,0.1); }
+
+    /* Decorative floating emojis */
+    .floater {
+      position: fixed;
+      font-size: 2rem;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.16;
+      animation: floatAround linear infinite;
+    }
+
+    @keyframes floatAround {
+      0% { transform: translateY(0) rotate(0deg); }
+      100% { transform: translateY(-100vh) rotate(360deg); }
+    }
+
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 28px 20px;
+      margin-top: 20px;
+      border-top: 3px dashed var(--mint);
+      font-size: 0.85rem;
+      color: #999;
+      font-weight: 600;
+    }
+
+    @media (max-width: 600px) {
+      .page-title h1 { font-size: 1.8rem; }
+      .card, .quiz-card { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating decorative emojis -->
+  <div class="floater" style="left:5%;bottom:-10%;animation-duration:18s;animation-delay:0s;">🧽</div>
+  <div class="floater" style="left:20%;bottom:-10%;animation-duration:22s;animation-delay:3s;">🪵</div>
+  <div class="floater" style="left:60%;bottom:-10%;animation-duration:16s;animation-delay:6s;">🧱</div>
+  <div class="floater" style="left:80%;bottom:-10%;animation-duration:20s;animation-delay:1s;">💧</div>
+  <div class="floater" style="left:40%;bottom:-10%;animation-duration:25s;animation-delay:9s;">♻️</div>
+
+  <!-- Navbar -->
+  <nav>
+    <div class="nav-logo">🧪 สรุป: วัสดุรอบตัวเรา</div>
+    <a href="index.html" class="back-btn">🏠 กลับหน้าแรก</a>
+  </nav>
+
+  <div class="wrap">
+
+    <div class="page-title">
+      <h1>🔬 วัสดุรอบตัวเรา</h1>
+      <p>สรุปสาระสำคัญ By iMF</p>
+    </div>
+    <div class="emoji-row">🥄🧻🧽🪨🧱</div>
+
+    <!-- Card 1: สมบัติของวัสดุ -->
+    <div class="card sky-shadow">
+      <div class="card-title">✨ สมบัติบางประการของวัสดุ</div>
+      <p>วัสดุแต่ละชนิดมี <strong>สมบัติ</strong> แตกต่างกัน เช่น ความแข็ง การดูดซับน้ำ และการนำความร้อน ซึ่งเป็นตัวกำหนดว่าวัสดุนั้นเหมาะกับการนำไปใช้งานแบบใด</p>
+      <table class="mini-table">
+        <tr><th>ชนิดวัสดุ</th><th>ความแข็ง</th><th>ดูดซับน้ำ</th><th>นำความร้อน</th></tr>
+        <tr><td>A (เช่น โลหะ)</td><td>แข็ง</td><td>ไม่ดูดซับ</td><td>นำความร้อน</td></tr>
+        <tr><td>B (เช่น ผ้า/ฟองน้ำ)</td><td>นุ่ม</td><td>ดูดซับได้</td><td>ไม่นำความร้อน</td></tr>
+        <tr><td>C (เช่น พลาสติก/ยาง)</td><td>นุ่ม</td><td>ไม่ดูดซับ</td><td>ไม่นำความร้อน</td></tr>
+      </table>
+    </div>
+
+    <!-- Card 2: การดูดซับน้ำ -->
+    <div class="card mint-shadow">
+      <div class="card-title">💧 สมบัติการดูดซับน้ำของวัสดุ</div>
+      <ul>
+        <li><span class="bullet">🔹</span> เป็นสมบัติที่วัสดุสามารถดูดซับน้ำเข้าไปแทรกอยู่ในช่องว่างของเนื้อวัสดุได้</li>
+        <li><span class="bullet">🔹</span> ทดสอบได้โดยนำวัสดุจุ่มลงในแก้วที่มีน้ำ แล้วสังเกตปริมาณน้ำที่ลดลง</li>
+      </ul>
+      <div class="tag-row">
+        <span class="tag" style="background:var(--mint);">🧻 ดูดซับได้: ผ้า, กระดาษ, ฟองน้ำ</span>
+        <span class="tag" style="background:var(--peach);">🥄 ไม่ดูดซับ: พลาสติก, แก้ว, โลหะ, หิน</span>
+      </div>
+    </div>
+
+    <!-- Card 3: การผสมวัสดุ -->
+    <div class="card yellow-shadow">
+      <div class="card-title">🧪 สมบัติของวัสดุที่ได้จากการผสมกัน</div>
+      <ul>
+        <li><span class="bullet">🔹</span> การนำวัสดุตั้งแต่ 2 ชนิดขึ้นไปมาผสมกัน เพื่อให้ได้ <strong>สมบัติใหม่ที่เหมาะสมต่อการใช้งาน</strong></li>
+        <li><span class="bullet">🔹</span> ผลลัพธ์อาจมีสมบัติเดิมอยู่ร่วมกับสมบัติใหม่ หรือเปลี่ยนไปอย่างสิ้นเชิงก็ได้</li>
+        <li><span class="bullet">🔹</span> ตัวอย่าง: ปูนซีเมนต์ + หิน + ทราย + น้ำ → <strong>คอนกรีต</strong> (แข็ง ทนทาน)</li>
+        <li><span class="bullet">🔹</span> ตัวอย่าง: กระดาษหนังสือพิมพ์ฉีกแช่น้ำ + กาว → <strong>เพเปอร์มาเช</strong> (ปั้นเป็นรูปทรงต่าง ๆ ได้)</li>
+        <li><span class="bullet">🔹</span> ตัวอย่าง: ดินเหนียว + น้ำ นวดแล้วปั้น ตากแดดให้แห้ง → เปลี่ยนจากนุ่มเป็น <strong>แข็ง ทนทาน</strong></li>
+      </ul>
+    </div>
+
+    <!-- Card 4: การเลือกวัสดุ -->
+    <div class="card pink-shadow">
+      <div class="card-title">🎯 การเลือกวัสดุมาใช้ประโยชน์</div>
+      <p>ต้องคำนึงถึง <strong>สมบัติของวัสดุเป็นอันดับแรก</strong> ให้สอดคล้องกับวัตถุประสงค์การใช้งาน และความปลอดภัยในการใช้</p>
+      <div class="tag-row">
+        <span class="tag" style="background:var(--sky);">🥤 พลาสติก → แข็ง เบา ไม่ดูดซับน้ำ</span>
+        <span class="tag" style="background:var(--peach);">🍽️ เซรามิก → ทนความร้อน ทำจาน</span>
+        <span class="tag" style="background:var(--mint);">🐟 แก้ว → โปร่งใส ทำโหลปลา</span>
+        <span class="tag" style="background:var(--yellow);">🪑 ไม้ → แข็งแรง ทนทาน ทำเฟอร์นิเจอร์</span>
+      </div>
+    </div>
+
+    <!-- Card 5: การนำกลับมาใช้ใหม่ -->
+    <div class="card lavender-shadow">
+      <div class="card-title">♻️ การนำวัสดุที่ใช้แล้วกลับมาใช้ใหม่</div>
+      <ul>
+        <li><span class="bullet">🔹</span> ลดปริมาณขยะ และใช้วัสดุอย่างคุ้มค่า</li>
+        <li><span class="bullet">🔹</span> ช่วยประหยัดค่าใช้จ่ายภายในครอบครัว</li>
+        <li><span class="bullet">🔹</span> สร้างผลงานชิ้นใหม่จากของเดิมได้ เช่น กระเป๋าน้ำมาใส่น้ำดื่มเอง ถุงผ้าแทนถุงพลาสติก กระป๋องมาปลูกต้นไม้</li>
+      </ul>
+    </div>
+
+    <!-- QUIZ SECTION -->
+    <div class="divider">
+      <h2>📝 มาลองทำแบบทดสอบกันเถอะ!</h2>
+      <hr class="divider-line">
+    </div>
+
+    <div id="quizContainer"></div>
+
+    <div class="quiz-summary" id="summaryBox" style="display:none;">
+      <div class="score-emoji" id="scoreEmoji">🎉</div>
+      <h3 id="scoreText">คะแนนของเธอคือ</h3>
+      <p id="scoreDetail"></p>
+      <button class="retry-btn" onclick="resetQuiz()">🔄 ลองใหม่อีกครั้ง</button>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div>🌟 สรุปเนื้อหาโดย Peeranat Na Nakorn 🌟</div>
+    <div style="margin-top:8px;"><a href="index.html">🏠 กลับสู่หน้าแรก</a></div>
+  </footer>
+
+  <script>
+    const quizData = [
+      {
+        q: "1. วัตถุในข้อใดทำมาจากวัสดุที่ไม่มีสมบัติการดูดซับน้ำ",
+        options: [" ช้อน (โลหะ)", " ผ้าเช็ดตัว", " ฟองน้ำ"],
+        answer: 0
+      },
+      {
+        q: "2. นำวัตถุ A B C ขนาดเท่ากันแช่น้ำ 1 ชั่วโมง พบว่าน้ำใน A ลดลงมากที่สุด สรุปได้ว่าอย่างไร",
+        options: ["วัตถุ A กันน้ำได้ ส่วน B และ C ไม่กันน้ำ", "วัตถุ A ดูดซับน้ำ ส่วน B และ C ไม่ดูดซับน้ำ", "วัตถุ A สามารถดูดซับน้ำได้มากกว่าวัตถุ B และ C"],
+        answer: 2
+      },
+      {
+        q: "3. เหตุผลหลักที่เรานำวัสดุบางอย่างมาผสมกันคืออะไร",
+        options: ["เพื่อให้ได้วัสดุที่มีสมบัติเหมาะสมและราคาถูก", "เพื่อให้ได้วัสดุที่มีสมบัติเหมาะสมต่อการนำไปใช้งาน", "เพื่อให้ได้วัสดุเหลือใช้และนำมาใช้ประโยชน์ให้คุ้มค่า"],
+        answer: 1
+      },
+      {
+        q: "4. การเลือกวัสดุมาทำเป็นวัตถุ เราควรคำนึงถึงสิ่งใดเป็นอันดับแรก",
+        options: ["ราคาของวัสดุ", "สมบัติของวัสดุ", "ความคุ้มค่าของวัสดุ"],
+        answer: 1
+      },
+      {
+        q: "5. วัสดุชนิดใดไม่เหมาะสมสำหรับนำมาทำของเล่นสำหรับเด็ก เพราะเหตุใด",
+        options: ["ยาง เพราะมีสมบัติยืดหยุ่นได้", "ผ้า เพราะมีสมบัตินุ่ม ดูดซับน้ำได้", "แก้ว เพราะมีสมบัติแข็งแต่เปราะแตกง่ายเมื่อถูกกระแทก"],
+        answer: 2
+      },
+      {
+        q: "6. ดินเหนียวผสมน้ำ นวดแล้วปั้นเป็นรูปทรง จากนั้นนำไปตากแดดให้แห้ง จะมีสมบัติเปลี่ยนแปลงไปอย่างไร",
+        options: ["มีสมบัติแข็ง ทนทาน", "มีสมบัตินุ่ม ยืดหยุ่นได้", "มีสมบัติแข็ง น้ำหนักเบา"],
+        answer: 0
+      }
+    ];
+
+    let userAnswers = new Array(quizData.length).fill(null);
+    let checked = new Array(quizData.length).fill(false);
+
+    function renderQuiz() {
+      const container = document.getElementById('quizContainer');
+      container.innerHTML = '';
+      quizData.forEach((item, qi) => {
+        const card = document.createElement('div');
+        card.className = 'quiz-card';
+
+        const qDiv = document.createElement('div');
+        qDiv.className = 'quiz-q';
+        qDiv.innerHTML = `<span class="quiz-num">${qi + 1}</span><span>${item.q.replace(/^\d+\.\s*/, '')}</span>`;
+        card.appendChild(qDiv);
+
+        const optsDiv = document.createElement('div');
+        optsDiv.className = 'quiz-options';
+
+        item.options.forEach((opt, oi) => {
+          const btn = document.createElement('div');
+          btn.className = 'quiz-opt';
+          btn.innerHTML = `<span class="opt-icon">⚪</span><span>${opt}</span>`;
+          btn.onclick = () => selectOption(qi, oi);
+          btn.id = `q${qi}-o${oi}`;
+          optsDiv.appendChild(btn);
+        });
+
+        card.appendChild(optsDiv);
+
+        const feedback = document.createElement('div');
+        feedback.className = 'quiz-feedback';
+        feedback.id = `feedback-${qi}`;
+        card.appendChild(feedback);
+
+        const checkBtn = document.createElement('button');
+        checkBtn.className = 'check-btn';
+        checkBtn.textContent = '✅ ตรวจคำตอบ';
+        checkBtn.id = `check-${qi}`;
+        checkBtn.disabled = true;
+        checkBtn.onclick = () => checkAnswer(qi);
+        card.appendChild(checkBtn);
+
+        container.appendChild(card);
+      });
+    }
+
+    function selectOption(qi, oi) {
+      if (checked[qi]) return;
+      userAnswers[qi] = oi;
+      for (let i = 0; i < quizData[qi].options.length; i++) {
+        const el = document.getElementById(`q${qi}-o${i}`);
+        el.classList.toggle('selected', i === oi);
+        el.querySelector('.opt-icon').textContent = i === oi ? '🔵' : '⚪';
+      }
+      document.getElementById(`check-${qi}`).disabled = false;
+    }
+
+    function checkAnswer(qi) {
+      if (checked[qi] || userAnswers[qi] === null) return;
+      checked[qi] = true;
+      const correctIdx = quizData[qi].answer;
+      const chosenIdx = userAnswers[qi];
+
+      for (let i = 0; i < quizData[qi].options.length; i++) {
+        const el = document.getElementById(`q${qi}-o${i}`);
+        el.classList.remove('selected');
+        if (i === correctIdx) {
+          el.classList.add('correct');
+          el.querySelector('.opt-icon').textContent = '✅';
+        } else if (i === chosenIdx) {
+          el.classList.add('wrong');
+          el.querySelector('.opt-icon').textContent = '❌';
+        }
+      }
+
+      const feedback = document.getElementById(`feedback-${qi}`);
+      if (chosenIdx === correctIdx) {
+        feedback.textContent = '🎉 เก่งมาก! ตอบถูกต้อง';
+        feedback.className = 'quiz-feedback correct-text';
+      } else {
+        feedback.textContent = '💡 ยังไม่ถูกนะ ลองทบทวนเนื้อหาด้านบนอีกครั้ง';
+        feedback.className = 'quiz-feedback wrong-text';
+      }
+
+      document.getElementById(`check-${qi}`).style.display = 'none';
+
+      if (checked.every(c => c)) {
+        showSummary();
+      }
+    }
+
+    function showSummary() {
+      let score = 0;
+      quizData.forEach((item, qi) => {
+        if (userAnswers[qi] === item.answer) score++;
+      });
+      const total = quizData.length;
+      const box = document.getElementById('summaryBox');
+      const emoji = document.getElementById('scoreEmoji');
+      const text = document.getElementById('scoreText');
+      const detail = document.getElementById('scoreDetail');
+
+      text.textContent = `ได้คะแนน ${score} / ${total} คะแนน`;
+
+      if (score === total) {
+        emoji.textContent = '🏆';
+        detail.textContent = 'เก่งสุด ๆ! เข้าใจเรื่องวัสดุรอบตัวเราแล้วครบถ้วน 🌟';
+      } else if (score >= total / 2) {
+        emoji.textContent = '😊';
+        detail.textContent = 'ทำได้ดีมาก! ลองทบทวนข้อที่ผิดอีกนิดนะ';
+      } else {
+        emoji.textContent = '💪';
+        detail.textContent = 'ไม่เป็นไรนะ ลองอ่านสรุปด้านบนอีกครั้งแล้วลองใหม่ได้เลย!';
+      }
+
+      box.style.display = 'block';
+      box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function resetQuiz() {
+      userAnswers = new Array(quizData.length).fill(null);
+      checked = new Array(quizData.length).fill(false);
+      document.getElementById('summaryBox').style.display = 'none';
+      renderQuiz();
+      window.scrollTo({ top: document.getElementById('quizContainer').offsetTop - 100, behavior: 'smooth' });
+    }
+
+    renderQuiz();
+  </script>
+</body>
+</html>
