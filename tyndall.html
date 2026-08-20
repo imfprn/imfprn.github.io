@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ปรากฏการณ์ทินดอลล์</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:       #FFFDF7;
+      --pink:     #FFB3C6;
+      --yellow:   #FFF0A0;
+      --mint:     #B5EAD7;
+      --lavender: #C9B8FF;
+      --sky:      #AEE6FF;
+      --peach:    #FFCBA4;
+      --blue:     #285eb4;
+      --dark:     #3a3a5c;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Sarabun', sans-serif;
+      background: var(--bg);
+      color: var(--dark);
+      min-height: 100vh;
+      padding-top: 58px;
+    }
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(circle at 10% 15%, rgba(255,179,198,.2) 0%, transparent 40%),
+        radial-gradient(circle at 90% 10%, rgba(174,230,255,.2) 0%, transparent 40%),
+        radial-gradient(circle at 80% 85%, rgba(181,234,215,.18) 0%, transparent 40%),
+        radial-gradient(circle at 15% 80%, rgba(201,184,255,.18) 0%, transparent 40%);
+    }
+
+    /* ── NAV ── */
+    .back-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+      background: rgba(255,253,247,.96); backdrop-filter: blur(10px);
+      padding: 8px 20px; display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 3px dashed var(--lavender);
+    }
+    .back-nav a {
+      background: var(--lavender); border: 2.5px solid rgba(0,0,0,.08);
+      border-radius: 14px; padding: 6px 14px; font-weight: 800; font-size: .88rem;
+      color: var(--dark); text-decoration: none; box-shadow: 3px 3px 0 rgba(0,0,0,.08);
+      font-family: 'Nunito', sans-serif; transition: transform .15s;
+    }
+    .back-nav a:hover { transform: translate(-2px,-2px); }
+    .back-nav .nav-title {
+      font-family: 'Fredoka One', cursive; font-size: 1.05rem; color: var(--blue);
+    }
+
+    /* ── PAGE ── */
+    .page { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 28px 16px 80px; }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, #1a1a3a 0%, #2d1b6e 50%, #1a2a50 100%);
+      border-radius: 28px; padding: 36px 28px 28px; margin-bottom: 24px;
+      text-align: center; position: relative; overflow: hidden;
+      box-shadow: 8px 8px 0 rgba(45,27,110,.3);
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 60%, rgba(220,38,38,.15) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .hero-icon { font-size: 3rem; margin-bottom: 10px; display: block; }
+    .hero h1 {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(1.7rem,4vw,2.5rem);
+      color: white; margin-bottom: 8px;
+    }
+    .hero h1 span { color: #fca5a5; }
+    .hero p { color: rgba(255,255,255,.7); font-size: .95rem; font-weight: 600; }
+    .rainbow-bar {
+      height: 4px; border-radius: 4px; margin-top: 20px;
+      background: linear-gradient(90deg,#fca5a5,#fb923c,#fbbf24,#a3e635,#34d399,#60a5fa,#c084fc);
+    }
+
+    /* ── SECTION HEADER ── */
+    .sec-head { display: flex; align-items: center; gap: 10px; margin: 28px 0 14px; }
+    .sec-head .pill {
+      font-family: 'Fredoka One', cursive; font-size: .78rem;
+      padding: 4px 14px; border-radius: 20px; color: var(--dark); white-space: nowrap;
+    }
+    .sec-head h2 { font-family: 'Fredoka One', cursive; font-size: 1.25rem; color: var(--dark); }
+
+    /* ── EXPERIMENT CARD ── */
+    .exp-card {
+      background: #0f172a;
+      border-radius: 24px; padding: 28px 20px;
+      border: 2px solid rgba(255,255,255,.08);
+      box-shadow: 0 20px 60px rgba(0,0,0,.35), 8px 8px 0 rgba(45,27,110,.25);
+      margin-bottom: 20px; position: relative; overflow: hidden;
+    }
+    .exp-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.15), transparent);
+    }
+
+    /* ── SWITCH ── */
+    .switch-row { display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 24px; }
+    .switch-label { font-family: 'Fredoka One', cursive; font-size: 1rem; color: #e2e8f0; }
+    .switch-btn {
+      width: 72px; height: 38px; border-radius: 19px;
+      position: relative; cursor: pointer;
+      background: #374151;
+      border: 2px solid rgba(255,255,255,.1);
+      transition: background .3s, box-shadow .3s;
+      flex-shrink: 0;
+    }
+    .switch-btn::after {
+      content: ''; position: absolute;
+      width: 28px; height: 28px; border-radius: 50%;
+      background: white; top: 3px; left: 3px;
+      transition: transform .35s cubic-bezier(.4,0,.2,1);
+      box-shadow: 0 2px 8px rgba(0,0,0,.3);
+    }
+    .switch-btn.on { background: #16a34a; box-shadow: 0 0 20px rgba(22,163,74,.4); }
+    .switch-btn.on::after { transform: translateX(34px); }
+
+    /* ── EXPERIMENT STAGE ── */
+    .stage {
+      position: relative;
+      height: 220px;
+      display: flex; align-items: center;
+      margin-bottom: 16px;
+    }
+
+    /* Laser device */
+    .laser-device {
+      flex-shrink: 0;
+      width: 68px; height: 24px;
+      background: linear-gradient(135deg,#374151,#1f2937);
+      border-radius: 6px 16px 16px 6px;
+      position: relative; z-index: 10;
+      border: 1.5px solid rgba(255,255,255,.1);
+      box-shadow: 0 4px 12px rgba(0,0,0,.4);
+    }
+    .laser-device::after {
+      content: ''; position: absolute;
+      right: -5px; top: 50%; transform: translateY(-50%);
+      width: 10px; height: 10px;
+      background: #dc2626; border-radius: 50%;
+      box-shadow: 0 0 8px #dc2626;
+    }
+    .laser-device-label {
+      position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+      margin-top: 8px; font-size: .7rem; color: #94a3b8; font-weight: 700; white-space: nowrap;
+    }
+
+    /* Beam rail (absolute, full width, vertically centred) */
+    .beam-rail {
+      position: absolute; top: 50%; left: 0; right: 0; height: 6px;
+      transform: translateY(-50%); pointer-events: none;
+    }
+    .beam-seg {
+      position: absolute; height: 3px; top: 1.5px;
+      background: #dc2626; border-radius: 2px;
+      opacity: 0; transition: opacity .4s;
+    }
+    .laser-on .beam-seg { opacity: 1; }
+
+    /* Segments relative to rail width */
+    .seg-before  { left: 7%;  width: 22%; }  /* laser tip → beaker 1 */
+    .seg-between { left: 38%; width: 12%; }  /* beaker 1 exit → beaker 2 entry */
+    .seg-after   { left: 67%; width: 33%; } /* beaker 2 exit → edge */
+
+    /* Beaker 1 (water) – invisible: no scatter, laser not visible in solution */
+    .seg-b1 {
+      left: 29%; width: 9%;
+      background: transparent;
+      opacity: 0 !important;
+    }
+
+    /* Beaker 2 (colloid) – GLOW */
+    .seg-b2 {
+      left: 50%; width: 17%;
+      background: linear-gradient(90deg, #dc2626, #ff4444, #dc2626);
+      border-radius: 2px; opacity: 0; transition: opacity .4s;
+    }
+    .laser-on .seg-b2 { opacity: 1; animation: laserGlow 1.5s ease-in-out infinite alternate; }
+    @keyframes laserGlow {
+      from { box-shadow: 0 0 8px #dc2626, 0 0 16px #ff6b6b; height: 3px; }
+      to   { box-shadow: 0 0 14px #dc2626, 0 0 28px #ff6b6b, 0 0 48px rgba(220,38,38,.35); height: 5px; top: 0.5px; }
+    }
+
+    /* Scatter particles in beaker 2 */
+    .scatter-dot {
+      position: absolute; width: 4px; height: 4px;
+      background: rgba(252,165,165,.0); border-radius: 50%;
+      top: 50%; transform: translate(-50%,-50%);
+      transition: background .4s;
+    }
+    .laser-on .scatter-dot { background: rgba(252,165,165,.7); animation: scatterPulse 1.2s ease-in-out infinite alternate; }
+    @keyframes scatterPulse {
+      from { opacity: .5; transform: translate(-50%,-50%) scale(1); }
+      to   { opacity: 1;  transform: translate(-50%,-50%) scale(1.6); }
+    }
+
+    /* Beaker SVGs */
+    .beakers-row {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      display: flex; align-items: flex-end;
+      pointer-events: none;
+    }
+    .bk-wrap {
+      display: flex; flex-direction: column; align-items: center;
+      position: absolute; bottom: 0; transform: translateX(-50%);
+    }
+    .bk-wrap.bk1 { left: 33%; }
+    .bk-wrap.bk2 { left: 58%; }
+
+    .bk-label {
+      font-size: .72rem; font-weight: 800; color: #94a3b8;
+      margin-top: 6px; text-align: center; white-space: nowrap;
+    }
+    svg.beaker { width: 90px; height: 130px; }
+
+    /* Tyndall cone in beaker 2 */
+    .tyndall-cone {
+      position: absolute;
+      /* positioned by JS / inline */
+      pointer-events: none;
+      opacity: 0; transition: opacity .5s .2s;
+    }
+    .laser-on .tyndall-cone { opacity: 1; }
+
+    /* ── INFO PANELS ── */
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media(max-width:580px){ .info-grid { grid-template-columns: 1fr; } }
+    .info-panel {
+      border-radius: 16px; padding: 16px;
+      border: 2px solid rgba(255,255,255,.08);
+    }
+    .info-panel h4 {
+      font-family: 'Fredoka One', cursive; font-size: .95rem;
+      margin-bottom: 6px;
+    }
+    .info-panel p { font-size: .82rem; font-weight: 600; line-height: 1.6; }
+
+    /* ── THEORY CARD ── */
+    .theory-card {
+      background: white; border-radius: 20px;
+      border: 2.5px solid rgba(0,0,0,.06); box-shadow: 6px 6px 0 rgba(0,0,0,.07);
+      padding: 22px 20px; margin-bottom: 14px;
+    }
+    .theory-card h3 {
+      font-family: 'Fredoka One', cursive; font-size: 1.05rem;
+      color: var(--dark); margin-bottom: 8px; display: flex; align-items: center; gap: 8px;
+    }
+    .theory-card p, .theory-card ul li {
+      font-size: .88rem; font-weight: 600; color: #555; line-height: 1.65;
+    }
+    .theory-card ul { margin: 8px 0 0 18px; }
+    .theory-card ul li { margin-bottom: 4px; }
+
+    /* ── EXAMPLES GRID ── */
+    .examples-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(170px,1fr)); gap: 12px; }
+    .example-chip {
+      background: white; border-radius: 16px;
+      border: 2.5px solid rgba(0,0,0,.06); box-shadow: 4px 4px 0 rgba(0,0,0,.07);
+      padding: 16px 12px; text-align: center;
+    }
+    .example-chip .ec-icon { font-size: 2rem; margin-bottom: 6px; display: block; }
+    .example-chip .ec-name { font-family: 'Fredoka One', cursive; font-size: .9rem; color: var(--dark); }
+    .example-chip .ec-desc { font-size: .75rem; color: #888; font-weight: 700; margin-top: 3px; line-height: 1.4; }
+
+    /* ── QUIZ ── */
+    .quiz-card {
+      background: white; border-radius: 22px;
+      border: 2.5px solid rgba(0,0,0,.06); box-shadow: 6px 6px 0 rgba(0,0,0,.07);
+      overflow: hidden;
+    }
+    .quiz-header {
+      background: linear-gradient(135deg,var(--blue),#4a90e2);
+      padding: 18px 22px; display: flex; align-items: center; gap: 10px;
+    }
+    .quiz-header h2 { font-family: 'Fredoka One', cursive; font-size: 1.2rem; color: white; }
+    .q-badge {
+      background: rgba(255,255,255,.2); border-radius: 10px;
+      padding: 3px 12px; font-size: .8rem; color: white; font-weight: 800; margin-left: auto;
+    }
+    .quiz-progress { height: 4px; background: rgba(255,255,255,.15); }
+    .quiz-progress-fill { height: 100%; background: var(--yellow); transition: width .4s; width: 0%; }
+    .quiz-body { padding: 22px; }
+    .q-num { font-size: .75rem; font-weight: 800; color: var(--blue); margin-bottom: 5px; letter-spacing: .5px; }
+    .q-text { font-size: .97rem; font-weight: 800; color: var(--dark); line-height: 1.5; margin-bottom: 14px; }
+    .q-ctx {
+      font-size: .82rem; font-weight: 700; color: #666;
+      background: #f7fbff; border-radius: 12px; padding: 10px 14px;
+      margin-bottom: 14px; line-height: 1.6; border-left: 3px solid var(--sky);
+    }
+    .choices { display: flex; flex-direction: column; gap: 10px; }
+    .choice-btn {
+      display: flex; align-items: center; gap: 12px; padding: 11px 16px;
+      border-radius: 14px; border: 2.5px solid rgba(0,0,0,.07);
+      background: #f7fbff; cursor: pointer;
+      font-family: 'Sarabun', sans-serif; font-size: .9rem; font-weight: 700;
+      color: var(--dark); text-align: left;
+      transition: transform .15s, border-color .15s, background .15s;
+    }
+    .choice-btn:hover:not(:disabled) { transform: translateX(4px); border-color: var(--sky); background: white; }
+    .ch-num {
+      width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+      background: white; border: 2px solid rgba(0,0,0,.1);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Fredoka One', cursive; font-size: .85rem; color: #aaa;
+    }
+    .choice-btn.correct { background: #f0fff8; border-color: #2ecc71; }
+    .choice-btn.correct .ch-num { background: #2ecc71; color: white; border-color: #2ecc71; }
+    .choice-btn.wrong { background: #fff0f0; border-color: #e74c3c; }
+    .choice-btn.wrong .ch-num { background: #e74c3c; color: white; border-color: #e74c3c; }
+    .choice-btn:disabled { cursor: default; }
+    .explain-box {
+      margin-top: 12px; padding: 11px 15px; border-radius: 13px;
+      font-size: .83rem; font-weight: 700; line-height: 1.55; display: none;
+    }
+    .explain-box.show { display: block; }
+    .explain-box.ce { background: #d4edda; color: #155724; border: 1.5px solid #b7dfb8; }
+    .explain-box.we { background: #f8d7da; color: #721c24; border: 1.5px solid #f1b0b7; }
+    .quiz-nav {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 18px; padding-top: 14px; border-top: 2px dashed rgba(0,0,0,.07);
+    }
+    .q-counter { font-size: .8rem; font-weight: 800; color: #aaa; }
+    .next-btn {
+      padding: 9px 24px; border: none; border-radius: 13px;
+      background: var(--blue); color: white;
+      font-family: 'Fredoka One', cursive; font-size: .95rem;
+      cursor: pointer; display: none;
+      box-shadow: 0 4px 0 rgba(40,94,180,.3); transition: transform .15s;
+    }
+    .next-btn:hover { transform: translateY(-2px); }
+    .next-btn.show { display: block; }
+
+    /* Result */
+    .result-panel { display: none; text-align: center; padding: 32px 22px; }
+    .result-panel.show { display: block; }
+    .result-emoji { font-size: 3.5rem; margin-bottom: 10px; display: block; }
+    .result-panel h3 { font-family: 'Fredoka One', cursive; font-size: 1.7rem; color: var(--dark); }
+    .score-big { font-family: 'Fredoka One', cursive; font-size: 3rem; color: var(--blue); margin: 8px 0; }
+    .score-bar-wrap { background: #eee; border-radius: 20px; height: 13px; max-width: 300px; margin: 0 auto 14px; overflow: hidden; }
+    .score-bar-fill { height: 100%; background: linear-gradient(90deg,var(--blue),#4a90e2); transition: width .8s; }
+    .result-msg { color: #888; font-size: .9rem; font-weight: 700; margin-bottom: 20px; }
+    .retry-btn {
+      padding: 12px 32px; border: none; border-radius: 16px;
+      background: var(--yellow); color: var(--dark);
+      font-family: 'Fredoka One', cursive; font-size: 1.05rem;
+      cursor: pointer; border: 2.5px solid rgba(0,0,0,.08);
+      box-shadow: 4px 4px 0 rgba(0,0,0,.1); transition: transform .15s;
+    }
+    .retry-btn:hover { transform: translate(-2px,-2px); }
+
+    /* Toast */
+    .toast {
+      position: fixed; top: 72px; left: 50%; transform: translateX(-50%) scale(.9);
+      background: white; border-radius: 18px; padding: 11px 22px;
+      box-shadow: 0 8px 28px rgba(0,0,0,.15); z-index: 998;
+      display: flex; align-items: center; gap: 10px;
+      opacity: 0; transition: all .3s; pointer-events: none; white-space: nowrap;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) scale(1); }
+
+    /* Floaters */
+    .floater {
+      position: fixed; pointer-events: none; z-index: 0; opacity: .1;
+      font-size: 1.5rem; animation: floatUp linear infinite;
+    }
+    @keyframes floatUp {
+      0%  { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      10% { opacity: .1; } 90% { opacity: .1; }
+      100%{ transform: translateY(-120px) rotate(360deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floaters -->
+  <div class="floater" style="left:4%;  animation-duration:20s; animation-delay:0s;">🔦</div>
+  <div class="floater" style="left:20%; animation-duration:26s; animation-delay:7s;">🧪</div>
+  <div class="floater" style="left:52%; animation-duration:18s; animation-delay:3s;">💧</div>
+  <div class="floater" style="left:74%; animation-duration:24s; animation-delay:9s;">⭐</div>
+  <div class="floater" style="left:88%; animation-duration:17s; animation-delay:2s;">🔬</div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast">
+    <span id="toastIcon" style="font-size:1.3rem;"></span>
+    <span id="toastMsg" style="font-weight:800;font-size:.9rem;color:var(--dark);"></span>
+  </div>
+
+  <!-- Nav -->
+  <div class="back-nav">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <a href="index.html">← กลับหน้าหลัก</a>
+      <span class="nav-title">ปรากฏการณ์ทินดอลล์</span>
+    </div>
+    <span style="font-size:1.3rem;">🔦</span>
+  </div>
+
+  <div class="page">
+
+    <!-- HERO -->
+    <div class="hero">
+      <span class="hero-icon">🔦</span>
+      <h1>ปรากฏการณ์ <span>ทินดอลล์</span></h1>
+      <p>Tyndall Effect · เมื่อแสงพบอนุภาคคอลลอยด์</p>
+      <div class="rainbow-bar"></div>
+    </div>
+
+    <!-- EXPERIMENT SECTION -->
+    <div class="sec-head">
+      <span class="pill" style="background:var(--lavender);">🧪 การทดลอง</span>
+      <h2>เปิดเลเซอร์ แล้วสังเกต!</h2>
+    </div>
+
+    <div class="exp-card">
+      <!-- Switch -->
+      <div class="switch-row">
+        <span class="switch-label">💡 เลเซอร์</span>
+        <div class="switch-btn off" id="laserSwitch" role="button" tabindex="0"
+             aria-pressed="false" title="เปิด/ปิดเลเซอร์"></div>
+        <span style="font-size:.85rem;color:#94a3b8;font-weight:700;" id="switchLabel">ปิด</span>
+      </div>
+
+      <!-- Stage -->
+      <div class="stage" id="stage">
+
+        <!-- Laser device -->
+        <div style="position:absolute;left:0;top:50%;transform:translateY(-50%);z-index:10;">
+          <div class="laser-device"></div>
+          <div class="laser-device-label">เลเซอร์</div>
+        </div>
+
+        <!-- Beam rail -->
+        <div class="beam-rail" id="beamRail">
+          <div class="beam-seg seg-before"></div>
+          <div class="beam-seg seg-b1"></div>
+          <div class="beam-seg seg-between"></div>
+          <div class="beam-seg seg-b2" id="segB2"></div>
+          <div class="beam-seg seg-after"></div>
+        </div>
+
+        <!-- Scatter dots inside beaker 2 region (50%–67%) -->
+        <!-- rendered by JS -->
+        <div id="scatterContainer" style="position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;"></div>
+
+        <!-- Beakers -->
+        <div class="bk-wrap bk1">
+          <svg class="beaker" viewBox="0 0 100 140">
+            <!-- beaker outline -->
+            <path d="M20,15 L20,112 Q20,128 35,128 L65,128 Q80,128 80,112 L80,15"
+                  fill="none" stroke="rgba(148,163,184,0.7)" stroke-width="2.5"/>
+            <!-- rim -->
+            <line x1="14" y1="15" x2="24" y2="15" stroke="rgba(148,163,184,0.7)" stroke-width="2"/>
+            <line x1="76" y1="15" x2="86" y2="15" stroke="rgba(148,163,184,0.7)" stroke-width="2"/>
+            <!-- water fill – transparent/clear -->
+            <path d="M22,35 L22,111 Q22,126 35,126 L65,126 Q78,126 78,111 L78,35 Z"
+                  fill="rgba(147,210,240,0.18)"/>
+            <!-- subtle waves -->
+            <path d="M22,36 Q40,32 60,36 Q70,38 78,36" fill="none" stroke="rgba(147,210,240,0.4)" stroke-width="1"/>
+          </svg>
+          <div class="bk-label">🥛 น้ำใส<br><span style="color:#60a5fa;font-size:.65rem;">สารละลาย</span></div>
+        </div>
+
+        <div class="bk-wrap bk2" id="bk2wrap">
+          <svg class="beaker" viewBox="0 0 100 140">
+            <path d="M20,15 L20,112 Q20,128 35,128 L65,128 Q80,128 80,112 L80,15"
+                  fill="none" stroke="rgba(148,163,184,0.7)" stroke-width="2.5"/>
+            <line x1="14" y1="15" x2="24" y2="15" stroke="rgba(148,163,184,0.7)" stroke-width="2"/>
+            <line x1="76" y1="15" x2="86" y2="15" stroke="rgba(148,163,184,0.7)" stroke-width="2"/>
+            <!-- colloid fill – milky/cloudy -->
+            <path d="M22,35 L22,111 Q22,126 35,126 L65,126 Q78,126 78,111 L78,35 Z"
+                  fill="rgba(226,232,240,0.55)"/>
+            <path d="M22,36 Q40,32 60,36 Q70,38 78,36" fill="none" stroke="rgba(200,220,240,0.5)" stroke-width="1"/>
+            <!-- Tyndall light cone (hidden by default, shown with laser-on) -->
+            <defs>
+              <radialGradient id="tyndallGrad" cx="0%" cy="50%" r="100%">
+                <stop offset="0%"   stop-color="#fca5a5" stop-opacity="0.9"/>
+                <stop offset="60%"  stop-color="#fca5a5" stop-opacity="0.35"/>
+                <stop offset="100%" stop-color="#fca5a5" stop-opacity="0"/>
+              </radialGradient>
+              <linearGradient id="beamGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%"  stop-color="#fca5a5" stop-opacity="0.9"/>
+                <stop offset="100%" stop-color="#fca5a5" stop-opacity="0.3"/>
+              </linearGradient>
+            </defs>
+            <!-- visible beam inside colloid -->
+            <rect id="tyndallBeam" x="20" y="65" width="60" height="5" rx="2.5"
+                  fill="url(#beamGrad)" opacity="0"
+                  style="transition:opacity .5s .2s"/>
+            <!-- glow cone -->
+            <ellipse id="tyndallGlow" cx="20" cy="67.5" rx="8" ry="12"
+                     fill="url(#tyndallGrad)" opacity="0"
+                     style="transition:opacity .5s .15s"/>
+          </svg>
+          <div class="bk-label">🌫️ นมเจือจาง<br><span style="color:#f87171;font-size:.65rem;">คอลลอยด์</span></div>
+        </div>
+
+      </div><!-- end stage -->
+
+      <!-- Info panels -->
+      <div class="info-grid">
+        <div class="info-panel" style="background:rgba(59,130,246,.08);border-color:rgba(59,130,246,.2);">
+          <h4 style="color:#60a5fa;">🥛 แก้วซ้าย – น้ำใส (สารละลาย)</h4>
+          <p style="color:#94a3b8;">อนุภาคละลายเล็กมาก (&lt;1 nm) แสงไม่กระเจิง — มองไม่เห็นลำแสง</p>
+        </div>
+        <div class="info-panel" style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.2);">
+          <h4 style="color:#f87171;">🌫️ แก้วขวา – นมเจือจาง (คอลลอยด์)</h4>
+          <p style="color:#94a3b8;">อนุภาคคอลลอยด์ขนาด 1–1000 nm กระเจิงแสง — เห็นลำแสงชัดเจน</p>
+        </div>
+      </div>
+    </div><!-- end exp-card -->
+
+    <!-- THEORY -->
+    <div class="sec-head">
+      <span class="pill" style="background:var(--sky);">📖 ทฤษฎี</span>
+      <h2>สาระสำคัญ</h2>
+    </div>
+
+    <div class="theory-card">
+      <h3>🔬 ปรากฏการณ์ทินดอลล์คืออะไร?</h3>
+      <p>เมื่อแสงผ่านสาร <strong>คอลลอยด์</strong> อนุภาคขนาดกลาง (1–1000 นาโนเมตร) จะกระเจิงแสงออกไปรอบทิศทาง ทำให้มองเห็น<strong>ลำแสง</strong>ชัดเจนจากด้านข้าง — เรียกว่า <strong>ปรากฏการณ์ทินดอลล์</strong></p>
+    </div>
+    <div class="theory-card">
+      <h3>⚗️ ประเภทของสาร</h3>
+      <ul>
+        <li><strong>สารละลาย</strong> — อนุภาคเล็กมาก (&lt;1 nm) แสงไม่กระเจิง ไม่เกิดปรากฏการณ์ทินดอลล์</li>
+        <li><strong>คอลลอยด์</strong> — อนุภาคกลาง (1–1000 nm) เกิดการกระเจิงแสง <strong>เห็นลำแสง ✅</strong></li>
+        <li><strong>สารแขวนลอย</strong> — อนุภาคใหญ่ (&gt;1000 nm) ตกตะกอนได้ เห็นอนุภาคชัด</li>
+      </ul>
+    </div>
+
+    <!-- EXAMPLES -->
+    <div class="sec-head">
+      <span class="pill" style="background:var(--peach);">🌍 ตัวอย่าง</span>
+      <h2>ปรากฏการณ์ทินดอลล์ในชีวิตจริง</h2>
+    </div>
+    <div class="examples-grid">
+      <div class="example-chip">
+        <span class="ec-icon">🌲</span>
+        <div class="ec-name">แสงส่องป่า</div>
+        <div class="ec-desc">แสงอาทิตย์ส่องผ่านหมอกในป่า เห็นลำแสงชัดเจน</div>
+      </div>
+      <div class="example-chip">
+        <span class="ec-icon">🌫️</span>
+        <div class="ec-name">หมอกควัน</div>
+        <div class="ec-desc">อนุภาคน้ำและฝุ่นในอากาศกระเจิงแสง</div>
+      </div>
+      <div class="example-chip">
+        <span class="ec-icon">🥛</span>
+        <div class="ec-name">นมเจือจาง</div>
+        <div class="ec-desc">อนุภาคไขมันนมขนาดคอลลอยด์กระเจิงแสงเลเซอร์</div>
+      </div>
+      <div class="example-chip">
+        <span class="ec-icon">🚗</span>
+        <div class="ec-name">ไฟรถในหมอก</div>
+        <div class="ec-desc">แสงไฟรถกระเจิงในอนุภาคหมอก มองเห็นลำแสง</div>
+      </div>
+      <div class="example-chip">
+        <span class="ec-icon">🎬</span>
+        <div class="ec-name">ลำแสงโปรเจกเตอร์</div>
+        <div class="ec-desc">ฝุ่นในอากาศทำให้เห็นลำแสงของโปรเจกเตอร์</div>
+      </div>
+      <div class="example-chip">
+        <span class="ec-icon">☁️</span>
+        <div class="ec-name">เมฆ / หมอก</div>
+        <div class="ec-desc">หยดน้ำขนาดคอลลอยด์กระเจิงแสงจนเมฆดูขาว</div>
+      </div>
+    </div>
+
+    <!-- QUIZ -->
+    <div class="sec-head" style="margin-top:36px;">
+      <span class="pill" style="background:var(--pink);">✏️ ทดสอบ</span>
+      <h2>แบบทดสอบ 6 ข้อ</h2>
+    </div>
+    <div class="quiz-card" id="quizCard">
+      <div class="quiz-header">
+        <h2>🎯 ทดสอบปรากฏการณ์ทินดอลล์</h2>
+        <span class="q-badge" id="qBadge">ข้อ 1/6</span>
+      </div>
+      <div class="quiz-progress"><div class="quiz-progress-fill" id="progFill"></div></div>
+      <div class="quiz-body" id="quizBody"></div>
+      <div class="result-panel" id="resultPanel">
+        <span class="result-emoji" id="rEmoji">🏆</span>
+        <h3 id="rTitle">ยอดเยี่ยม!</h3>
+        <div class="score-big" id="rScore">6/6</div>
+        <div class="score-bar-wrap"><div class="score-bar-fill" id="rBar"></div></div>
+        <p class="result-msg" id="rMsg"></p>
+        <button class="retry-btn" onclick="startQuiz()">🔄 ทำอีกครั้ง</button>
+      </div>
+    </div>
+
+  </div><!-- end .page -->
+
+  <script>
+  // ── LASER SWITCH ──────────────────────────────────────────────
+  const sw    = document.getElementById('laserSwitch');
+  const rail  = document.getElementById('beamRail');
+  const stage = document.getElementById('stage');
+  const lbl   = document.getElementById('switchLabel');
+  const tBeam = document.getElementById('tyndallBeam');
+  const tGlow = document.getElementById('tyndallGlow');
+
+  // Build scatter dots in beaker-2 region (~50%–67% of stage width)
+  const sc = document.getElementById('scatterContainer');
+  for (let i = 0; i < 18; i++) {
+    const d = document.createElement('div');
+    d.className = 'scatter-dot';
+    // x: 50%–67%, y: 35%–65% of stage
+    d.style.left = (50 + Math.random() * 17) + '%';
+    d.style.top  = (30 + Math.random() * 40) + '%';
+    d.style.animationDelay = (Math.random() * 1.2) + 's';
+    sc.appendChild(d);
+  }
+
+  function toggleLaser() {
+    const on = sw.classList.toggle('on');
+    sw.classList.toggle('off', !on);
+    sw.setAttribute('aria-pressed', on);
+    lbl.textContent = on ? 'เปิด' : 'ปิด';
+
+    // beam segments — skip seg-b1 (inside clear water, laser invisible in solution)
+    rail.querySelectorAll('.beam-seg').forEach(s => {
+      if (s.classList.contains('seg-b1')) return; // always hidden
+      s.style.opacity = on ? '1' : '0';
+    });
+
+    // tyndall visible beam inside colloid beaker svg
+    tBeam.style.opacity = on ? '0.9' : '0';
+    tGlow.style.opacity = on ? '0.7' : '0';
+
+    // scatter dots
+    sc.querySelectorAll('.scatter-dot').forEach(d => {
+      d.style.background = on ? 'rgba(252,165,165,.7)' : 'rgba(252,165,165,0)';
+      d.style.animation  = on ? 'scatterPulse 1.2s ease-in-out infinite alternate' : 'none';
+    });
+  }
+
+  sw.addEventListener('click', toggleLaser);
+  sw.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' ') { e.preventDefault(); toggleLaser(); }});
+
+  // ── QUIZ ──────────────────────────────────────────────────────
+  const QS = [
+    {
+      q: "ปรากฏการณ์ทินดอลล์เกิดขึ้นเมื่อแสงผ่านสารชนิดใด",
+      choices: ["สารละลายใส เช่น น้ำเกลือ","สารคอลลอยด์ เช่น นมเจือจาง","น้ำบริสุทธิ์"],
+      answer: 1,
+      explain: "✅ อนุภาคคอลลอยด์ขนาด 1–1000 nm กระเจิงแสงได้ดี ทำให้เห็นลำแสงชัดเจน"
+    },
+    {
+      q: "ขนาดอนุภาคของสารคอลลอยด์อยู่ในช่วงใด",
+      choices: ["น้อยกว่า 1 นาโนเมตร","1–1000 นาโนเมตร","มากกว่า 10,000 นาโนเมตร"],
+      answer: 1,
+      explain: "✅ คอลลอยด์มีอนุภาคขนาด 1–1000 nm ซึ่งใหญ่พอที่จะกระเจิงแสงได้"
+    },
+    {
+      q: "เหตุใดสารละลายใส เช่น น้ำเกลือ จึงไม่เกิดปรากฏการณ์ทินดอลล์",
+      choices: [
+        "เพราะอนุภาคเล็กเกินไป จึงไม่กระเจิงแสง",
+        "เพราะไม่มีน้ำเป็นส่วนประกอบ",
+        "เพราะแสงเดินทางได้เร็วเกินไป"
+      ],
+      answer: 0,
+      explain: "✅ อนุภาคในสารละลายเล็กกว่า 1 nm ไม่สามารถกระเจิงแสงได้ จึงมองไม่เห็นลำแสง"
+    },
+    {
+      q: "ข้อใดคือตัวอย่างของปรากฏการณ์ทินดอลล์ในชีวิตประจำวัน",
+      choices: [
+        "เงาที่เกิดบนกำแพงเมื่อมีแสงไฟส่อง",
+        "ลำแสงอาทิตย์ที่มองเห็นได้ชัดเจนในป่าหมอก",
+        "ภาพสะท้อนในกระจก"
+      ],
+      answer: 1,
+      explain: "✅ แสงอาทิตย์ผ่านอนุภาคน้ำและฝุ่นในหมอกซึ่งมีขนาดคอลลอยด์ จึงเห็นลำแสงชัด"
+    },
+    {
+      q: "เมื่อส่องไฟฉายผ่านนมเจือจาง สิ่งที่สังเกตเห็นได้คืออะไร",
+      choices: [
+        "มองไม่เห็นลำแสงเพราะนมดูดซับแสง",
+        "เห็นลำแสงเรืองแสงชัดเจนภายในนม",
+        "แสงสะท้อนออกมาทั้งหมดโดยไม่ผ่าน"
+      ],
+      answer: 1,
+      explain: "✅ อนุภาคไขมันในนมมีขนาดคอลลอยด์ กระเจิงแสง ทำให้มองเห็นลำแสงชัดเจน"
+    },
+    {
+      q: "ข้อใดไม่ใช่ตัวอย่างของปรากฏการณ์ทินดอลล์",
+      choices: [
+        "เมฆดูขาวเพราะหยดน้ำกระเจิงแสง",
+        "ลำแสงโปรเจกเตอร์ที่มองเห็นในห้องมีฝุ่น",
+        "แสงหักเหผ่านแท่งแก้วปริซึม"
+      ],
+      answer: 2,
+      explain: "✅ การหักเหของแสงผ่านปริซึมเป็นคนละปรากฏการณ์ (Refraction) ไม่ใช่ทินดอลล์"
+    }
+  ];
+
+  let cur=0, score=0, answered=false;
+
+  function startQuiz() {
+    cur=0; score=0; answered=false;
+    document.getElementById('resultPanel').classList.remove('show');
+    document.getElementById('quizBody').style.display='block';
+    renderQ();
+  }
+
+  function renderQ() {
+    answered=false;
+    const q=QS[cur]; const tot=QS.length;
+    document.getElementById('qBadge').textContent=`ข้อ ${cur+1}/${tot}`;
+    document.getElementById('progFill').style.width=((cur/tot)*100)+'%';
+    document.getElementById('quizBody').innerHTML=`
+      <div class="q-num">ข้อที่ ${cur+1} / ${tot}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="choices">
+        ${q.choices.map((c,i)=>`
+          <button class="choice-btn" id="ch${i}" onclick="pick(${i})">
+            <span class="ch-num">${i+1}</span><span>${c}</span>
+          </button>`).join('')}
+      </div>
+      <div class="explain-box" id="expBox">${q.explain}</div>
+      <div class="quiz-nav">
+        <span class="q-counter">คะแนน: ${score} / ${cur}</span>
+        <button class="next-btn" id="nextBtn" onclick="nextQ()">
+          ${cur<tot-1?'ข้อถัดไป →':'ดูผลลัพธ์ 🏆'}
+        </button>
+      </div>`;
+  }
+
+  function pick(idx) {
+    if (answered) return; answered=true;
+    const q=QS[cur]; const ok=idx===q.answer;
+    if(ok) score++;
+    q.choices.forEach((_,i)=>{
+      const b=document.getElementById('ch'+i);
+      b.disabled=true;
+      if(i===q.answer) b.classList.add('correct');
+      else if(i===idx&&!ok) b.classList.add('wrong');
+    });
+    const exp=document.getElementById('expBox');
+    exp.classList.add('show',ok?'ce':'we');
+    document.getElementById('nextBtn').classList.add('show');
+    document.querySelector('.q-counter').textContent=`คะแนน: ${score} / ${cur+1}`;
+    // toast
+    const t=document.getElementById('toast');
+    document.getElementById('toastIcon').textContent=ok?'⭐':'📖';
+    document.getElementById('toastMsg').textContent=ok?'ถูกต้อง! +1 คะแนน':'ผิด — ดูเฉลยด้านล่าง';
+    t.classList.add('show'); clearTimeout(t._t);
+    t._t=setTimeout(()=>t.classList.remove('show'),1800);
+  }
+
+  function nextQ() {
+    cur++;
+    if(cur>=QS.length){ showResult(); return; }
+    renderQ();
+  }
+
+  function showResult() {
+    document.getElementById('quizBody').style.display='none';
+    document.getElementById('progFill').style.width='100%';
+    document.getElementById('qBadge').textContent='เสร็จสิ้น!';
+    const pct=score/QS.length;
+    const [emoji,title,msg]=pct===1
+      ?['🏆','เก่งมากที่สุด!','ตอบถูกทุกข้อ! เข้าใจปรากฏการณ์ทินดอลล์อย่างสมบูรณ์']
+      :pct>=.67?['🌟','ดีมาก!','เข้าใจเกือบครบ ทบทวนข้อที่ผิดแล้วลองใหม่']
+      :['📚','ทบทวนอีกนิด!','กลับไปอ่านสาระสำคัญด้านบนแล้วลองทำใหม่นะ'];
+    document.getElementById('rEmoji').textContent=emoji;
+    document.getElementById('rTitle').textContent=title;
+    document.getElementById('rScore').textContent=`${score}/${QS.length}`;
+    document.getElementById('rMsg').textContent=msg;
+    setTimeout(()=>document.getElementById('rBar').style.width=(pct*100)+'%',200);
+    document.getElementById('resultPanel').classList.add('show');
+    document.getElementById('resultPanel').scrollIntoView({behavior:'smooth',block:'center'});
+  }
+
+  startQuiz();
+  </script>
+</body>
+</html>
