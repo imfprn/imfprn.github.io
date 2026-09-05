@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>วัฏจักรชีวิตสัตว์ ป.3</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:       #FFFDF7;
+      --pink:     #FFB3C6;
+      --yellow:   #FFF0A0;
+      --mint:     #B5EAD7;
+      --lavender: #C9B8FF;
+      --sky:      #AEE6FF;
+      --peach:    #FFCBA4;
+      --blue:     #285eb4;
+      --dark:     #3a3a5c;
+      --gray:     #7a7a9a;
+      --shadow:   6px 6px 0 rgba(0,0,0,0.07);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg); color: var(--dark);
+      min-height: 100vh; padding-top: 58px;
+    }
+    body::before {
+      content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(circle at 10% 15%, rgba(255,179,198,.2) 0%, transparent 40%),
+        radial-gradient(circle at 90% 10%, rgba(174,230,255,.2) 0%, transparent 40%),
+        radial-gradient(circle at 80% 85%, rgba(181,234,215,.18) 0%, transparent 40%),
+        radial-gradient(circle at 15% 80%, rgba(201,184,255,.18) 0%, transparent 40%);
+    }
+
+    /* NAV */
+    .back-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+      background: rgba(255,253,247,.96); backdrop-filter: blur(10px);
+      padding: 8px 20px; display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 3px dashed var(--mint);
+    }
+    .back-nav a {
+      background: var(--mint); border: 2.5px solid rgba(0,0,0,.08);
+      border-radius: 14px; padding: 6px 14px; font-weight: 800; font-size: .88rem;
+      color: var(--dark); text-decoration: none; box-shadow: 3px 3px 0 rgba(0,0,0,.08);
+      transition: transform .15s;
+    }
+    .back-nav a:hover { transform: translate(-2px,-2px); }
+    .back-nav .nav-title { font-family: 'Fredoka One', cursive; font-size: 1.05rem; color: var(--blue); }
+
+    /* PAGE */
+    .page { position: relative; z-index: 1; max-width: 960px; margin: 0 auto; padding: 28px 16px 80px; }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, #1a3a2a 0%, #2d6b4a 50%, #1a4a2a 100%);
+      border-radius: 28px; padding: 36px 28px 28px; margin-bottom: 28px;
+      text-align: center; position: relative; overflow: hidden;
+      box-shadow: 8px 8px 0 rgba(45,107,74,.3);
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(ellipse at 50% 70%, rgba(181,234,215,.15) 0%, transparent 60%);
+    }
+    .hero-icon { font-size: 3rem; margin-bottom: 10px; display: block; }
+    .hero h1 {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(1.7rem,4.5vw,2.6rem);
+      color: white; margin-bottom: 8px; line-height: 1.2;
+    }
+    .hero h1 span { color: #86efac; }
+    .hero p { color: rgba(255,255,255,.75); font-size: .95rem; font-weight: 700; }
+    .rainbow-bar {
+      height: 4px; border-radius: 4px; margin-top: 20px;
+      background: linear-gradient(90deg,var(--pink),var(--peach),var(--yellow),var(--mint),var(--sky),var(--lavender));
+    }
+
+    /* SECTION HEADER */
+    .sec-head { display: flex; align-items: center; gap: 10px; margin: 32px 0 16px; }
+    .sec-head .pill {
+      font-family: 'Fredoka One', cursive; font-size: .78rem;
+      padding: 4px 14px; border-radius: 20px; color: var(--dark); white-space: nowrap;
+    }
+    .sec-head h2 { font-family: 'Fredoka One', cursive; font-size: 1.3rem; color: var(--dark); }
+
+    /* SUMMARY CARDS */
+    .summary-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(260px,1fr)); gap: 14px; margin-bottom: 8px; }
+    .sum-card {
+      background: white; border-radius: 20px; padding: 20px 18px;
+      border: 2.5px solid rgba(0,0,0,.06); box-shadow: var(--shadow);
+    }
+    .sum-card h3 {
+      font-family: 'Fredoka One', cursive; font-size: 1rem; color: var(--dark);
+      margin-bottom: 8px; display: flex; align-items: center; gap: 8px;
+    }
+    .sum-card p, .sum-card li {
+      font-size: .85rem; font-weight: 700; color: var(--gray); line-height: 1.65;
+    }
+    .sum-card ul { margin: 6px 0 0 16px; }
+
+    /* FOOD TABLE */
+    .tbl-wrap {
+      background: white; border-radius: 20px; overflow: hidden;
+      border: 2.5px solid rgba(0,0,0,.06); box-shadow: var(--shadow); margin-bottom: 8px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: .83rem; }
+    th {
+      background: var(--blue); color: white;
+      font-family: 'Fredoka One', cursive; font-size: .88rem;
+      padding: 11px 14px; text-align: left;
+    }
+    td { padding: 10px 14px; border-bottom: 1.5px solid rgba(0,0,0,.05); font-weight: 700; color: var(--dark); }
+    tr:last-child td { border-bottom: none; }
+    tr:nth-child(even) td { background: #f7fbff; }
+    .tag {
+      display: inline-block; border-radius: 8px; padding: 2px 10px;
+      font-size: .75rem; font-weight: 800;
+    }
+    .tag-e { background: var(--yellow); color: #7a6000; }
+    .tag-ne { background: #f0f0f0; color: #666; }
+
+    /* CYCLE TYPE CARDS */
+    .cycle-type-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(240px,1fr)); gap: 14px; }
+    .ct-card {
+      border-radius: 18px; padding: 18px 16px;
+      border: 2.5px solid rgba(0,0,0,.06); box-shadow: var(--shadow);
+    }
+    .ct-card h4 { font-family: 'Fredoka One', cursive; font-size: 1rem; margin-bottom: 8px; }
+    .ct-card .stages {
+      display: flex; align-items: center; flex-wrap: wrap; gap: 4px;
+      font-size: .8rem; font-weight: 800; color: var(--dark);
+    }
+    .stage-chip {
+      background: rgba(255,255,255,.7); border-radius: 8px;
+      padding: 3px 10px; border: 1.5px solid rgba(0,0,0,.08);
+      font-size: .78rem;
+    }
+    .arrow-sep { color: var(--blue); font-weight: 900; }
+    .ct-card .examples { margin-top: 10px; font-size: .8rem; color: var(--gray); font-weight: 700; }
+
+    /* ══════════════════════════════════════════
+       WHEEL SECTION
+    ══════════════════════════════════════════ */
+    .wheels-section { margin-top: 8px; }
+    .animal-tabs {
+      display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;
+    }
+    .atab {
+      padding: 10px 22px; border-radius: 20px; cursor: pointer;
+      font-family: 'Fredoka One', cursive; font-size: 1rem;
+      border: 2.5px solid rgba(0,0,0,.08);
+      box-shadow: 4px 4px 0 rgba(0,0,0,.08);
+      transition: transform .15s, box-shadow .15s;
+    }
+    .atab:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 rgba(0,0,0,.1); }
+    .atab.active { box-shadow: 2px 2px 0 rgba(0,0,0,.1); transform: translate(2px,2px); }
+
+    .wheel-panel { display: none; }
+    .wheel-panel.show { display: block; }
+
+    .wheel-card {
+      background: white; border-radius: 24px;
+      border: 2.5px solid rgba(0,0,0,.06); box-shadow: var(--shadow);
+      padding: 24px 20px;
+    }
+    .wheel-title {
+      font-family: 'Fredoka One', cursive; font-size: 1.4rem;
+      text-align: center; margin-bottom: 6px; color: var(--dark);
+    }
+    .wheel-subtitle {
+      text-align: center; font-size: .85rem; font-weight: 700;
+      color: var(--gray); margin-bottom: 20px;
+    }
+
+    /* WHEEL LAYOUT: SVG wheel + info side by side */
+    .wheel-layout {
+      display: flex; flex-direction: column; align-items: center; gap: 20px;
+    }
+    @media(min-width:620px) {
+      .wheel-layout { flex-direction: row; align-items: center; }
+    }
+
+    /* SVG Wheel */
+    /* ── WHEEL MECHANISM: data disc fixed, cover disc rotates ── */
+    .wheel-svg-wrap {
+      position: relative; flex-shrink: 0;
+      width: 300px; height: 300px;
+    }
+    .wheel-svg-wrap svg {
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%;
+    }
+    /* Data disc — always visible, never moves */
+    .data-disc { z-index: 1; }
+    /* Cover disc — rotates on top, has cutout window */
+    .cover-disc {
+      z-index: 2;
+      transform-origin: center center;
+      transition: transform .55s cubic-bezier(.4,0,.2,1);
+      cursor: pointer;
+    }
+    /* Centre button sits on top of everything */
+    .wheel-center-btn {
+      position: absolute; z-index: 10;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      width: 68px; height: 68px;
+      border-radius: 50%; border: none;
+      font-size: 1.7rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,.25);
+      transition: transform .15s, box-shadow .15s;
+    }
+    .wheel-center-btn:hover { transform: translate(-50%,-50%) scale(1.1); }
+    .wheel-center-btn:active { transform: translate(-50%,-50%) scale(0.9); }
+
+    /* Stage info panel */
+    .stage-info-list { flex: 1; }
+    .sil-title {
+      font-family: 'Fredoka One', cursive; font-size: 1rem; color: var(--dark); margin-bottom: 12px;
+    }
+    .stage-row {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 12px 14px; border-radius: 14px; margin-bottom: 8px;
+      border: 2px solid transparent;
+      cursor: pointer; transition: all .2s;
+    }
+    .stage-row:hover { transform: translateX(4px); }
+    .stage-row.active-stage { border-width: 2.5px; }
+    .stage-row .sr-icon { font-size: 1.8rem; flex-shrink: 0; }
+    .stage-row .sr-body { flex: 1; }
+    .stage-row .sr-num {
+      font-family: 'Fredoka One', cursive; font-size: .78rem; margin-bottom: 2px;
+    }
+    .stage-row .sr-name { font-size: .92rem; font-weight: 800; color: var(--dark); }
+    .stage-row .sr-desc { font-size: .78rem; font-weight: 700; color: var(--gray); margin-top: 2px; line-height: 1.5; }
+
+    /* Nav buttons */
+    .wheel-nav { display: flex; justify-content: center; gap: 12px; margin-top: 16px; }
+    .wnav-btn {
+      padding: 9px 22px; border: none; border-radius: 14px;
+      font-family: 'Fredoka One', cursive; font-size: .95rem;
+      cursor: pointer; transition: transform .15s;
+      box-shadow: 3px 3px 0 rgba(0,0,0,.1);
+    }
+    .wnav-btn:hover { transform: translate(-1px,-1px); }
+    .wnav-prev { background: var(--lavender); color: var(--dark); }
+    .wnav-next { background: var(--sky); color: var(--dark); }
+    .wnav-auto { border: 2px solid rgba(0,0,0,.08); }
+    .wnav-auto.playing { background: var(--pink) !important; }
+
+    /* Stage counter badge */
+    .stage-counter {
+      text-align: center; margin-top: 10px;
+      font-family: 'Fredoka One', cursive; font-size: .9rem; color: var(--gray);
+    }
+
+    /* Environment tips */
+    .tips-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(220px,1fr)); gap: 14px; }
+    .tip-card {
+      border-radius: 18px; padding: 18px 16px;
+      border: 2.5px solid rgba(0,0,0,.06); box-shadow: var(--shadow);
+    }
+    .tip-card h4 { font-family: 'Fredoka One', cursive; font-size: .95rem; margin-bottom: 6px; color: var(--dark); }
+    .tip-card p { font-size: .82rem; font-weight: 700; color: var(--dark); line-height: 1.6; }
+
+    /* Floaters */
+    .floater {
+      position: fixed; pointer-events: none; z-index: 0; opacity: .1;
+      font-size: 1.6rem; animation: floatUp linear infinite;
+    }
+    @keyframes floatUp {
+      0%  { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      10% { opacity: .1; } 90% { opacity: .1; }
+      100%{ transform: translateY(-120px) rotate(360deg); opacity: 0; }
+    }
+
+    @media(max-width:580px) {
+      .summary-grid { grid-template-columns: 1fr; }
+      .cycle-type-grid { grid-template-columns: 1fr; }
+      .wheel-svg-wrap { width: 260px; height: 260px; }
+      .wheel-center-btn { width: 60px; height: 60px; font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="floater" style="left:4%;  animation-duration:20s;animation-delay:0s;">🌿</div>
+  <div class="floater" style="left:20%; animation-duration:26s;animation-delay:6s;">🦋</div>
+  <div class="floater" style="left:52%; animation-duration:18s;animation-delay:3s;">🐸</div>
+  <div class="floater" style="left:74%; animation-duration:24s;animation-delay:9s;">🦟</div>
+  <div class="floater" style="left:88%; animation-duration:17s;animation-delay:2s;">🥚</div>
+
+  <!-- NAV -->
+  <div class="back-nav">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <a href="index.html">← กลับหน้าหลัก</a>
+      <span class="nav-title">วัฏจักรชีวิตสัตว์ ป.3</span>
+    </div>
+    <span style="font-size:1.3rem;">🦋</span>
+  </div>
+
+  <div class="page">
+
+    <!-- HERO -->
+    <div class="hero">
+      <span class="hero-icon">🔬</span>
+      <h1>สรุปสาระสำคัญ<br><span>วิทยาศาสตร์ ป.3</span></h1>
+      <p>ปัจจัยการดำรงชีวิต · สารอาหาร · วัฏจักรชีวิตสัตว์ · สิ่งแวดล้อม</p>
+      <div class="rainbow-bar"></div>
+    </div>
+
+    <!-- ── PART 1: ปัจจัยการดำรงชีวิต ── -->
+    <div class="sec-head">
+      <span class="pill" style="background:var(--sky);">📖 สาระที่ 1</span>
+      <h2>ปัจจัยจำเป็นต่อการดำรงชีวิต</h2>
+    </div>
+    <div class="summary-grid">
+      <div class="sum-card" style="border-top:4px solid var(--sky);">
+        <h3>💧 น้ำ</h3>
+        <p>เป็นส่วนประกอบสำคัญของร่างกาย ช่วยควบคุมอุณหภูมิและช่วยการขับถ่าย</p>
+        <ul><li>ปากแห้ง ผิวแห้ง ปัสสาวะสีเข้ม = สัญญาณขาดน้ำ</li></ul>
+      </div>
+      <div class="sum-card" style="border-top:4px solid var(--peach);">
+        <h3>🍚 อาหาร</h3>
+        <p>ให้พลังงาน ช่วยให้ร่างกายเจริญเติบโตและซ่อมแซมส่วนที่สึกหรอ</p>
+      </div>
+      <div class="sum-card" style="border-top:4px solid var(--mint);">
+        <h3>🌬️ อากาศ</h3>
+        <p>มนุษย์และสัตว์ใช้ <strong>แก๊สออกซิเจน</strong> ในการหายใจเพื่อสร้างพลังงาน</p>
+        <ul><li>น้ำ + อาหาร + อากาศ = ปัจจัยชีวภาพขั้นพื้นฐาน</li></ul>
+      </div>
+    </div>
+
+    <!-- ── PART 2: อาหาร 5 หมู่ ── -->
+    <div class="sec-head">
+      <span class="pill" style="background:var(--yellow);">🍽️ สาระที่ 2</span>
+      <h2>อาหารหลัก 5 หมู่</h2>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>หมู่</th>
+            <th>ตัวอย่างอาหาร</th>
+            <th>สารอาหาร</th>
+            <th>ประโยชน์</th>
+            <th>พลังงาน</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>เนื้อ นม ไข่ ถั่ว</td><td>โปรตีน</td><td>ซ่อมแซม สร้างกล้ามเนื้อ</td><td><span class="tag tag-e">⚡ ได้</span></td></tr>
+          <tr><td>2</td><td>ข้าว แป้ง น้ำตาล มัน</td><td>คาร์โบไฮเดรต</td><td>พลังงานหลักในการทำกิจกรรม</td><td><span class="tag tag-e">⚡ ได้</span></td></tr>
+          <tr><td>3</td><td>ผักชนิดต่างๆ</td><td>เกลือแร่/วิตามิน</td><td>ควบคุมการทำงาน มีใยอาหาร</td><td><span class="tag tag-ne">❌ ไม่</span></td></tr>
+          <tr><td>4</td><td>ผลไม้ชนิดต่างๆ</td><td>วิตามิน/เกลือแร่</td><td>บำรุงผิว สายตา สร้างภูมิคุ้มกัน</td><td><span class="tag tag-ne">❌ ไม่</span></td></tr>
+          <tr><td>5</td><td>น้ำมัน เนย ไขมัน</td><td>ไขมัน</td><td>ให้พลังงานสูง ให้ความอบอุ่น</td><td><span class="tag tag-e">⚡ ได้</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ── PART 3: กลุ่มสัตว์ตามอาหาร ── -->
+    <div class="sec-head">
+      <span class="pill" style="background:var(--peach);">🐾 สาระที่ 3</span>
+      <h2>กลุ่มสัตว์ตามอาหารที่กิน</h2>
+    </div>
+    <div class="summary-grid">
+      <div class="sum-card" style="border-top:4px solid var(--mint);">
+        <h3>🌿 สัตว์กินพืช</h3>
+        <p style="color:#3a3a5c;font-size:.82rem;">(Herbivores)</p>
+        <ul><li>วัว ควาย กวาง กระต่าย ช้าง ม้า</li></ul>
+      </div>
+      <div class="sum-card" style="border-top:4px solid var(--pink);">
+        <h3>🥩 สัตว์กินเนื้อ</h3>
+        <p style="color:#3a3a5c;font-size:.82rem;">(Carnivores)</p>
+        <ul><li>เสือ สิงโต จระเข้ งู ฉลาม</li></ul>
+      </div>
+      <div class="sum-card" style="border-top:4px solid var(--sky);">
+        <h3>🍽️ สัตว์กินทั้งสองอย่าง</h3>
+        <p style="color:#3a3a5c;font-size:.82rem;">(Omnivores)</p>
+        <ul><li>มนุษย์ ไก่ เป็ด สุนัข แมว หนูนา</li></ul>
+      </div>
+    </div>
+
+    <!-- ── PART 4: ประเภทวัฏจักร ── -->
+    <div class="sec-head">
+      <span class="pill" style="background:var(--lavender);">🔄 สาระที่ 4</span>
+      <h2>ประเภทวัฏจักรชีวิตของสัตว์</h2>
+    </div>
+    <div class="cycle-type-grid">
+      <div class="ct-card" style="background:var(--sky);">
+        <h4>2 ระยะ — ออกลูกเป็นตัว</h4>
+        <div class="stages">
+          <span class="stage-chip">👶 ตัวอ่อน</span>
+          <span class="arrow-sep">→</span>
+          <span class="stage-chip">🧑 ตัวเต็มวัย</span>
+        </div>
+        <div class="examples">ตัวอย่าง: มนุษย์ สุนัข แมว วัว กวาง กระต่าย วาฬ</div>
+      </div>
+      <div class="ct-card" style="background:var(--mint);">
+        <h4>3 ระยะ — ออกลูกเป็นไข่</h4>
+        <div class="stages">
+          <span class="stage-chip">🥚 ไข่</span>
+          <span class="arrow-sep">→</span>
+          <span class="stage-chip">🐣 ตัวอ่อน</span>
+          <span class="arrow-sep">→</span>
+          <span class="stage-chip">🐓 ตัวเต็มวัย</span>
+        </div>
+        <div class="examples">ตัวอย่าง: ไก่ เต่า ปลา กบ (ลูกอ๊อด)</div>
+      </div>
+      <div class="ct-card" style="background:var(--lavender);">
+        <h4>4 ระยะ — เปลี่ยนรูปร่างสมบูรณ์</h4>
+        <div class="stages">
+          <span class="stage-chip">🥚 ไข่</span>
+          <span class="arrow-sep">→</span>
+          <span class="stage-chip">🐛 ตัวหนอน</span>
+          <span class="arrow-sep">→</span>
+          <span class="stage-chip">💤 ดักแด้</span>
+          <span class="arrow-sep">→</span>
+          <span class="stage-chip">🦋 ตัวเต็มวัย</span>
+        </div>
+        <div class="examples">ตัวอย่าง: ผีเสื้อ ยุง แมลงวัน</div>
+      </div>
+    </div>
+
+    <!-- ══ INTERACTIVE WHEELS ══ -->
+    <div class="sec-head" style="margin-top:40px;">
+      <span class="pill" style="background:var(--pink);">🎡 Interactive</span>
+      <h2>วงล้อวัฏจักรชีวิต — กดเล่นได้เลย!</h2>
+    </div>
+    <p style="font-size:.88rem;font-weight:700;color:var(--gray);margin-bottom:18px;">กดปุ่มกลางวงล้อเพื่อหมุน หรือกดบัตรด้านข้างเพื่อเลือกดูระยะ ลองกด ▶️ ให้หมุนอัตโนมัติ!</p>
+
+    <!-- TABS -->
+    <div class="animal-tabs">
+      <button class="atab active" id="tab-mosquito"
+              style="background:var(--pink);" onclick="switchAnimal('mosquito')">
+        🦟 ยุง (4 ระยะ)
+      </button>
+      <button class="atab" id="tab-butterfly"
+              style="background:var(--lavender);" onclick="switchAnimal('butterfly')">
+        🦋 ผีเสื้อ (4 ระยะ)
+      </button>
+      <button class="atab" id="tab-frog"
+              style="background:var(--peach);" onclick="switchAnimal('frog')">
+        🐔 ไก่ (3 ระยะ)
+      </button>
+    </div>
+
+    <!-- MOSQUITO -->
+    <div class="wheel-panel show" id="panel-mosquito">
+      <div class="wheel-card">
+        <div class="wheel-title">🦟 วัฏจักรชีวิตของยุง</div>
+        <div class="wheel-subtitle">4 ระยะ · การเปลี่ยนรูปร่างสมบูรณ์ (Complete Metamorphosis)</div>
+        <div class="wheel-layout">
+          <div>
+            <div class="wheel-svg-wrap">
+              <!-- DATA disc: 4 equal 90° segments, stays fixed -->
+              <svg class="data-disc" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="150" cy="150" r="120" fill="#f5f5f5"/>
+                <!-- Seg0: 0°→90°   top-right    ไข่ -->
+                <path d="M150,150 L150,30 A120,120 0 0,1 270,150 Z"  fill="#FFB3C6" stroke="white" stroke-width="3"/>
+                <!-- Seg1: 90°→180° bottom-right  ลูกน้ำ -->
+                <path d="M150,150 L270,150 A120,120 0 0,1 150,270 Z" fill="#FFCBA4" stroke="white" stroke-width="3"/>
+                <!-- Seg2: 180°→270° bottom-left  ตัวโม่ง -->
+                <path d="M150,150 L150,270 A120,120 0 0,1 30,150 Z"  fill="#FFF0A0" stroke="white" stroke-width="3"/>
+                <!-- Seg3: 270°→360° top-left     ยุงโตเต็มวัย -->
+                <path d="M150,150 L30,150 A120,120 0 0,1 150,30 Z"   fill="#C9B8FF" stroke="white" stroke-width="3"/>
+                <!-- midpoints: 45°,135°,225°,315° at r≈82 -->
+                <text x="208" y="94"  font-size="26" text-anchor="middle">🥚</text>
+                <text x="208" y="74"  font-size="11" font-weight="bold" fill="#3a3a5c" text-anchor="middle" font-family="Nunito,sans-serif">ไข่</text>
+                <text x="208" y="210" font-size="26" text-anchor="middle">🦠</text>
+                <text x="208" y="232" font-size="11" font-weight="bold" fill="#3a3a5c" text-anchor="middle" font-family="Nunito,sans-serif">ลูกน้ำ</text>
+                <text x="92"  y="210" font-size="26" text-anchor="middle">🐡</text>
+                <text x="92"  y="232" font-size="11" font-weight="bold" fill="#3a3a5c" text-anchor="middle" font-family="Nunito,sans-serif">ตัวโม่ง</text>
+                <text x="92"  y="94"  font-size="24" text-anchor="middle">🦟</text>
+                <text x="92"  y="74"  font-size="10" font-weight="bold" fill="#3a3a5c" text-anchor="middle" font-family="Nunito,sans-serif">ยุงโตเต็มวัย</text>
+              </svg>
+              <!-- COVER disc: window = exact 90° (top→right), spokes at 0°/90°/180°/270° -->
+              <svg id="wheel-mosquito" class="cover-disc" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <mask id="mask-m">
+                    <rect width="300" height="300" fill="white"/>
+                    <!-- window: 0°→90° (top-right quadrant) -->
+                    <path d="M150,150 L150,28 A122,122 0 0,1 272,150 Z" fill="black"/>
+                  </mask>
+                </defs>
+                <circle cx="150" cy="150" r="122" fill="rgba(240,240,240,0.97)" mask="url(#mask-m)"/>
+                <circle cx="150" cy="150" r="122" fill="none" stroke="#bbb" stroke-width="2.5"/>
+                <line x1="150" y1="150" x2="150" y2="28"  stroke="white" stroke-width="4"/>
+                <line x1="150" y1="150" x2="272" y2="150" stroke="white" stroke-width="4"/>
+                <line x1="150" y1="150" x2="150" y2="272" stroke="white" stroke-width="4"/>
+                <line x1="150" y1="150" x2="28"  y2="150" stroke="white" stroke-width="4"/>
+              </svg>
+              <button class="wheel-center-btn" id="m-spin-btn" style="background:linear-gradient(135deg,#FFB3C6,#FFCBA4);">🦟</button>
+            </div>
+            <div class="wheel-nav">
+              <button class="wnav-btn wnav-prev" onclick="prevStage('mosquito')">◀ ก่อนหน้า</button>
+              <button class="wnav-btn wnav-auto" id="auto-mosquito" style="background:var(--yellow);" onclick="toggleAuto('mosquito')">▶️ อัตโนมัติ</button>
+              <button class="wnav-btn wnav-next" onclick="nextStage('mosquito')">ถัดไป ▶</button>
+            </div>
+            <div class="stage-counter" id="counter-mosquito">ระยะที่ 1 / 4</div>
+          </div>
+          <div class="stage-info-list">
+            <div class="sil-title">🔎 รายละเอียดแต่ละระยะ</div>
+            <div class="stage-row" id="m-sr0" onclick="setStage('mosquito',0)" style="background:#fff0f5;">
+              <span class="sr-icon">🥚</span>
+              <div class="sr-body"><div class="sr-num" style="color:#e75480;">ระยะที่ 1</div><div class="sr-name">ไข่ (Egg)</div><div class="sr-desc">ยุงวางไข่บนผิวน้ำนิ่ง เช่น โอ่งน้ำ ยางรถยนต์ที่มีน้ำขัง ไข่มีขนาดเล็กมาก</div></div>
+            </div>
+            <div class="stage-row" id="m-sr1" onclick="setStage('mosquito',1)" style="background:#fff5ee;">
+              <span class="sr-icon">🦠</span>
+              <div class="sr-body"><div class="sr-num" style="color:#e87040;">ระยะที่ 2</div><div class="sr-name">ลูกน้ำ (Larva)</div><div class="sr-desc">อาศัยในน้ำ หายใจโดยโผล่ท่อหายใจขึ้นผิวน้ำ กินแบคทีเรียและสาหร่ายขนาดเล็ก</div></div>
+            </div>
+            <div class="stage-row" id="m-sr2" onclick="setStage('mosquito',2)" style="background:#fffbe8;">
+              <span class="sr-icon">🐡</span>
+              <div class="sr-body"><div class="sr-num" style="color:#c8a000;">ระยะที่ 3</div><div class="sr-name">ตัวโม่ง (Pupa)</div><div class="sr-desc">ยังอยู่ในน้ำ ไม่กินอาหาร ภายในมีการเปลี่ยนแปลงครั้งใหญ่</div></div>
+            </div>
+            <div class="stage-row" id="m-sr3" onclick="setStage('mosquito',3)" style="background:#f3efff;">
+              <span class="sr-icon">🦟</span>
+              <div class="sr-body"><div class="sr-num" style="color:#7050c0;">ระยะที่ 4</div><div class="sr-name">ยุงตัวเต็มวัย (Adult)</div><div class="sr-desc">บินได้ ยุงตัวเมียดูดเลือดเพื่อสร้างไข่ ยุงตัวผู้กินน้ำหวานจากดอกไม้</div></div>
+            </div>
+            <div style="margin-top:12px;padding:10px 14px;background:#fff0f0;border-radius:12px;border-left:3px solid #e74c3c;">
+              <p style="font-size:.8rem;font-weight:800;color:#c0392b;">⚠️ ตัดวัฏจักร: เทน้ำขัง ปิดฝาภาชนะ เปลี่ยนน้ำในแจกันทุก 7 วัน → ป้องกันไข้เลือดออก!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BUTTERFLY -->
+    <div class="wheel-panel" id="panel-butterfly">
+      <div class="wheel-card">
+        <div class="wheel-title">🦋 วัฏจักรชีวิตของผีเสื้อ</div>
+        <div class="wheel-subtitle">4 ระยะ · การเปลี่ยนรูปร่างสมบูรณ์ (Complete Metamorphosis)</div>
+        <div class="wheel-layout">
+          <div>
+            <div class="wheel-svg-wrap">
+              <!-- DATA disc -->
+              <svg class="data-disc" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="150" cy="150" r="120" fill="#f5f5f5"/>
+                <!-- 4 equal 90° segments — same geometry as mosquito wheel -->
+                <!-- Seg0: 0°→90°   (top-right)    ไข่ -->
+                <path d="M150,150 L150,30 A120,120 0 0,1 270,150 Z"  fill="#C9B8FF" stroke="white" stroke-width="3"/>
+                <!-- Seg1: 90°→180°  (bottom-right) หนอน -->
+                <path d="M150,150 L270,150 A120,120 0 0,1 150,270 Z" fill="#AEE6FF" stroke="white" stroke-width="3"/>
+                <!-- Seg2: 180°→270° (bottom-left)  ดักแด้ -->
+                <path d="M150,150 L150,270 A120,120 0 0,1 30,150 Z"  fill="#B5EAD7" stroke="white" stroke-width="3"/>
+                <!-- Seg3: 270°→0°   (top-left)     ผีเสื้อ -->
+                <path d="M150,150 L30,150 A120,120 0 0,1 150,30 Z"   fill="#FFF0A0" stroke="white" stroke-width="3"/>
+                <!-- mid 45°  → (207,93) -->
+                <text x="208" y="94"  font-size="26" text-anchor="middle">🥚</text>
+                <text x="208" y="74"  font-size="11" font-weight="bold" fill="#3a3a5c" text-anchor="middle" font-family="Nunito,sans-serif">ไข่</text>
+                <!-- mid 135° → (207,207) -->
+                <text x="208" y="210" font-size="26" text-anchor="middle">🐛</text>
+                <text x="208" y="232" font-size="11" font-weight="bold" fill="#3a3a5c" text-anchor="middle" font-family="Nunito,sans-serif">หนอนผีเสื้อ</text>
+                <!-- mid 225° → (93,207) -->
+                <text x="92"  y="210" font-size="26" text-anchor="middle">🫘</text>
+                <text x="92"  y="232" font-size="11" font-weight="bold" fill="#3a3a5c" text-anchor="middle" font-family="Nunito,sans-serif">ดักแด้</text>
+                <!-- mid 315° → (93,93) -->
+                <text x="92"  y="94"  font-size="26" text-anchor="middle">🦋</text>
+                <text x="92"  y="74"  font-size="10" font-weight="bold" fill="#3a3a5c" text-anchor="middle" font-family="Nunito,sans-serif">ผีเสื้อโตเต็มวัย</text>
+              </svg>
+              <!-- COVER disc: 90° window matching seg0, spokes at 0°/90°/180°/270° -->
+              <svg id="wheel-butterfly" class="cover-disc" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <mask id="mask-b">
+                    <rect width="300" height="300" fill="white"/>
+                    <!-- window = 90°: 0°→90° (top→right) -->
+                    <path d="M150,150 L150,28 A122,122 0 0,1 272,150 Z" fill="black"/>
+                  </mask>
+                </defs>
+                <circle cx="150" cy="150" r="122" fill="rgba(240,240,240,0.97)" mask="url(#mask-b)"/>
+                <circle cx="150" cy="150" r="122" fill="none" stroke="#bbb" stroke-width="2.5"/>
+                <line x1="150" y1="150" x2="150" y2="28"  stroke="white" stroke-width="4"/>
+                <line x1="150" y1="150" x2="272" y2="150" stroke="white" stroke-width="4"/>
+                <line x1="150" y1="150" x2="150" y2="272" stroke="white" stroke-width="4"/>
+                <line x1="150" y1="150" x2="28"  y2="150" stroke="white" stroke-width="4"/>
+              </svg>
+              <button class="wheel-center-btn" id="b-spin-btn" style="background:linear-gradient(135deg,#C9B8FF,#AEE6FF);">🦋</button>
+            </div>
+            <div class="wheel-nav">
+              <button class="wnav-btn wnav-prev" onclick="prevStage('butterfly')">◀ ก่อนหน้า</button>
+              <button class="wnav-btn wnav-auto" id="auto-butterfly" style="background:var(--yellow);" onclick="toggleAuto('butterfly')">▶️ อัตโนมัติ</button>
+              <button class="wnav-btn wnav-next" onclick="nextStage('butterfly')">ถัดไป ▶</button>
+            </div>
+            <div class="stage-counter" id="counter-butterfly">ระยะที่ 1 / 4</div>
+          </div>
+          <div class="stage-info-list">
+            <div class="sil-title">🔎 รายละเอียดแต่ละระยะ</div>
+            <div class="stage-row" id="b-sr0" onclick="setStage('butterfly',0)" style="background:#f3efff;">
+              <span class="sr-icon">🥚</span>
+              <div class="sr-body"><div class="sr-num" style="color:#7050c0;">ระยะที่ 1</div><div class="sr-name">ไข่ (Egg)</div><div class="sr-desc">ผีเสื้อวางไข่ใต้ใบพืช ไข่มีลวดลายและสีสันแตกต่างกันตามสายพันธุ์</div></div>
+            </div>
+            <div class="stage-row" id="b-sr1" onclick="setStage('butterfly',1)" style="background:#eef8ff;">
+              <span class="sr-icon">🐛</span>
+              <div class="sr-body"><div class="sr-num" style="color:#2070c0;">ระยะที่ 2</div><div class="sr-name">หนอนผีเสื้อ (Larva)</div><div class="sr-desc">กินใบพืชตลอดเวลา ลอกคราบหลายครั้งก่อนเข้าดักแด้</div></div>
+            </div>
+            <div class="stage-row" id="b-sr2" onclick="setStage('butterfly',2)" style="background:#efffef;">
+              <span class="sr-icon">🫘</span>
+              <div class="sr-body"><div class="sr-num" style="color:#108040;">ระยะที่ 3</div><div class="sr-name">ดักแด้ (Pupa/Chrysalis)</div><div class="sr-desc">ห่อหุ้มตัวด้วยใยไหม ไม่กินอาหาร อวัยวะภายในเปลี่ยนแปลงอย่างสมบูรณ์</div></div>
+            </div>
+            <div class="stage-row" id="b-sr3" onclick="setStage('butterfly',3)" style="background:#fffde8;">
+              <span class="sr-icon">🦋</span>
+              <div class="sr-body"><div class="sr-num" style="color:#b07800;">ระยะที่ 4</div><div class="sr-name">ผีเสื้อตัวเต็มวัย (Adult)</div><div class="sr-desc">บินได้ กินน้ำหวานจากดอกไม้ ช่วยผสมเกสร จากนั้นผสมพันธุ์และวางไข่</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHICKEN (replaces FROG) -->
+    <div class="wheel-panel" id="panel-frog">
+      <div class="wheel-card">
+        <div class="wheel-title">🐔 วัฏจักรชีวิตของไก่</div>
+        <div class="wheel-subtitle">3 ระยะ · ออกลูกเป็นไข่ (Oviparous)</div>
+        <div class="wheel-layout">
+          <div>
+            <div class="wheel-svg-wrap">
+              <!-- DATA disc: 3 segments 120° -->
+              <svg class="data-disc" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="150" cy="150" r="120" fill="#f5f5f5"/>
+                <path d="M150,150 L150,30 A120,120 0 0,1 253.9,210 Z" fill="#FFCBA4" stroke="white" stroke-width="3"/>
+                <path d="M150,150 L253.9,210 A120,120 0 0,1 46.1,210 Z" fill="#FFF0A0" stroke="white" stroke-width="3"/>
+                <path d="M150,150 L46.1,210 A120,120 0 0,1 150,30 Z"   fill="#B5EAD7" stroke="white" stroke-width="3"/>
+                <text x="215" y="108" font-size="30" text-anchor="middle">🥚</text>
+                <text x="220" y="82"  font-size="11" font-weight="bold" fill="#3a3a5c" text-anchor="middle" font-family="Nunito,sans-serif">ไข่</text>
+                <text x="150" y="240" font-size="30" text-anchor="middle">🐣</text>
+                <text x="150" y="265" font-size="11" font-weight="bold" fill="#3a3a5c" text-anchor="middle" font-family="Nunito,sans-serif">ลูกไก่</text>
+                <text x="85"  y="108" font-size="30" text-anchor="middle">🐔</text>
+                <text x="80"  y="82"  font-size="11" font-weight="bold" fill="#3a3a5c" text-anchor="middle" font-family="Nunito,sans-serif">ไก่โตเต็มวัย</text>
+              </svg>
+              <!-- COVER disc: 120° window -->
+              <svg id="wheel-frog" class="cover-disc" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <mask id="mask-f">
+                    <rect width="300" height="300" fill="white"/>
+                    <!-- window = segment 0: 270°→30° (top region) -->
+                    <path d="M150,150 L150,28 A122,122 0 0,1 255.6,211 Z" fill="black"/>
+                  </mask>
+                </defs>
+                <circle cx="150" cy="150" r="122" fill="rgba(245,245,245,0.96)" mask="url(#mask-f)"/>
+                <circle cx="150" cy="150" r="122" fill="none" stroke="#ccc" stroke-width="2"/>
+                <line x1="150" y1="150" x2="150"  y2="28"  stroke="white" stroke-width="3"/>
+                <line x1="150" y1="150" x2="255.6" y2="211" stroke="white" stroke-width="3"/>
+                <line x1="150" y1="150" x2="44.4"  y2="211" stroke="white" stroke-width="3"/>
+              </svg>
+              <button class="wheel-center-btn" id="f-spin-btn" style="background:linear-gradient(135deg,#FFCBA4,#FFF0A0);">🐔</button>
+            </div>
+            <div class="wheel-nav">
+              <button class="wnav-btn wnav-prev" onclick="prevStage('frog')">◀ ก่อนหน้า</button>
+              <button class="wnav-btn wnav-auto" id="auto-frog" style="background:var(--yellow);" onclick="toggleAuto('frog')">▶️ อัตโนมัติ</button>
+              <button class="wnav-btn wnav-next" onclick="nextStage('frog')">ถัดไป ▶</button>
+            </div>
+            <div class="stage-counter" id="counter-frog">ระยะที่ 1 / 3</div>
+          </div>
+          <div class="stage-info-list">
+            <div class="sil-title">🔎 รายละเอียดแต่ละระยะ</div>
+            <div class="stage-row" id="f-sr0" onclick="setStage('frog',0)" style="background:#fff5ee;">
+              <span class="sr-icon">🥚</span>
+              <div class="sr-body"><div class="sr-num" style="color:#c05020;">ระยะที่ 1</div><div class="sr-name">ไข่ (Egg)</div><div class="sr-desc">แม่ไก่วางไข่และฟักโดยใช้ความอบอุ่นจากร่างกาย ใช้เวลาประมาณ 21 วัน ไข่จึงฟักออก</div></div>
+            </div>
+            <div class="stage-row" id="f-sr1" onclick="setStage('frog',1)" style="background:#fffde8;">
+              <span class="sr-icon">🐣</span>
+              <div class="sr-body"><div class="sr-num" style="color:#b07800;">ระยะที่ 2</div><div class="sr-name">ลูกไก่ (Chick)</div><div class="sr-desc">ฟักออกมามีขน กินอาหารที่แม่หาให้ ค่อยๆ เติบโต ขนาดใหญ่ขึ้นและพัฒนาขนปีก</div></div>
+            </div>
+            <div class="stage-row" id="f-sr2" onclick="setStage('frog',2)" style="background:#efffef;">
+              <span class="sr-icon">🐔</span>
+              <div class="sr-body"><div class="sr-num" style="color:#108040;">ระยะที่ 3</div><div class="sr-name">ไก่ตัวเต็มวัย (Adult)</div><div class="sr-desc">โตเต็มที่ หากินได้เอง ไก่ตัวเมียออกไข่ได้ วัฏจักรชีวิตจึงเริ่มใหม่</div></div>
+            </div>
+            <div style="margin-top:12px;padding:10px 14px;background:#fff8e8;border-radius:12px;border-left:3px solid #f39c12;">
+              <p style="font-size:.8rem;font-weight:800;color:#b07000;">💡 ไก่ออกไข่ได้โดยไม่ต้องผสมพันธุ์ แต่ไข่นั้นจะไม่ฟักออกมาเป็นตัว ไข่ที่ฟักได้ต้องผ่านการผสมพันธุ์จากไก่ตัวผู้ก่อน</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+        <!-- ── PART 5: สิ่งแวดล้อม ── -->
+    <div class="sec-head" style="margin-top:40px;">
+      <span class="pill" style="background:var(--mint);">🌍 สาระที่ 5</span>
+      <h2>การรักษาสิ่งแวดล้อมและตัดวงจรโรค</h2>
+    </div>
+    <div class="tips-grid">
+      <div class="tip-card" style="background:var(--pink);">
+        <h4>🦟 ป้องกันยุงลาย</h4>
+        <p>เทน้ำขังทิ้ง ปิดฝาโอ่ง เปลี่ยนน้ำในแจกันทุก 7 วัน = ตัดระยะไข่และลูกน้ำ ป้องกันโรคไข้เลือดออก</p>
+      </div>
+      <div class="tip-card" style="background:var(--mint);">
+        <h4>🐟 อนุรักษ์สัตว์น้ำ</h4>
+        <p>ไม่ทิ้งขยะหรือสารเคมีลงแม่น้ำ ไม่ใช้อวนตาถี่ เพราะจะจับลูกปลาไปด้วย ทำให้สัตว์น้ำสูญพันธุ์</p>
+      </div>
+      <div class="tip-card" style="background:var(--yellow);">
+        <h4>♻️ 3R ใช้ชีวิตอย่างยั่งยืน</h4>
+        <p>Reduce ลดการใช้ · Reuse นำกลับมาใช้ · Recycle นำไปแปรรูป เพื่อรักษาทรัพยากรธรรมชาติ</p>
+      </div>
+    </div>
+
+  </div><!-- end .page -->
+
+  <script>
+  // ════════════════════════════════════
+  // WHEEL ENGINE
+  // ════════════════════════════════════
+  const ANIMALS = {
+    mosquito:  { stages: 4, cur: 0, timer: null },
+    butterfly: { stages: 4, cur: 0, timer: null },
+    frog:      { stages: 3, cur: 0, timer: null }
+  };
+
+  // Highlight colours for active stage row per animal
+  const COLORS = {
+    mosquito:  ['#FFB3C6','#FFCBA4','#FFF0A0','#C9B8FF'],
+    butterfly: ['#C9B8FF','#AEE6FF','#B5EAD7','#FFF0A0'],
+    frog:      ['#FFCBA4','#FFF0A0','#B5EAD7']
+  };
+
+  function switchAnimal(name) {
+    Object.keys(ANIMALS).forEach(k => {
+      document.getElementById('panel-'+k).classList.remove('show');
+      document.getElementById('tab-'+k).classList.remove('active');
+    });
+    document.getElementById('panel-'+name).classList.add('show');
+    document.getElementById('tab-'+name).classList.add('active');
+    setStage(name, ANIMALS[name].cur);
+  }
+
+  function setStage(animal, idx) {
+    const a = ANIMALS[animal];
+    a.cur = ((idx % a.stages) + a.stages) % a.stages;
+    // Update stage rows
+    for (let i = 0; i < a.stages; i++) {
+      const row = document.getElementById(`${animal[0]}-sr${i}`);
+      if (!row) continue;
+      row.classList.toggle('active-stage', i === a.cur);
+      if (i === a.cur) {
+        row.style.borderColor = COLORS[animal][i];
+        row.style.boxShadow = `3px 3px 0 ${COLORS[animal][i]}`;
+      } else {
+        row.style.borderColor = 'transparent';
+        row.style.boxShadow = 'none';
+      }
+    }
+    // Update counter
+    document.getElementById(`counter-${animal}`).textContent =
+      `ระยะที่ ${a.cur + 1} / ${a.stages}`;
+    // Rotate COVER disc: each step rotates by -segAngle (reveals next segment)
+    const cover = document.getElementById(`wheel-${animal}`);
+    if (cover) {
+      const segAngle = 360 / a.stages;
+      // We track cumulative degrees separately to handle smooth continuous rotation
+      if (!ANIMALS[animal].deg) ANIMALS[animal].deg = 0;
+      ANIMALS[animal].deg = segAngle * a.cur;
+      cover.style.transform = `rotate(${ANIMALS[animal].deg}deg)`;
+    }
+  }
+
+  function nextStage(animal) {
+    setStage(animal, ANIMALS[animal].cur + 1);
+    spinWheel(animal);
+  }
+  function prevStage(animal) {
+    setStage(animal, ANIMALS[animal].cur - 1);
+    spinWheelReverse(animal);
+  }
+
+  function spinWheel(animal) {
+    const btn = document.getElementById(`${animal[0]}-spin-btn`);
+    if (btn) {
+      btn.style.transform = 'translate(-50%,-50%) scale(0.85)';
+      setTimeout(() => { btn.style.transform = 'translate(-50%,-50%) scale(1)'; }, 150);
+    }
+  }
+  function spinWheelReverse(animal) { spinWheel(animal); }
+
+  function toggleAuto(animal) {
+    const a = ANIMALS[animal];
+    const btn = document.getElementById(`auto-${animal}`);
+    if (a.timer) {
+      clearInterval(a.timer);
+      a.timer = null;
+      btn.textContent = '▶️ อัตโนมัติ';
+      btn.style.background = 'var(--yellow)';
+      btn.classList.remove('playing');
+    } else {
+      btn.textContent = '⏹ หยุด';
+      btn.style.background = 'var(--pink)';
+      btn.classList.add('playing');
+      a.timer = setInterval(() => {
+        setStage(animal, a.cur + 1);
+        spinWheel(animal);
+      }, 1800);
+    }
+  }
+
+  // Spin-btn center click → just go next
+  document.getElementById('m-spin-btn').addEventListener('click', () => nextStage('mosquito'));
+  document.getElementById('b-spin-btn').addEventListener('click', () => nextStage('butterfly'));
+  document.getElementById('f-spin-btn').addEventListener('click', () => nextStage('frog'));
+
+  // Init deg accumulators
+  ANIMALS.mosquito.deg  = 0;
+  ANIMALS.butterfly.deg = 0;
+  ANIMALS.frog.deg      = 0;
+  setStage('mosquito', 0);
+  setStage('butterfly', 0);
+  setStage('frog', 0);
+  </script>
+</body>
+</html>
