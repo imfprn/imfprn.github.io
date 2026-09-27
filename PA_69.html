@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>อินโฟกราฟิกวิจัย: สื่อดิจิทัล Canva เรื่องรู้ทันแสง</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;600;700&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --who:#F0B429;        --who-soft:#FDF1D2;
+    --what:#4F9DD6;       --what-soft:#DCEEFA;
+    --why:#F2924A;        --why-soft:#FCE3CE;
+    --title:#D9782E;      --title-soft:#F9DEC0;
+    --pdca:#6C7BC4;       --pdca-soft:#E7E9FB;
+    --benefit:#3F9E7A;    --benefit-soft:#DCF1E8;
+    --result:#E1613F;     --result-soft:#FADAD0;
+    --ink:#4A3B2E;
+    --ink-soft:#8A7566;
+    --card:#FFFFFF;
+    --check-bg:#FFFCF4;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0;padding:0;
+    background:var(--check-bg);
+    font-family:'Sarabun',sans-serif;
+    color:var(--ink);
+  }
+  body{
+    background-image:
+      repeating-linear-gradient(0deg, rgba(240,180,41,0.10) 0 28px, transparent 28px 56px),
+      repeating-linear-gradient(90deg, rgba(240,180,41,0.10) 0 28px, transparent 28px 56px);
+    background-color:var(--check-bg);
+    padding: clamp(14px, 3vw, 36px);
+  }
+  .sheet{
+    max-width:1280px;
+    margin:0 auto;
+    background:var(--check-bg);
+    border-radius:28px;
+    padding: clamp(16px, 2.4vw, 32px);
+    position:relative;
+    overflow:hidden;
+    border: 3px dashed rgba(217,120,46,0.35);
+  }
+
+  /* ---------- header ---------- */
+  .masthead{
+    text-align:center;
+    margin-bottom: clamp(14px, 2vw, 22px);
+    position:relative;
+  }
+  .masthead .kicker{
+    font-family:'Mali',sans-serif;
+    font-weight:700;
+    font-size: clamp(0.85rem, 1.4vw, 1.05rem);
+    color:var(--title);
+    letter-spacing:0.04em;
+  }
+  .masthead h1{
+    font-family:'Mali',sans-serif;
+    font-weight:700;
+    font-size: clamp(1.35rem, 2.6vw, 2rem);
+    margin: 6px 0 0;
+    line-height:1.35;
+    color:var(--ink);
+  }
+  .masthead h1 .hi{color:var(--title);}
+
+  /* ---------- grid ---------- */
+  .grid{
+    display:grid;
+    grid-template-columns: 1fr 1.28fr 1fr;
+    grid-template-rows: auto auto auto auto auto;
+    gap: clamp(10px, 1.4vw, 18px);
+    grid-template-areas:
+      "who    title   what"
+      "why    title   what"
+      "why    pdca    pdca"
+      "benefit pdca   pdca"
+      "benefit result result";
+  }
+  @media (max-width: 760px){
+    .grid{
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "title"
+        "who"
+        "what"
+        "why"
+        "pdca"
+        "benefit"
+        "result";
+    }
+  }
+
+  .card{
+    background:var(--card);
+    border-radius:22px;
+    padding: 18px 18px 20px;
+    box-shadow: 0 6px 0 rgba(74,59,46,0.06);
+    position:relative;
+  }
+  .label{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-family:'Mali',sans-serif;
+    font-weight:700;
+    font-size: clamp(0.9rem, 1.3vw, 1.05rem);
+    color:#fff;
+    padding: 6px 18px;
+    border-radius: 999px;
+    position:absolute;
+    top:-16px;
+    box-shadow: 0 3px 0 rgba(0,0,0,0.08);
+  }
+  
+  
+  .label .en{
+    font-family:'Mali',sans-serif;
+    font-weight:700;
+  }
+  .body-text{
+    margin-top: 14px;
+    font-size: clamp(0.86rem, 1.05vw, 0.98rem);
+    line-height:1.75;
+    color:var(--ink);
+  }
+  .body-text b{color:var(--title);}
+
+  /* WHO */
+  .c-who{grid-area:who; background:var(--who-soft); border:2px solid var(--who);}
+  .c-who .label{ left:16px; background:var(--who);}
+  /* WHAT */
+  .c-what{grid-area:what; background:var(--what-soft); border:2px solid var(--what);}
+  .c-what .label{ left:16px; background:var(--what);}
+  /* WHY */
+  .c-why{grid-area:why; background:var(--why-soft); border:2px solid var(--why);}
+  .c-why .label{ left:16px; background:var(--why);}
+
+  /* TITLE / center */
+  .c-title{
+    grid-area:title;
+    background:var(--card);
+    border:2px solid var(--title);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding: 80px 20px 22px;
+  }
+  .c-title .label{
+    left:50%; transform:translateX(-50%);
+    background:var(--title);
+  }
+  .c-title .project-name{
+    font-family:'Mali',sans-serif;
+    font-weight:700;
+    font-size: clamp(1.05rem, 1.7vw, 1.4rem);
+    color:var(--ink);
+    line-height:1.5;
+    margin-top:10px;
+  }
+  .c-title .topic-pill{
+    display:inline-block;
+    margin-top:12px;
+    background:var(--benefit-soft);
+    color:#276b52;
+    border:2px solid var(--benefit);
+    border-radius:14px;
+    padding:6px 16px;
+    font-weight:600;
+    font-size: clamp(0.82rem, 1.05vw, 0.95rem);
+  }
+  .c-title .teacher{
+    margin-top:14px;
+    font-size: clamp(0.85rem, 1.05vw, 0.98rem);
+    color:#3f5a91;
+    font-weight:600;
+  }
+  .c-title .teacher small{
+    display:block;
+    color:var(--ink-soft);
+    font-weight:400;
+    margin-top:2px;
+  }
+
+  /* PDCA / when where how */
+  .c-pdca{
+    grid-area:pdca;
+    background:var(--pdca-soft);
+    border:2px solid var(--pdca);
+  }
+  .c-pdca .label{ left:50%; transform:translateX(-50%); background:var(--pdca); }
+  .pdca-list{ margin-top:18px; display:flex; flex-direction:column; gap:12px;}
+  .pdca-item{ display:flex; gap:10px; align-items:flex-start;}
+  .pdca-badge{
+    flex:0 0 auto;
+    width:30px;height:30px;border-radius:50%;
+    background:var(--card);
+    border:2px solid var(--pdca);
+    color:var(--pdca);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Mali',sans-serif; font-weight:700; font-size:0.95rem;
+  }
+  .pdca-item .txt{font-size: clamp(0.82rem, 1.02vw, 0.94rem); line-height:1.65;}
+  .pdca-item .txt b{color:var(--ink); font-family:'Mali',sans-serif;}
+
+  /* BENEFIT */
+  .c-benefit{grid-area:benefit; background:var(--benefit-soft); border:2px solid var(--benefit);}
+  .c-benefit .label{ left:16px; background:var(--benefit);}
+  .benefit-item{ display:flex; gap:10px; margin-top:14px; align-items:flex-start;}
+  .benefit-dot{
+    flex:0 0 auto;
+    width:10px;height:10px;border-radius:50%;
+    background:var(--benefit);
+    margin-top:7px;
+  }
+  .benefit-item p{margin:0; font-size:clamp(0.82rem,1.02vw,0.94rem); line-height:1.65;}
+
+  /* RESULT */
+  .c-result{grid-area:result; background:var(--result-soft); border:2px solid var(--result);}
+  .c-result .label{ left:16px; background:var(--result);}
+  .result-cols{
+    margin-top:16px;
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:14px;
+  }
+  @media (max-width:560px){ .result-cols{grid-template-columns:1fr;} }
+  .result-col h4{
+    font-family:'Mali',sans-serif;
+    margin:0 0 6px;
+    font-size: clamp(0.9rem,1.15vw,1.02rem);
+    color:var(--result);
+    border-bottom:2px solid var(--result);
+    display:inline-block;
+    padding-bottom:2px;
+  }
+  .result-col p{margin:8px 0 0; font-size:clamp(0.8rem,1vw,0.92rem); line-height:1.65;}
+  .stat-row{display:flex; gap:10px; margin-top:10px; flex-wrap:wrap;}
+  .stat-chip{
+    background:#fff;
+    border:2px solid var(--result);
+    border-radius:14px;
+    padding:6px 10px;
+    font-family:'Mali',sans-serif;
+    font-weight:700;
+    font-size:0.8rem;
+    color:var(--result);
+    white-space:nowrap;
+  }
+
+  /* decorative light icons */
+  .deco{position:absolute; opacity:0.95;}
+  .d1{ top:6px; left: -6px; width:64px;}
+  .d2{ top:2px; right:2px; width:60px;}
+  .d3{ bottom:40px; left:36%; width:48px; z-index:0;}
+  .footer-strip{
+    margin-top: clamp(20px,2.6vw,26px);
+    text-align:center;
+    font-size:0.78rem;
+    color:var(--ink-soft);
+    font-family:'Mali',sans-serif;
+    position:relative;
+    z-index:1;
+    background:var(--check-bg);
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <!-- flashlight icon (top-left) -->
+  <svg class="deco d1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <rect x="30" y="54" width="24" height="32" rx="6" fill="#fff" stroke="#F0B429" stroke-width="3.2"/>
+    <rect x="33" y="40" width="18" height="16" rx="4" fill="#fff" stroke="#F0B429" stroke-width="3.2"/>
+    <circle cx="42" cy="33" r="11" fill="#fff" stroke="#F0B429" stroke-width="3.2"/>
+    <line x1="57" y1="28" x2="74" y2="20" stroke="#F0B429" stroke-width="3.2" stroke-linecap="round"/>
+    <line x1="59" y1="36" x2="78" y2="36" stroke="#F0B429" stroke-width="3.2" stroke-linecap="round"/>
+    <line x1="57" y1="44" x2="74" y2="52" stroke="#F0B429" stroke-width="3.2" stroke-linecap="round"/>
+  </svg>
+
+  <!-- light bulb icon (top-right) -->
+  <svg class="deco d2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="50" cy="42" r="21" fill="#fff" stroke="#4F9DD6" stroke-width="3.2"/>
+    <rect x="42" y="59" width="16" height="9" rx="2" fill="#fff" stroke="#4F9DD6" stroke-width="3.2"/>
+    <line x1="44" y1="73" x2="56" y2="73" stroke="#4F9DD6" stroke-width="3.2" stroke-linecap="round"/>
+    <line x1="50" y1="13" x2="50" y2="5" stroke="#4F9DD6" stroke-width="3.2" stroke-linecap="round"/>
+    <line x1="73" y1="23" x2="79" y2="17" stroke="#4F9DD6" stroke-width="3.2" stroke-linecap="round"/>
+    <line x1="27" y1="23" x2="21" y2="17" stroke="#4F9DD6" stroke-width="3.2" stroke-linecap="round"/>
+  </svg>
+
+  <!-- sun icon (bottom center) -->
+  <svg class="deco d3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="50" cy="50" r="17" fill="#fff" stroke="#F2924A" stroke-width="3.2"/>
+    <g stroke="#F2924A" stroke-width="3.2" stroke-linecap="round">
+      <line x1="50" y1="19" x2="50" y2="9"/>
+      <line x1="50" y1="81" x2="50" y2="91"/>
+      <line x1="19" y1="50" x2="9" y2="50"/>
+      <line x1="81" y1="50" x2="91" y2="50"/>
+      <line x1="27" y1="27" x2="20" y2="20"/>
+      <line x1="73" y1="27" x2="80" y2="20"/>
+      <line x1="27" y1="73" x2="20" y2="80"/>
+      <line x1="73" y1="73" x2="80" y2="80"/>
+    </g>
+  </svg>
+
+  <div class="masthead">
+    <div class="kicker">งานวิจัยในชั้นเรียน · ปีการศึกษา 2569</div>
+    <h1>อินโฟกราฟิกสรุปงานวิจัย <span class="hi">เรื่อง รู้ทันแสง</span> ด้วยสื่อดิจิทัลโปรแกรม Canva</h1>
+  </div>
+
+  <div class="grid">
+
+    <div class="card c-who">
+      <span class="label">Who <span class="en">ปัญหานี้เกิดกับใคร</span></span>
+      <div class="body-text">
+        นักเรียน<b>ชั้นประถมศึกษาปีที่ 2 โรงเรียนอนุราชประสิทธิ์</b> กลุ่มตัวอย่างที่ใช้ในการวิจัย คือ นักเรียนชั้นประถมศึกษาปีที่ 2 จำนวน 1 ห้องเรียน รวม <b>30 คน</b> ซึ่งได้มาโดยการสุ่มอย่างง่าย (Simple Random Sampling) โดยใช้ห้องเรียนเป็นหน่วยสุ่ม จากประชากรทั้งหมด 2 ห้องเรียน 60 คน
+      </div>
+    </div>
+
+    <div class="card c-what">
+      <span class="label">What <span class="en">ปัญหาอะไร</span></span>
+      <div class="body-text">
+        นักเรียนขาดสื่อการเรียนรู้ที่ส่งเสริมการลงมือปฏิบัติจริงในเนื้อหา<b>เรื่อง รู้ทันแสง</b> ทำให้ยังไม่สามารถเชื่อมโยงความรู้เรื่องแสงกับปรากฏการณ์รอบตัวได้อย่างเป็นรูปธรรม ส่งผลให้<b>ผลสัมฤทธิ์ทางการเรียน</b>วิชาวิทยาศาสตร์และเทคโนโลยียังไม่เป็นที่น่าพอใจเท่าที่ควร
+      </div>
+    </div>
+
+    <div class="card c-why">
+      <span class="label">Why <span class="en">ทำไมจึงเกิดปัญหานี้</span></span>
+      <div class="body-text">
+        เนื้อหาเรื่องแสงเป็นเรื่องนามธรรม ยากต่อการจินตนาการสำหรับเด็กวัยนี้ สื่อการสอนแบบเดิมเน้นการบรรยายและภาพนิ่ง ขาดภาพเคลื่อนไหวหรือกิจกรรมเชิงปฏิสัมพันธ์ที่ช่วยกระตุ้นความสนใจ ทำให้ผู้เรียนขาดแรงจูงใจและไม่ได้ลงมือสำรวจตรวจสอบด้วยตนเองอย่างเพียงพอ
+      </div>
+    </div>
+
+    <div class="card c-title">
+      <span class="label" style="font-size: clamp(1.8rem, 1.5vw, 1.5rem);">ประเด็นท้าทาย</span>
+      <div class="project-name">
+        การพัฒนาสื่อดิจิทัลด้วยโปรแกรม Canva เรื่อง <u>รู้ทันแสง</u><br>
+        รายวิชาวิทยาศาสตร์และเทคโนโลยี สำหรับนักเรียนชั้นประถมศึกษาปีที่ 2
+      </div>
+      <span class="topic-pill">การจัดการเรียนรู้ด้วยสื่อดิจิทัล Canva</span>
+      <div class="teacher">
+        ผู้วิจัย : นายพีรณัฐ ณ นคร
+        <small>ตำแหน่ง ครู &nbsp;·&nbsp; กลุ่มสาระการเรียนรู้วิทยาศาสตร์และเทคโนโลยี &nbsp;·&nbsp; โรงเรียนอนุราชประสิทธิ์</small>
+      </div>
+    </div>
+
+    <div class="card c-pdca">
+      <span class="label">When Where How</span>
+      <div class="pdca-list">
+        <div class="pdca-item">
+          <div class="pdca-badge">P</div>
+          <div class="txt"><b>Plan วางแผน</b> — วิเคราะห์ปัญหาการเรียนรู้เรื่องรู้ทันแสง ศึกษาแนวคิด 5E และสื่อดิจิทัล Canva ออกแบบแผนการจัดการเรียนรู้ 6 แผน (6 ชั่วโมง) และสร้างแบบทดสอบวัดผลสัมฤทธิ์กับแบบประเมินความพึงพอใจ ตรวจสอบคุณภาพเครื่องมือโดยผู้เชี่ยวชาญ 3 ท่าน (IOC)</div>
+        </div>
+        <div class="pdca-item">
+          <div class="pdca-badge">D</div>
+          <div class="txt"><b>Do ปฏิบัติ</b> — ทดสอบก่อนเรียน (Pretest) จัดกิจกรรมการเรียนรู้แบบสืบเสาะหาความรู้ (5E) ร่วมกับสื่อดิจิทัล Canva สัปดาห์ละ 1–2 คาบ คาบละ 60 นาที รวม 5 สัปดาห์ 6 ชั่วโมง กับนักเรียนกลุ่มตัวอย่าง 30 คน จากนั้นทดสอบหลังเรียน (Posttest) และให้ประเมินความพึงพอใจ</div>
+        </div>
+        <div class="pdca-item">
+          <div class="pdca-badge">C</div>
+          <div class="txt"><b>Check ตรวจสอบ</b> — เปรียบเทียบคะแนนก่อน–หลังเรียนด้วยค่าเฉลี่ย ส่วนเบี่ยงเบนมาตรฐาน และสถิติทดสอบค่าที (t-test dependent) พร้อมวิเคราะห์ระดับความพึงพอใจตามเกณฑ์ของลิเคิร์ท</div>
+        </div>
+        <div class="pdca-item">
+          <div class="pdca-badge">A</div>
+          <div class="txt"><b>Act ปรับปรุง</b> — ปรับปรุงสื่อ Canva ด้านขนาดตัวอักษรและการจัดวางเนื้อหา ให้ความช่วยเหลือรายบุคคลแก่นักเรียนที่ยังไม่ผ่านเกณฑ์ และวางแผนขยายผลไปยังหน่วยการเรียนรู้อื่นในภาคเรียนถัดไป</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card c-benefit">
+      <span class="label">ประโยชน์</span>
+      <div class="benefit-item">
+        <div class="benefit-dot"></div>
+        <p>ครูมีสื่อดิจิทัลโปรแกรม Canva เรื่อง รู้ทันแสง ที่ผ่านการตรวจสอบคุณภาพจากผู้เชี่ยวชาญ สามารถนำไปใช้จัดการเรียนรู้ได้จริง และเป็นต้นแบบพัฒนาสื่อในหัวข้ออื่น และวิชาอื่นต่อไป</p>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-dot"></div>
+        <p>นักเรียนมีผลสัมฤทธิ์ทางการเรียนรู้สูงขึ้นและมีเจตคติที่ดีต่อการเรียนวิทยาศาสตร์ ผ่านสื่อดิจิทัลที่มีภาพ สี และแอนิเมชันที่น่าสนใจ</p>
+      </div>
+    </div>
+
+    <div class="card c-result">
+      <span class="label">ผลสำเร็จ</span>
+      <div class="result-cols">
+        <div class="result-col">
+          <h4>เชิงปริมาณ</h4>
+          <p>นักเรียนกลุ่มตัวอย่างจำนวน 30 คน มีผลสัมฤทธิ์ทางการเรียนรู้เรื่อง รู้ทันแสง หลังเรียนสูงกว่าก่อนเรียนอย่างมีนัยสำคัญทางสถิติที่ระดับ .05 โดยมีนักเรียนผ่านเกณฑ์ร้อยละ 70 ขึ้นไป จำนวน 25 คน คิดเป็นร้อยละ 83.33</p>
+          <div class="stat-row">
+            <span class="stat-chip">ก่อนเรียน x̄ 6.93</span>
+            <span class="stat-chip">หลังเรียน x̄ 7.83</span>
+            <span class="stat-chip">t = 5.83, p = .00</span>
+          </div>
+        </div>
+        <div class="result-col">
+          <h4>เชิงคุณภาพ</h4>
+          <p>นักเรียนมีความพึงพอใจต่อการใช้สื่อดิจิทัลโปรแกรม Canva ในการเรียนรู้เรื่อง รู้ทันแสง โดยภาพรวมอยู่ในระดับมาก โดยเฉพาะด้านการออกแบบและรูปแบบการนำเสนอ (แอนิเมชันและภาพเคลื่อนไหว) ที่ได้รับความนิยมสูงสุด</p>
+          <div class="stat-row">
+            <span class="stat-chip">x̄ = 4.40</span>
+            <span class="stat-chip">S.D. = 0.12</span>
+            <span class="stat-chip">ระดับมาก</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+ <div class="footer-strip">การพัฒนาสื่อดิจิทัลด้วยโปรแกรม Canva เรื่อง รู้ทันแสง รายวิชาวิทยาศาสตร์และเทคโนโลยี ชั้นประถมศึกษาปีที่ 2 · โรงเรียนอนุราชประสิทธิ์ · ปีการศึกษา 2569 <br>
+  2022–2025 · Peeranat Na Nakorn · All Rights Reserved</div>
+</body>
+</html>
